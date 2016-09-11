@@ -1,0 +1,48 @@
+package org.upb.fmde.de.categories.tgraphs;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiPredicate;
+
+import org.upb.fmde.de.categories.PatternMatcher;
+import org.upb.fmde.de.categories.graphs.GraphMorphism;
+import org.upb.fmde.de.categories.graphs.GraphPatternMatcher;
+
+public class TPatternMatcher extends PatternMatcher<TGraph, TGraphMorphism>{
+	
+	public TPatternMatcher(TGraph pattern, TGraph host) {
+		super(pattern, host);
+	}
+
+	public List<TGraphMorphism> determineMatches(boolean mono) {
+		List<TGraphMorphism> typedMatches = new ArrayList<>();
+		
+		GraphPatternMatcher pm = new GraphPatternMatcher(pattern.getTypeMorphism().getSource(), host.getTypeMorphism().getSource());
+		for (GraphMorphism m : pm.determineMatches(mono, createEdgeTypeFilter(), createNodeTypeFilter())) {
+			try {
+				TGraphMorphism typedMatch = new TGraphMorphism("m", m, pattern, host);
+				typedMatches.add(typedMatch);
+			} catch (Exception e) {
+				
+			}
+		}
+		
+		return typedMatches;
+	}
+
+	private BiPredicate<Object, Object> createNodeTypeFilter() {
+		return (from, to) -> {
+			Object t_from = pattern.getTypeMorphism().get_f_V().map(from);
+			Object t_to = host.getTypeMorphism().get_f_V().map(to);
+			return t_from.equals(t_to);
+		};
+	}
+
+	private BiPredicate<Object, Object> createEdgeTypeFilter() {
+		return (from, to) -> {
+			Object t_from = pattern.getTypeMorphism().get_f_E().map(from);
+			Object t_to = host.getTypeMorphism().get_f_E().map(to);
+			return t_from.equals(t_to);
+		};
+	}
+}
