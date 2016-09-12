@@ -1,13 +1,22 @@
 package org.upb.fmde.de.graphconditions;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
-import org.upb.fmde.de.categories.Category;
+import org.upb.fmde.de.categories.CategoryWithInitOb;
+import org.upb.fmde.de.categories.ComparableArrow;
+import org.upb.fmde.de.categories.PatternMatcher;
 
-public class Constraint<Ob, Arr> extends GraphCondition<Ob, Arr> {
+public class Constraint<Ob, Arr extends ComparableArrow<Arr>> extends SatisfiableGraphCondition<Ob, Arr> {
 
-	public Constraint(Category<Ob, Arr> cat, Arr p, List<Arr> ci) {
-		super(cat, p, ci);
+	private CategoryWithInitOb<Ob, Arr> catWithInitOb;
+	
+	public Constraint(CategoryWithInitOb<Ob, Arr> cat, Ob P, List<Arr> ci) {
+		super(cat, cat.initialArrowInto(P), ci);
+		catWithInitOb = cat;
 	}
 
+	public boolean isSatisfiedByObject(Ob o, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator) {
+		return isSatisfiedByArrow(catWithInitOb.initialArrowInto(o), creator);
+	}
 }

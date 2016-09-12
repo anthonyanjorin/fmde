@@ -66,7 +66,7 @@ public class TestsEx2 {
 		GraphMorphism f = createGraphMorphism(G, G_);
 		TGraphMorphism f_typed = new TGraphMorphism("f", f, GT, GT_);
 	
-		TGraphDiagram d_typed = new TGraphDiagram();
+		TGraphDiagram d_typed = new TGraphDiagram(TG);
 		d_typed.arrows(f_typed).objects(GT, GT_).saveAsDot(diagrams, "typed_match_in_TGraphs");
 		d_typed.getGraphDiagram().saveAsDot(diagrams, "typed_match_in_Graphs");
 		d_typed.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typed_match_in_FinSets");

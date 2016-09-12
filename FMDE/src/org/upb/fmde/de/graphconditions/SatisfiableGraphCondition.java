@@ -1,8 +1,9 @@
 package org.upb.fmde.de.graphconditions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.upb.fmde.de.categories.Category;
@@ -15,7 +16,8 @@ public class SatisfiableGraphCondition<Ob, Arr extends ComparableArrow<Arr>> ext
 		super(cat, p, ci);
 	}
 
-	public boolean isSatisfiedBy(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator){
+	@Override
+	public boolean isSatisfiedByArrow(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator){
 		Ob G = cat.target(m);
 		Ob P = cat.target(p);
 		
@@ -26,18 +28,17 @@ public class SatisfiableGraphCondition<Ob, Arr extends ComparableArrow<Arr>> ext
 				.filter(mp -> m.isTheSameAs(cat.compose(p, mp)));
 		
 		// determine all m_c_i
-		List<Arr> m_ci = ci
-				.stream()
-				.flatMap(c -> {
-					PatternMatcher<Ob, Arr> conclusion = creator.apply(cat.target(c), G);
-					return conclusion.getMonicMatches().stream();
-				})
-				.collect(Collectors.toList());
+		Map<Arr, Arr> m_ci = new HashMap<>();
+		ci.stream()
+		  .forEach(c -> {
+				PatternMatcher<Ob, Arr> conclusion = creator.apply(cat.target(c), G);
+				conclusion.getMonicMatches().forEach(m_c -> m_ci.put(m_c, c));
+		  });
 		
 		// forall m_p: there must be a m_c_i that commutes with it
-		return m_pi.allMatch(m_p -> m_ci
+		return m_pi.allMatch(m_p -> m_ci.keySet()
 				.stream()
-				.anyMatch(m_c -> m_p.isTheSameAs(cat.compose(ci.get(m_ci.indexOf(m_c)), m_c)))
+				.anyMatch(m_c -> m_p.isTheSameAs(cat.compose(m_ci.get(m_c), m_c)))
 				);
 	}
 }

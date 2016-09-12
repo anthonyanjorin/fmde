@@ -13,7 +13,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Board">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lists" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lists" lowerBound="1" upperBound="-1"
         eType="#//List" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -12,7 +12,7 @@ public class TGraph extends Labelled {
 		this.type = type;
 	}
 	
-	public GraphMorphism getTypeMorphism(){
+	public GraphMorphism type(){
 		return type;
 	}
 }

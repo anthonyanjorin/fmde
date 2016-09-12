@@ -17,8 +17,8 @@ public class TGraphMorphism extends LabelledArrow<TGraph> implements ComparableA
 	}
 
 	private boolean isValid() {
-		return Graphs.compose(f, target.getTypeMorphism())
-				     .isTheSameAs(source.getTypeMorphism());
+		return Graphs.compose(f, target.type())
+				     .isTheSameAs(source.type());
 	}
 
 	public GraphMorphism getUntypedMorphism(){
@@ -33,8 +33,8 @@ public class TGraphMorphism extends LabelledArrow<TGraph> implements ComparableA
 	
 	@Override
 	public boolean isTheSameAs(TGraphMorphism a) {
-		return source.getTypeMorphism().isTheSameAs(a.source.getTypeMorphism()) &&
-			   target.getTypeMorphism().isTheSameAs(a.getTarget().getTypeMorphism()) &&
+		return source.type().isTheSameAs(a.source.type()) &&
+			   target.type().isTheSameAs(a.getTarget().type()) &&
 			   f.isTheSameAs(a.f);
 	}
 }

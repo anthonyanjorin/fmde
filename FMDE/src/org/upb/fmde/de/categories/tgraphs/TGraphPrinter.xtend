@@ -17,11 +17,11 @@ class TGraphPrinter implements DotPrinter {
 			hide members
 			hide circle
 			«FOR graph : d.objects»
-				«FOR o : graph.typeMorphism.source.vertices.elements»
+				«FOR o : graph.type.source.vertices.elements»
 					class "«d.cat.showOb(graph)».«o»"
 				«ENDFOR»
-				«FOR e : graph.typeMorphism.source.edges.elements»
-					"«d.cat.showOb(graph)».«graph.typeMorphism.source.src.map(e)»"-->"«d.cat.showOb(graph)».«graph.typeMorphism.source.trg.map(e)»" : "«e»"
+				«FOR e : graph.type.source.edges.elements»
+					"«d.cat.showOb(graph)».«graph.type.source.src.map(e)»"-->"«d.cat.showOb(graph)».«graph.type.source.trg.map(e)»" : "«e»"
 				«ENDFOR»			
 			«ENDFOR»
 			

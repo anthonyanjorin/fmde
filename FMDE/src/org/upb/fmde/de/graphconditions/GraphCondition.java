@@ -2,10 +2,12 @@ package org.upb.fmde.de.graphconditions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.upb.fmde.de.categories.Category;
+import org.upb.fmde.de.categories.PatternMatcher;
 
-public class GraphCondition<Ob, Arr> {
+public abstract class GraphCondition<Ob, Arr> implements ComplexGraphCondition<Ob, Arr> {
 	protected Category<Ob, Arr> cat;
 	protected Arr p;
 	protected List<Arr> ci;
@@ -24,4 +26,7 @@ public class GraphCondition<Ob, Arr> {
 				throw new IllegalStateException("Graph condition is not well-formed!");
 		});
 	}
+
+	@Override
+	public abstract boolean isSatisfiedByArrow(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator);
 }
