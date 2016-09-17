@@ -1,6 +1,6 @@
 package org.upb.fmde.de.categories.typedtriplegraphs;
 
-import org.upb.fmde.de.categories.Diagram;
+import org.upb.fmde.de.categories.diagrams.Diagram;
 import org.upb.fmde.de.categories.triplegraphs.TripleGraphDiagram;
 
 public class TTripleGraphDiagram extends Diagram<TTripleGraph, TTripleMorphism> {

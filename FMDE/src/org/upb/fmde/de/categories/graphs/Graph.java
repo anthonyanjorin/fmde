@@ -1,5 +1,6 @@
 package org.upb.fmde.de.categories.graphs;
 
+import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.Labelled;
 import org.upb.fmde.de.categories.finsets.FinSet;
 import org.upb.fmde.de.categories.finsets.TotalFunction;
@@ -20,10 +21,10 @@ public class Graph extends Labelled {
 	}
 
 	private void ensureValidity() {
-		ensure(source.getSource().equals(E), "Graph " + label + " is invalid: " + "source function doesn't fit to set of edges");
-		ensure(source.getTarget().equals(V), "Graph " + label + " is invalid: " + "source function doesn't fit to set of vertices");
-		ensure(target.getSource().equals(E), "Graph " + label + " is invalid: " + "target function doesn't fit to set of edges");
-		ensure(target.getTarget().equals(V), "Graph " + label + " is invalid: " + "target function doesn't fit to set of vertices");
+		Category.ensure(source.getSource().equals(E), "Graph " + label + " is invalid: " + "source function doesn't fit to set of edges");
+		Category.ensure(source.getTarget().equals(V), "Graph " + label + " is invalid: " + "source function doesn't fit to set of vertices");
+		Category.ensure(target.getSource().equals(E), "Graph " + label + " is invalid: " + "target function doesn't fit to set of edges");
+		Category.ensure(target.getTarget().equals(V), "Graph " + label + " is invalid: " + "target function doesn't fit to set of vertices");
 	}
 	
 	public FinSet getEdges(){

@@ -9,4 +9,10 @@ public interface Category<Ob, Arr> {
 	
 	String showOb(Ob o);
 	String showArr(Arr f);
+	
+	static void ensure(boolean condition, String message) {
+		if(!condition){
+			throw new IllegalStateException(message);
+		}
+	}
 }

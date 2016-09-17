@@ -1,6 +1,6 @@
 package org.upb.fmde.de.categories.tgraphs
 
-import org.upb.fmde.de.categories.DotPrinter
+import org.upb.fmde.de.categories.diagrams.DotPrinter
 
 class TGraphPrinter implements DotPrinter {
 	

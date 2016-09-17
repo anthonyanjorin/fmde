@@ -5,7 +5,7 @@ import static org.upb.fmde.de.categories.finsets.OpFinSets.OpFinSets;
 import java.io.File;
 import java.io.IOException;
 
-import org.upb.fmde.de.categories.Diagram;
+import org.upb.fmde.de.categories.diagrams.Diagram;
 import org.upb.fmde.de.categories.finsets.CounterExampleChecker;
 import org.upb.fmde.de.categories.finsets.FinSet;
 import org.upb.fmde.de.categories.finsets.FinSetDiagram;

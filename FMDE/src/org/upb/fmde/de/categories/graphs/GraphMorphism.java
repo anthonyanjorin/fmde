@@ -2,6 +2,7 @@ package org.upb.fmde.de.categories.graphs;
 
 import static org.upb.fmde.de.categories.finsets.FinSets.FinSets;
 
+import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.ComparableArrow;
 import org.upb.fmde.de.categories.LabelledArrow;
 import org.upb.fmde.de.categories.finsets.TotalFunction;
@@ -20,11 +21,11 @@ public class GraphMorphism extends LabelledArrow<Graph> implements ComparableArr
 
 	private void ensureValidity(){
 		String message = "GraphMorphism " + label + ": " + source.label() + " -> " + target.label() + " is not valid: ";
-		ensure(f_E.getSource().equals(source.getEdges()), message + f_E.label() + " does not match the source graph " + source.label());
-		ensure(f_E.getTarget().equals(target.getEdges()) , message + f_E.label() + " does not match the target graph " + target.label());
-		ensure(f_V.getSource().equals(source.getVertices()) , message + f_V.label() + " does not match the source graph " + source.label());
-		ensure(f_V.getTarget().equals(target.getVertices()) , message + f_V.label() + " does not match the target graph " + target.label());
-		ensure(isStructurePreserving() , message + "It is not structure preserving!");		
+		Category.ensure(f_E.getSource().equals(source.getEdges()), message + f_E.label() + " does not match the source graph " + source.label());
+		Category.ensure(f_E.getTarget().equals(target.getEdges()) , message + f_E.label() + " does not match the target graph " + target.label());
+		Category.ensure(f_V.getSource().equals(source.getVertices()) , message + f_V.label() + " does not match the source graph " + source.label());
+		Category.ensure(f_V.getTarget().equals(target.getVertices()) , message + f_V.label() + " does not match the target graph " + target.label());
+		Category.ensure(isStructurePreserving() , message + "It is not structure preserving!");		
 	}
 
 	private boolean isStructurePreserving() {

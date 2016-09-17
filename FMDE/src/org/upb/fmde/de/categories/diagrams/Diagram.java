@@ -1,10 +1,13 @@
-package org.upb.fmde.de.categories;
+package org.upb.fmde.de.categories.diagrams;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+
+import org.upb.fmde.de.categories.diagrams.CatPrinter;
+import org.upb.fmde.de.categories.Category;
 
 public class Diagram<Ob, Arr> {
 	private Category<Ob, Arr> cat;

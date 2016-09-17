@@ -3,7 +3,7 @@ package org.upb.fmde.de.ecore
 import org.eclipse.emf.ecore.ENamedElement
 import org.eclipse.emf.ecore.EObject
 import org.moflon.core.utilities.eMoflonEMFUtil
-import org.upb.fmde.de.categories.DotPrinter
+import org.upb.fmde.de.categories.diagrams.DotPrinter
 import org.upb.fmde.de.categories.graphs.GraphDiagram
 
 class EcorePrinter implements DotPrinter {

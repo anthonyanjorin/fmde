@@ -1,6 +1,6 @@
 package org.upb.fmde.de.categories.finsets
 
-import org.upb.fmde.de.categories.DotPrinter
+import org.upb.fmde.de.categories.diagrams.DotPrinter
 
 class FinSetPrinter implements DotPrinter {
 	

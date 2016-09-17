@@ -1,7 +1,8 @@
 package org.upb.fmde.de.categories.finsets;
 
-import org.upb.fmde.de.categories.Diagram;
 import static org.upb.fmde.de.categories.finsets.FinSets.FinSets;
+
+import org.upb.fmde.de.categories.diagrams.Diagram;
 
 public class OpCounterExampleChecker {
 	

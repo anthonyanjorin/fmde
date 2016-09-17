@@ -3,7 +3,7 @@ package org.upb.fmde.de.categories.finsets;
 import java.io.File;
 import java.io.IOException;
 
-import org.upb.fmde.de.categories.Diagram;
+import org.upb.fmde.de.categories.diagrams.Diagram;
 
 public class FinSetDiagram extends Diagram<FinSet, TotalFunction> {
 

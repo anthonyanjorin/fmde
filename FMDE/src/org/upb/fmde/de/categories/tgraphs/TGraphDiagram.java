@@ -3,7 +3,7 @@ package org.upb.fmde.de.categories.tgraphs;
 import java.io.File;
 import java.io.IOException;
 
-import org.upb.fmde.de.categories.Diagram;
+import org.upb.fmde.de.categories.diagrams.Diagram;
 import org.upb.fmde.de.categories.graphs.Graph;
 import org.upb.fmde.de.categories.graphs.GraphDiagram;
 

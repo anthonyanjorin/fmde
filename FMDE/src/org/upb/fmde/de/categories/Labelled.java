@@ -19,10 +19,4 @@ abstract public class Labelled {
 	public String toString() {
 		return label;
 	}
-	
-	protected void ensure(boolean condition, String message) {
-		if(!condition){
-			throw new IllegalStateException(message);
-		}
-	}
 }

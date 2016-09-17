@@ -1,4 +1,4 @@
-package org.upb.fmde.de.categories
+package org.upb.fmde.de.categories.diagrams
 
 class CatPrinter<Ob, Arr> implements DotPrinter {
 	
