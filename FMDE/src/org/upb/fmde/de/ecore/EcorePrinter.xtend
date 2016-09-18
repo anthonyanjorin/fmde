@@ -3,8 +3,8 @@ package org.upb.fmde.de.ecore
 import org.eclipse.emf.ecore.ENamedElement
 import org.eclipse.emf.ecore.EObject
 import org.moflon.core.utilities.eMoflonEMFUtil
+import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram
 import org.upb.fmde.de.categories.diagrams.DotPrinter
-import org.upb.fmde.de.categories.graphs.GraphDiagram
 
 class EcorePrinter implements DotPrinter {
 	
@@ -21,16 +21,16 @@ class EcorePrinter implements DotPrinter {
 			hide members
 			hide circle
 			«FOR graph : d.objects»
-				«FOR o : graph.vertices.elements»
+				«FOR o : graph.vertices.elts»
 					class "«graph.label».«o.show»"
 				«ENDFOR»
-				«FOR e : graph.edges.elements»
+				«FOR e : graph.edges.elts»
 					"«graph.label».«graph.src.map(e).show»"-->"«graph.label».«graph.trg.map(e).show»" : "«e.show»"
 				«ENDFOR»			
 			«ENDFOR»
 			«FOR f : d.arrows»
-				«FOR v : f.get_f_V.source.elements»
-					"«f.source.label».«v.show»" --> "«f.target.label».«f.get_f_V.map(v).show»" : "«f.label»"
+				«FOR v : f._V.src.elts»
+					"«f.src.label».«v.show»" --> "«f.trg.label».«f._V.map(v).show»" : "«f.label»"
 				«ENDFOR»
 			«ENDFOR»
 			@enduml

@@ -1,16 +1,16 @@
 package org.upb.fmde.de.tests;
 
-import static org.upb.fmde.de.categories.finsets.OpFinSets.OpFinSets;
+import static org.upb.fmde.de.categories.concrete.finsets.OpFinSets.OpFinSets;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.upb.fmde.de.categories.concrete.finsets.CounterExampleChecker;
+import org.upb.fmde.de.categories.concrete.finsets.FinSet;
+import org.upb.fmde.de.categories.concrete.finsets.FinSetDiagram;
+import org.upb.fmde.de.categories.concrete.finsets.OpCounterExampleChecker;
+import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.diagrams.Diagram;
-import org.upb.fmde.de.categories.finsets.CounterExampleChecker;
-import org.upb.fmde.de.categories.finsets.FinSet;
-import org.upb.fmde.de.categories.finsets.FinSetDiagram;
-import org.upb.fmde.de.categories.finsets.OpCounterExampleChecker;
-import org.upb.fmde.de.categories.finsets.TotalFunction;
 
 public class TestsEx1 {
 	private static final String diagrams = "diagrams/ex1/";

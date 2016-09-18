@@ -11,11 +11,11 @@ public abstract class LabelledArrow<Ob> extends Labelled {
 		this.target = target;
 	}
 	
-	public Ob getSource(){
+	public Ob src(){
 		return source;
 	}
 	
-	public Ob getTarget(){
+	public Ob trg(){
 		return target;
 	}
 }

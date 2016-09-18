@@ -5,9 +5,9 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.moflon.core.utilities.eMoflonEMFUtil;
-import org.upb.fmde.de.categories.finsets.FinSet;
-import org.upb.fmde.de.categories.finsets.TotalFunction;
-import org.upb.fmde.de.categories.graphs.Graph;
+import org.upb.fmde.de.categories.concrete.finsets.FinSet;
+import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
+import org.upb.fmde.de.categories.concrete.graphs.Graph;
 
 public class ModelToGraphs {
 	private Graph result;
@@ -32,7 +32,7 @@ public class ModelToGraphs {
 	}
 
 	private void visitNodeAndEdges(EObject eob) {
-		vertices.getElements().add(eob);
+		vertices.elts().add(eob);
 		for (EStructuralFeature sf : eMoflonEMFUtil.getAllReferences(eob)) {
 			if (sf.isMany()) {
 				((Collection<?>) eob.eGet(sf)).forEach(o -> addEdge(sf, eob, o));
@@ -45,7 +45,7 @@ public class ModelToGraphs {
 
 	private void addEdge(EStructuralFeature sf, EObject from, Object to) {
 		EcoreEdge edge = new EcoreEdge(sf, from, to);
-		edges.getElements().add(edge);
+		edges.elts().add(edge);
 		source.addMapping(edge, from);
 		target.addMapping(edge, to);
 	}

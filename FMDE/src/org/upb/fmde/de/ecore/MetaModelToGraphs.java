@@ -3,9 +3,9 @@ package org.upb.fmde.de.ecore;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.upb.fmde.de.categories.finsets.FinSet;
-import org.upb.fmde.de.categories.finsets.TotalFunction;
-import org.upb.fmde.de.categories.graphs.Graph;
+import org.upb.fmde.de.categories.concrete.finsets.FinSet;
+import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
+import org.upb.fmde.de.categories.concrete.graphs.Graph;
 
 public class MetaModelToGraphs {
 	private Graph result;
@@ -42,14 +42,14 @@ public class MetaModelToGraphs {
 	}
 
 	private void addEdge(EReference edge) {
-		edges.getElements().add(edge);
+		edges.elts().add(edge);
 		source.addMapping(edge, edge.getEContainingClass());
 		target.addMapping(edge, edge.getEReferenceType());
 	}
 
 	private void visitNode(EObject eob) {
 		if (filterForRelevantNodeTypes(eob))
-			vertices.getElements().add(eob);
+			vertices.elts().add(eob);
 	}
 
 	private boolean filterForRelevantNodeTypes(EObject eob) {
