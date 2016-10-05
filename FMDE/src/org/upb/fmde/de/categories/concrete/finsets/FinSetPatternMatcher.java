@@ -36,19 +36,25 @@ public class FinSetPatternMatcher extends PatternMatcher<FinSet, TotalFunction> 
 			return;
 		}
 		
-		Object currentVariable = pattern.elts().get(index);
+		Object currentVariable = getNextFreeVariable(index, match);
 		for(Object o : host.elts()){
 			if (!mono || notInImageOfMatch(match, o)) {
-				if (notYetMatched(match, currentVariable)) {
-					if (filter.test(currentVariable, o)) {
-						TotalFunction match_ = new TotalFunction(match.src(), match.label(), match.trg());
-						match_.mappings().putAll(match.mappings());
-						match_.addMapping(currentVariable, o);
-						mapElements(index + 1, match_);
-					}
+				if (filter.test(currentVariable, o)) {
+					TotalFunction match_ = new TotalFunction(match.src(), match.label(), match.trg());
+					match_.mappings().putAll(match.mappings());
+					match_.addMapping(currentVariable, o);
+					mapElements(index + 1, match_);
 				}
 			}
 		}
+	}
+
+	private Object getNextFreeVariable(int index, TotalFunction match) {
+		Object currentVariable = pattern.elts().get(index);
+		if(notYetMatched(match, currentVariable))
+			return currentVariable;
+		else
+			return getNextFreeVariable(index + 1, match);
 	}
 
 	private boolean notYetMatched(TotalFunction match, Object currentVariable) {

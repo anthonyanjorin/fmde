@@ -1,10 +1,13 @@
 package org.upb.fmde.de.tests;
 
 import static org.upb.fmde.de.categories.concrete.finsets.OpFinSets.OpFinSets;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.upb.fmde.de.categories.concrete.finsets.CounterExampleChecker;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.FinSetDiagram;
@@ -15,42 +18,57 @@ import org.upb.fmde.de.categories.diagrams.Diagram;
 public class TestsEx1 {
 	private static final String diagrams = "diagrams/ex1/";
 	
-	public static void main(String[] args) throws IOException {
+	@BeforeClass
+	public static void clear() {
 		for(File f : new File(diagrams).listFiles()) f.delete();
-		
-		monicExample();
-		epicExample();
-		dualityExample();		
-		
-		System.out.println("All diagrams created.");
 	}
 
-	private static void dualityExample() throws IOException {
+	@Test
+	public void monicExample() throws IOException {
+		Diagram<FinSet, TotalFunction> d = createDiagram1();
+
+		d.saveAsDot(diagrams, "monicExample")
+		 .prettyPrint(diagrams, "monicExample");
+		
+		assertTrue(CounterExampleChecker.isCounterExampleForMono(d));	
+		assertFalse(CounterExampleChecker.isCounterExampleForMono(createDiagram2()));
+	}
+	
+	@Test
+	public void epicExample() throws IOException {
+		FinSetDiagram d = createDiagram2(); 
+		
+		 d.saveAsDot(diagrams, "epicExample")
+		  .prettyPrint(diagrams, "epicExample");
+		
+		assertTrue(CounterExampleChecker.isCounterExampleForEpi(d));
+		assertFalse(CounterExampleChecker.isCounterExampleForEpi(createDiagram1()));
+	}
+	
+	@Test
+	public void dualityExample() throws IOException {
 		FinSetDiagram d1 = createDiagram1();
 		Diagram<FinSet, TotalFunction> opd1 = new Diagram<FinSet, TotalFunction>(OpFinSets)
 				.arrows(d1.getArrows())
-				.objects(d1.getObjects())
-				.saveAsDot(diagrams, "epi_diagram_in_OpFinSets");
+				.objects(d1.getObjects());
 		
-		System.out.println("op_f is not epic? " + (OpCounterExampleChecker.isCounterExampleForEpi(opd1)? "Yes" : "I don't know"));
+		opd1.saveAsDot(diagrams, "dualityExampleEpi");
+		
+		assertTrue(OpCounterExampleChecker.isCounterExampleForEpi(opd1));
+		assertFalse(OpCounterExampleChecker.isCounterExampleForMono(opd1));
 		
 		FinSetDiagram d2 = createDiagram2();
 		Diagram<FinSet, TotalFunction> opd2 = new Diagram<FinSet, TotalFunction>(OpFinSets)
 				.arrows(d2.getArrows())
-				.objects(d2.getObjects())
-				.saveAsDot(diagrams, "mono_diagram_in_OpFinSets");
+				.objects(d2.getObjects());
 		
-		System.out.println("op_f is not monic? " + (OpCounterExampleChecker.isCounterExampleForMono(opd2)? "Yes" : "I don't know"));
-	}
-
-	private static void monicExample() throws IOException {
-		Diagram<FinSet, TotalFunction> d1 = createDiagram1()
-				.saveAsDot(diagrams, "mono_diagram_in_FinSets");
+		opd2.saveAsDot(diagrams, "dualityExampleMono");
 		
-		System.out.println("f is not monic? " + (CounterExampleChecker.isCounterExampleForMono(d1)? "Yes" : "I don't know"));
+		assertTrue(OpCounterExampleChecker.isCounterExampleForMono(opd2));
+		assertFalse(OpCounterExampleChecker.isCounterExampleForEpi(opd2));
 	}
 	
-	private static FinSetDiagram createDiagram1() {
+	private FinSetDiagram createDiagram1() {
 		FinSet X = new FinSet("X", "a", "b", "c");
 		FinSet Y = new FinSet("Y", 1, 2, "blup");
 		FinSet Z = new FinSet("Z", 'a', 3, "foo");
@@ -70,17 +88,13 @@ public class TestsEx1 {
 				.addMapping(Y.get("2"), Z.get("a"))
 				.addMapping(Y.get("blup"), Z.get("3"));
 				
-		return (FinSetDiagram) new FinSetDiagram().objects(X, Y, Z).arrows(g, h, f);
+		FinSetDiagram d1 = new FinSetDiagram();
+		d1.objects(X, Y, Z).arrows(g, h, f);
+
+		return d1;
 	}
 
-	private static void epicExample() throws IOException {
-		FinSetDiagram d2 = createDiagram2(); 
-		d2.saveAsDot(diagrams, "epi_diagram_in_FinSets");
-		
-		System.out.println("f is not epic? " + (CounterExampleChecker.isCounterExampleForEpi(d2)? "Yes" : "I don't know"));
-	}
-
-	private static FinSetDiagram createDiagram2() {
+	private FinSetDiagram createDiagram2() {
 		FinSet Z = new FinSet("Z", "a", "b", "c");
 		FinSet Y = new FinSet("Y", 1, 2, "blup");
 		FinSet X = new FinSet("X", 'a', 3, "foo");

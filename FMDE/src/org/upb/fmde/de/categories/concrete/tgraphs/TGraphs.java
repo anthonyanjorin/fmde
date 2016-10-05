@@ -10,7 +10,9 @@ import org.upb.fmde.de.categories.colimits.pushouts.CoSpan;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 
-public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>, CategoryWithInitOb<TGraph, TGraphMorphism>, CategoryWithPushouts<TGraph, TGraphMorphism> {
+public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>, 
+								CategoryWithInitOb<TGraph, TGraphMorphism>, 
+								CategoryWithPushouts<TGraph, TGraphMorphism> {
 	private final Graph typeGraph;
 	private final TGraph EMPTY_TYPED_GRAPH;
 	private final CoLimit<TGraph, TGraphMorphism> INITIAL_OBJECT;
