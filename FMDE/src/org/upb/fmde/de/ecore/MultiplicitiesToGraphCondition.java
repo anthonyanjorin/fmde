@@ -99,8 +99,8 @@ public class MultiplicitiesToGraphCondition {
 	}
 
 	private void addB(FinSet vertices, FinSet edges, TotalFunction src, TotalFunction trg) {
-		String b = "b";
-		String a_b = "a->b";
+		String b = "b" + vertices.elts().size();
+		String a_b = "a->b" + edges.elts().size();
 		vertices.elts().add(b);
 		edges.elts().add(a_b);
 		src.addMapping(a_b, vertices.get("a"));

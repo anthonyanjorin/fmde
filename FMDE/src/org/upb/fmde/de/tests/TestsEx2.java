@@ -1,8 +1,9 @@
 package org.upb.fmde.de.tests;
 
-import java.io.File;
 import java.io.IOException;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
@@ -21,58 +22,59 @@ import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleMorphism;
 public class TestsEx2 {
 	private static final String diagrams = "diagrams/ex2/";
 
-	public static void main(String[] args) throws IOException {
-		for(File f : new File(diagrams).listFiles()) f.delete();
-		
-		graphExample();
-		typedGraphExample();
-		tripleExample();
-		tripleMatchExample();
-		typedTripleExample();
-
-		System.out.println("All diagrams created.");
+	@BeforeClass
+	public static void clear() {
+		TestUtil.clear(diagrams);
 	}
 
-	private static void graphExample() throws IOException {
-		Graph pattern = createPatternGraph("G");
+	@Test
+	public void graphExample() throws IOException {
+		Graph pattern = TestUtil.createPatternGraph("G");
 	
 		GraphDiagram d_pattern = new GraphDiagram();
 		d_pattern.objects(pattern).saveAsDot(diagrams, "pattern_in_Graphs");
 		d_pattern.getSetDiagram().saveAsDot(diagrams, "pattern_in_FinSets");
 	
-		Graph hostGraph = createHostGraph("G'");
+		Graph hostGraph = TestUtil.createHostGraph("G'");
 		GraphDiagram d_graph_ = new GraphDiagram();
 		d_graph_.objects(hostGraph).saveAsDot(diagrams, "hostGraph_in_Graphs");
 		d_graph_.getSetDiagram().saveAsDot(diagrams, "hostGraph_in_FinSets");
 	
-		GraphMorphism f = createGraphMorphism(pattern, hostGraph);
+		GraphMorphism f = TestUtil.createGraphMorphism(pattern, hostGraph);
 	
 		GraphDiagram d = new GraphDiagram();
 		d.objects(pattern, hostGraph).arrows(f);
 	
 		d.saveAsDot(diagrams, "match_in_Graphs");
 		d.getSetDiagram().saveAsDot(diagrams, "match_in_FinSets");
+		d.prettyPrint(diagrams, "match_in_Graphs");
+		
+		//TODO Add some assertions here
 	}
 
-	private static void typedGraphExample() throws IOException {
-		Graph TG = createListCardTypeGraph("TG");
+	@Test
+	public void typedGraphExample() throws IOException {
+		Graph TG = TestUtil.createListCardTypeGraph("TG");
 	
-		Graph G = createPatternGraph("G");
-		TGraph GT = createTypedPatternGraph(TG, G);
+		Graph G = TestUtil.createPatternGraph("G");
+		TGraph GT = TestUtil.createTypedPatternGraph(TG, G);
 	
-		Graph G_ = createHostGraph("G'");
-		TGraph GT_ = createTypedHostGraph(TG, G_);
+		Graph G_ = TestUtil.createHostGraph("G'");
+		TGraph GT_ = TestUtil.createTypedHostGraph(TG, G_);
 	
-		GraphMorphism f = createGraphMorphism(G, G_);
+		GraphMorphism f = TestUtil.createGraphMorphism(G, G_);
 		TGraphMorphism f_typed = new TGraphMorphism("f", f, GT, GT_);
 	
 		TGraphDiagram d_typed = new TGraphDiagram(TG);
 		d_typed.arrows(f_typed).objects(GT, GT_).saveAsDot(diagrams, "typed_match_in_TGraphs");
 		d_typed.getGraphDiagram().saveAsDot(diagrams, "typed_match_in_Graphs");
 		d_typed.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typed_match_in_FinSets");
+		
+		//TODO Add some assertions here
 	}
-
-	private static void tripleExample() throws IOException {
+	
+	@Test
+	public void tripleExample() throws IOException {
 		TripleGraph GT = createPatternTriple("GT");
 	
 		TripleGraphDiagram d_triples = new TripleGraphDiagram();
@@ -80,10 +82,78 @@ public class TestsEx2 {
 	
 		d_triples.getGraphDiagram().saveAsDot(diagrams, "tripleGraph_in_Graphs");
 		d_triples.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleGraph_in_FinSets");	
+		
+		//TODO Add some assertions here
 	}
 
-	private static TripleGraph createPatternTriple(String name) {
-		Graph G_S = createPatternGraph("G_S");
+	@Test
+	public void tripleMatchExample() throws IOException {
+		TripleGraph GT = createPatternTriple("GT");	
+		TripleGraph GT_ = createHostTriple("GT'");
+		TripleMorphism f = createTripleMorphism("f", GT, GT_);
+	
+		// Create and save diagrams
+		TripleGraphDiagram d = new TripleGraphDiagram();
+		d.arrows(f).objects(GT_).saveAsDot(diagrams, "tripleMorphism_in_TripleGraphs");
+		d.getGraphDiagram().saveAsDot(diagrams, "tripleMorphism_in_Graphs");
+		d.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleMorphism_in_FinSets");	
+		
+		//TODO Add some assertions here
+	}
+
+	@Test
+	public void typedTripleExample() throws IOException {
+		// Create type triple graph
+		Graph TG_S = TestUtil.createListCardTypeGraph("TG_S");
+		FinSet TG_C_E = new FinSet("TG_C_E");
+		FinSet TG_C_V = new FinSet("TG_C_V", "CardToTask");
+		TotalFunction s_TG_C = new TotalFunction(TG_C_E, "s_TG_C", TG_C_V);
+		TotalFunction t_TG_C = new TotalFunction(TG_C_E, "t_TG_C", TG_C_V);
+		Graph TG_C = new Graph("TG_C", TG_C_E, TG_C_V, s_TG_C, t_TG_C);
+	
+		FinSet TG_T_E = new FinSet("TG_T_E", "related");
+		FinSet TG_T_V = new FinSet("TG_T_V", "Task");
+		TotalFunction s_TG_T = new TotalFunction(TG_T_E, "s_TG_T", TG_T_V).addMapping(TG_T_E.get("related"),
+				TG_T_V.get("Task"));
+		TotalFunction t_TG_T = new TotalFunction(TG_T_E, "t_TG_T", TG_T_V).addMapping(TG_T_E.get("related"),
+				TG_T_V.get("Task"));
+		Graph TG_T = new Graph("TG_T", TG_T_E, TG_T_V, s_TG_T, t_TG_T);
+	
+		TotalFunction sigma_TGT_V = new TotalFunction(TG_C.vertices(), "sigma_TGT_V", TG_S.vertices())
+				.addMapping(TG_C.vertices().get("CardToTask"), TG_S.vertices().get("Card"));
+		TotalFunction sigma_TGT_E = new TotalFunction(TG_C.edges(), "sigma_TGT_E", TG_S.edges());
+		GraphMorphism sigma_TGT = new GraphMorphism("sigma_TGT", TG_C, TG_S, sigma_TGT_E, sigma_TGT_V);
+	
+		TotalFunction tau_TGT_V = new TotalFunction(TG_C.vertices(), "tau_TGT_V", TG_T.vertices())
+				.addMapping(TG_C.vertices().get("CardToTask"), TG_T.vertices().get("Task"));
+		TotalFunction tau_TGT_E = new TotalFunction(TG_C.edges(), "tau_TGT_E", TG_T.edges());
+		GraphMorphism tau_TGT = new GraphMorphism("tau_TGT", TG_C, TG_T, tau_TGT_E, tau_TGT_V);
+	
+		TripleGraph TGT = new TripleGraph("TGT", TG_S, sigma_TGT, TG_C, tau_TGT, TG_T);
+	
+		// Create typed triple graphs
+		TripleGraph GT = createPatternTriple("GT");
+		TTripleGraph tGT = createTypedPatternTriple(TG_S, TG_C, TG_T, TGT, GT);
+	
+		TripleGraph GT_ = createHostTriple("GT'");
+		TTripleGraph tGT_ = createTypedHostTriple(TG_S, TG_C, TG_T, TGT, GT_);
+	
+		// Created type triple morphism
+		TripleMorphism f = createTripleMorphism("f", GT, GT_);
+		TTripleMorphism tf = new TTripleMorphism("f", f, tGT, tGT_);
+	
+		// Create and save diagrams
+		TTripleGraphDiagram d = new TTripleGraphDiagram();
+		d.objects(tGT, tGT_).arrows(tf).saveAsDot(diagrams, "typedTripleMorphism_in_TypedTripleGraphs");
+		d.getTripleGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_TripleGraphs");
+		d.getTripleGraphDiagram().getGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_Graphs");
+		d.getTripleGraphDiagram().getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_FinSets");
+		
+		//TODO Add some assertions here
+	}
+
+	private TripleGraph createPatternTriple(String name) {
+		Graph G_S = TestUtil.createPatternGraph("G_S");
 	
 		FinSet E_G_C = new FinSet("E_G_C");
 		FinSet V_G_C = new FinSet("V_G_C", "C2T");
@@ -108,19 +178,7 @@ public class TestsEx2 {
 		return GT;
 	}
 
-	private static void tripleMatchExample() throws IOException {
-		TripleGraph GT = createPatternTriple("GT");	
-		TripleGraph GT_ = createHostTriple("GT'");
-		TripleMorphism f = createTripleMorphism("f", GT, GT_);
-	
-		// Create and save diagrams
-		TripleGraphDiagram d = new TripleGraphDiagram();
-		d.arrows(f).objects(GT_).saveAsDot(diagrams, "tripleMorphism_in_TripleGraphs");
-		d.getGraphDiagram().saveAsDot(diagrams, "tripleMorphism_in_Graphs");
-		d.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleMorphism_in_FinSets");	
-	}
-
-	private static TripleMorphism createTripleMorphism(String name, TripleGraph GT, TripleGraph GT_) {	
+	private TripleMorphism createTripleMorphism(String name, TripleGraph GT, TripleGraph GT_) {	
 		// Create f_T
 		TotalFunction f_T_V = new TotalFunction(GT.getG_T().vertices(), "f_T_V", GT_.getG_T().vertices())
 				.addMapping(GT.getG_T().vertices().get("T"), GT_.getG_T().vertices().get("tx"));
@@ -144,8 +202,8 @@ public class TestsEx2 {
 		return new TripleMorphism(name, GT, GT_, f_S, f_C, f_T);
 	}
 
-	private static TripleGraph createHostTriple(String name) {
-		Graph G_S_ = createHostGraph(name + "_S");
+	private TripleGraph createHostTriple(String name) {
+		Graph G_S_ = TestUtil.createHostGraph(name + "_S");
 	
 		FinSet E_G_C_ = new FinSet(name + "_E_C");
 		FinSet V_G_C_ = new FinSet(name + "_V_C", "x2tx", "y2ty");
@@ -173,59 +231,8 @@ public class TestsEx2 {
 		return GT_;
 	}
 
-	private static void typedTripleExample() throws IOException {
-		// Create type triple graph
-		Graph TG_S = createListCardTypeGraph("TG_S");
-		FinSet TG_C_E = new FinSet("TG_C_E");
-		FinSet TG_C_V = new FinSet("TG_C_V", "CardToTask");
-		TotalFunction s_TG_C = new TotalFunction(TG_C_E, "s_TG_C", TG_C_V);
-		TotalFunction t_TG_C = new TotalFunction(TG_C_E, "t_TG_C", TG_C_V);
-		Graph TG_C = new Graph("TG_C", TG_C_E, TG_C_V, s_TG_C, t_TG_C);
-
-		FinSet TG_T_E = new FinSet("TG_T_E", "related");
-		FinSet TG_T_V = new FinSet("TG_T_V", "Task");
-		TotalFunction s_TG_T = new TotalFunction(TG_T_E, "s_TG_T", TG_T_V).addMapping(TG_T_E.get("related"),
-				TG_T_V.get("Task"));
-		TotalFunction t_TG_T = new TotalFunction(TG_T_E, "t_TG_T", TG_T_V).addMapping(TG_T_E.get("related"),
-				TG_T_V.get("Task"));
-		Graph TG_T = new Graph("TG_T", TG_T_E, TG_T_V, s_TG_T, t_TG_T);
-
-		TotalFunction sigma_TGT_V = new TotalFunction(TG_C.vertices(), "sigma_TGT_V", TG_S.vertices())
-				.addMapping(TG_C.vertices().get("CardToTask"), TG_S.vertices().get("Card"));
-		TotalFunction sigma_TGT_E = new TotalFunction(TG_C.edges(), "sigma_TGT_E", TG_S.edges());
-		GraphMorphism sigma_TGT = new GraphMorphism("sigma_TGT", TG_C, TG_S, sigma_TGT_E, sigma_TGT_V);
-
-		TotalFunction tau_TGT_V = new TotalFunction(TG_C.vertices(), "tau_TGT_V", TG_T.vertices())
-				.addMapping(TG_C.vertices().get("CardToTask"), TG_T.vertices().get("Task"));
-		TotalFunction tau_TGT_E = new TotalFunction(TG_C.edges(), "tau_TGT_E", TG_T.edges());
-		GraphMorphism tau_TGT = new GraphMorphism("tau_TGT", TG_C, TG_T, tau_TGT_E, tau_TGT_V);
-
-		TripleGraph TGT = new TripleGraph("TGT", TG_S, sigma_TGT, TG_C, tau_TGT, TG_T);
-
-		// Create typed triple graphs
-		TripleGraph GT = createPatternTriple("GT");
-		TTripleGraph tGT = createTypedPatternTriple(TG_S, TG_C, TG_T, TGT, GT);
-
-		TripleGraph GT_ = createHostTriple("GT'");
-		TTripleGraph tGT_ = createTypedHostTriple(TG_S, TG_C, TG_T, TGT, GT_);
-
-		// Created type triple morphism
-		TripleMorphism f = createTripleMorphism("f", GT, GT_);
-		TTripleMorphism tf = new TTripleMorphism("f", f, tGT, tGT_);
-
-		// Create and save diagrams
-		TTripleGraphDiagram d = new TTripleGraphDiagram();
-		d.objects(tGT, tGT_).arrows(tf).saveAsDot(diagrams, "typedTripleMorphism_in_TypedTripleGraphs");
-		d.getTripleGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_TripleGraphs");
-		d.getTripleGraphDiagram().getGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_Graphs");
-		d.getTripleGraphDiagram().getGraphDiagram().getSetDiagram().saveAsDot(diagrams,
-				"typedTripleMorphism_in_FinSets");
-	}
-
-	private static TTripleGraph createTypedHostTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT,
-			TripleGraph GT_) {
-		TotalFunction type_S_E_ = new TotalFunction(GT_.getG_S().edges(), "type'_S_E",
-				TG_S.edges())
+	private TTripleGraph createTypedHostTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT, TripleGraph GT_) {
+		TotalFunction type_S_E_ = new TotalFunction(GT_.getG_S().edges(), "type'_S_E", TG_S.edges())
 						.addMapping(GT_.getG_S().edges().get("e1:cards"),
 								TG_S.edges().get("cards"))
 						.addMapping(GT_.getG_S().edges().get("e2:cards"),
@@ -233,8 +240,7 @@ public class TestsEx2 {
 						.addMapping(GT_.getG_S().edges().get("prev"), TG_S.edges().get("prev"))
 						.addMapping(GT_.getG_S().edges().get("next"), TG_S.edges().get("next"));
 
-		TotalFunction type_S_V_ = new TotalFunction(GT_.getG_S().vertices(), "type'_V",
-				TG_S.vertices())
+		TotalFunction type_S_V_ = new TotalFunction(GT_.getG_S().vertices(), "type'_V", TG_S.vertices())
 						.addMapping(GT_.getG_S().vertices().get("i"),
 								TG_S.vertices().get("List"))
 						.addMapping(GT_.getG_S().vertices().get("j"),
@@ -247,25 +253,19 @@ public class TestsEx2 {
 								TG_S.vertices().get("Card"));
 		GraphMorphism type_S_ = new GraphMorphism("type'_S", GT_.getG_S(), TG_S, type_S_E_, type_S_V_);
 
-		TotalFunction type_C_V_ = new TotalFunction(GT_.getG_C().vertices(), "type'_C_V",
-				TG_C.vertices())
+		TotalFunction type_C_V_ = new TotalFunction(GT_.getG_C().vertices(), "type'_C_V", TG_C.vertices())
 						.addMapping(GT_.getG_C().vertices().get("x2tx"),
 								TG_C.vertices().get("CardToTask"))
 						.addMapping(GT_.getG_C().vertices().get("y2ty"),
 								TG_C.vertices().get("CardToTask"));
-		TotalFunction type_C_E_ = new TotalFunction(GT_.getG_C().edges(), "type_C_E",
-				TG_C.edges());
+		TotalFunction type_C_E_ = new TotalFunction(GT_.getG_C().edges(), "type_C_E", TG_C.edges());
 		GraphMorphism type_C_ = new GraphMorphism("type'_C", GT_.getG_C(), TG_C, type_C_E_, type_C_V_);
 
-		TotalFunction type_T_V_ = new TotalFunction(GT_.getG_T().vertices(), "type'_T_V",
-				TG_T.vertices())
-						.addMapping(GT_.getG_T().vertices().get("tx"),
-								TG_T.vertices().get("Task"))
-						.addMapping(GT_.getG_T().vertices().get("ty"),
-								TG_T.vertices().get("Task"));
-		TotalFunction type_T_E_ = new TotalFunction(GT_.getG_T().edges(), "type'_T_E",
-				TG_T.edges()).addMapping(GT_.getG_T().edges().get("r"),
-						TG_T.edges().get("related"));
+		TotalFunction type_T_V_ = new TotalFunction(GT_.getG_T().vertices(), "type'_T_V", TG_T.vertices())
+						.addMapping(GT_.getG_T().vertices().get("tx"), TG_T.vertices().get("Task"))
+						.addMapping(GT_.getG_T().vertices().get("ty"), TG_T.vertices().get("Task"));
+		TotalFunction type_T_E_ = new TotalFunction(GT_.getG_T().edges(), "type'_T_E", TG_T.edges())
+				.addMapping(GT_.getG_T().edges().get("r"), TG_T.edges().get("related"));
 		GraphMorphism type_T_ = new GraphMorphism("type'_T", GT_.getG_T(), TG_T, type_T_E_, type_T_V_);
 
 		TripleMorphism type_ = new TripleMorphism("type'", GT_, TGT, type_S_, type_C_, type_T_);
@@ -273,119 +273,26 @@ public class TestsEx2 {
 		return tGT_;
 	}
 
-	private static TTripleGraph createTypedPatternTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT,
-			TripleGraph GT) {
-		TotalFunction type_S_V = new TotalFunction(GT.getG_S().vertices(), "type_S_V",
-				TG_S.vertices())
-						.addMapping(GT.getG_S().vertices().get("L"), TG_S.vertices().get("List"))
-						.addMapping(GT.getG_S().vertices().get("C"),
-								TG_S.vertices().get("Card"));
+	private TTripleGraph createTypedPatternTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT, TripleGraph GT) {
+		TotalFunction type_S_V = new TotalFunction(GT.getG_S().vertices(), "type_S_V",TG_S.vertices())
+				.addMapping(GT.getG_S().vertices().get("L"), TG_S.vertices().get("List"))
+				.addMapping(GT.getG_S().vertices().get("C"), TG_S.vertices().get("Card"));
 		TotalFunction type_S_E = new TotalFunction(GT.getG_S().edges(), "type_S_E", TG_S.edges())
 				.addMapping(GT.getG_S().edges().get("cards"), TG_S.edges().get("cards"));
 		GraphMorphism type_S = new GraphMorphism("type_S", GT.getG_S(), TG_S, type_S_E, type_S_V);
 
-		TotalFunction type_C_V = new TotalFunction(GT.getG_C().vertices(), "type_C_V",
-				TG_C.vertices()).addMapping(GT.getG_C().vertices().get("C2T"),
-						TG_C.vertices().get("CardToTask"));
-		TotalFunction type_C_E = new TotalFunction(GT.getG_C().edges(), "type_C_E",
-				TG_C.edges());
+		TotalFunction type_C_V = new TotalFunction(GT.getG_C().vertices(), "type_C_V", TG_C.vertices())
+				.addMapping(GT.getG_C().vertices().get("C2T"), TG_C.vertices().get("CardToTask"));
+		TotalFunction type_C_E = new TotalFunction(GT.getG_C().edges(), "type_C_E", TG_C.edges());
 		GraphMorphism type_C = new GraphMorphism("type_C", GT.getG_C(), TG_C, type_C_E, type_C_V);
 
-		TotalFunction type_T_V = new TotalFunction(GT.getG_T().vertices(), "type_T_V",
-				TG_T.vertices()).addMapping(GT.getG_T().vertices().get("T"),
-						TG_T.vertices().get("Task"));
-		TotalFunction type_T_E = new TotalFunction(GT.getG_T().edges(), "type_T_E",
-				TG_T.edges());
+		TotalFunction type_T_V = new TotalFunction(GT.getG_T().vertices(), "type_T_V", TG_T.vertices())
+				.addMapping(GT.getG_T().vertices().get("T"), TG_T.vertices().get("Task"));
+		TotalFunction type_T_E = new TotalFunction(GT.getG_T().edges(), "type_T_E", TG_T.edges());
 		GraphMorphism type_T = new GraphMorphism("type_T", GT.getG_T(), TG_T, type_T_E, type_T_V);
 
 		TripleMorphism type = new TripleMorphism("type", GT, TGT, type_S, type_C, type_T);
 		TTripleGraph tGT = new TTripleGraph("GT", type);
 		return tGT;
-	}
-
-	public static Graph createPatternGraph(String name) {
-		FinSet edges = new FinSet("E_" + name, "cards");
-		FinSet vertices = new FinSet("V_" + name, "L", "C");
-		TotalFunction source = new TotalFunction(edges, "s_" + name, vertices);
-		source.addMapping(edges.get("cards"), vertices.get("L"));
-		TotalFunction target = new TotalFunction(edges, "t_" + name, vertices);
-		target.addMapping(edges.get("cards"), vertices.get("C"));
-	
-		return new Graph(name, edges, vertices, source, target);
-	}
-
-	public static Graph createHostGraph(String name) {
-		FinSet edges_ = new FinSet("E_" + name, "prev", "next", "e1:cards", "e2:cards");
-		FinSet vertices_ = new FinSet("V_" + name, "i", "j", "k", "x", "y");
-		TotalFunction source_ = new TotalFunction(edges_, "s_" + name, vertices_);
-		source_.addMapping(edges_.get("prev"), vertices_.get("j")).addMapping(edges_.get("next"), vertices_.get("j"))
-				.addMapping(edges_.get("e1:cards"), vertices_.get("j"))
-				.addMapping(edges_.get("e2:cards"), vertices_.get("k"));
-		TotalFunction target_ = new TotalFunction(edges_, "t_" + name, vertices_);
-		target_.addMapping(edges_.get("prev"), vertices_.get("i")).addMapping(edges_.get("next"), vertices_.get("k"))
-				.addMapping(edges_.get("e1:cards"), vertices_.get("x"))
-				.addMapping(edges_.get("e2:cards"), vertices_.get("y"));
-	
-		return new Graph(name, edges_, vertices_, source_, target_);
-	}
-
-	public static GraphMorphism createGraphMorphism(Graph pattern, Graph hostGraph) {
-		TotalFunction f_E = new TotalFunction(pattern.edges(), "f_E", hostGraph.edges())
-				.addMapping(pattern.edges().get("cards"), hostGraph.edges().get("e1:cards"));
-		TotalFunction f_V = new TotalFunction(pattern.vertices(), "f_V", hostGraph.vertices())
-				.addMapping(pattern.vertices().get("L"), hostGraph.vertices().get("j"))
-				.addMapping(pattern.vertices().get("C"), hostGraph.vertices().get("x"));
-	
-		GraphMorphism f = new GraphMorphism("f", pattern, hostGraph, f_E, f_V);
-		return f;
-	}
-
-	public static TGraph createTypedPatternGraph(Graph TG, Graph G) {
-		TotalFunction type_E = new TotalFunction(G.edges(), "type_E", TG.edges())
-				.addMapping(G.edges().get("cards"), TG.edges().get("cards"));
-	
-		TotalFunction type_V = new TotalFunction(G.vertices(), "type_V", TG.vertices())
-				.addMapping(G.vertices().get("L"), TG.vertices().get("List"))
-				.addMapping(G.vertices().get("C"), TG.vertices().get("Card"));
-	
-		GraphMorphism type = new GraphMorphism("type", G, TG, type_E, type_V);
-		TGraph GT = new TGraph("G", type);
-		return GT;
-	}
-
-	public static TGraph createTypedHostGraph(Graph TG, Graph G_) {
-		TotalFunction type_E_ = new TotalFunction(G_.edges(), "type'_E", TG.edges())
-				.addMapping(G_.edges().get("e1:cards"), TG.edges().get("cards"))
-				.addMapping(G_.edges().get("e2:cards"), TG.edges().get("cards"))
-				.addMapping(G_.edges().get("prev"), TG.edges().get("prev"))
-				.addMapping(G_.edges().get("next"), TG.edges().get("next"));
-
-		TotalFunction type_V_ = new TotalFunction(G_.vertices(), "type'_V", TG.vertices())
-				.addMapping(G_.vertices().get("i"), TG.vertices().get("List"))
-				.addMapping(G_.vertices().get("j"), TG.vertices().get("List"))
-				.addMapping(G_.vertices().get("k"), TG.vertices().get("List"))
-				.addMapping(G_.vertices().get("x"), TG.vertices().get("Card"))
-				.addMapping(G_.vertices().get("y"), TG.vertices().get("Card"));
-
-		GraphMorphism type_ = new GraphMorphism("type'", G_, TG, type_E_, type_V_);
-
-		TGraph GT_ = new TGraph("G'", type_);
-		return GT_;
-	}
-
-	public static Graph createListCardTypeGraph(String name) {
-		FinSet E_TG = new FinSet("E_" + name, "prev", "next", "cards");
-		FinSet V_TG = new FinSet("V_" + name, "List", "Card");
-
-		TotalFunction s_TG = new TotalFunction(E_TG, "s_" + name, V_TG);
-		s_TG.addMapping(E_TG.get("prev"), V_TG.get("List")).addMapping(E_TG.get("next"), V_TG.get("List"))
-				.addMapping(E_TG.get("cards"), V_TG.get("List"));
-
-		TotalFunction t_TG = new TotalFunction(E_TG, "t_" + name, V_TG);
-		t_TG.addMapping(E_TG.get("prev"), V_TG.get("List")).addMapping(E_TG.get("next"), V_TG.get("List"))
-				.addMapping(E_TG.get("cards"), V_TG.get("Card"));
-
-		Graph TG = new Graph(name, E_TG, V_TG, s_TG, t_TG);
-		return TG;
 	}
 }

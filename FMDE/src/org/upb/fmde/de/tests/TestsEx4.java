@@ -2,7 +2,6 @@ package org.upb.fmde.de.tests;
 
 import static org.upb.fmde.de.categories.concrete.tgraphs.TGraphs.TGraphsFor;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,14 +22,13 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
-import org.upb.fmde.de.ecore.MetaModelToGraphs;
 
 public class TestsEx4 {
 	private static final String diagrams = "diagrams/ex4/";
 
 	@BeforeClass
-	public static void clear(){
-		for (File f : new File(diagrams).listFiles()) f.delete();
+	public static void clear() {
+		TestUtil.clear(diagrams);
 	}
 	
 	@Test
@@ -63,12 +61,12 @@ public class TestsEx4 {
 	@Test
 	public void colimitsGraphs() throws IOException{
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
-		EObject root = TestsEx3.loadSimpleTrello(rs);
-		TGraph[] L_TG_Ecore = TestsEx3.loadBoardAsTGraphs(rs, "models/ex3/graphCondition/L.xmi", "L");
+		EObject root = TestUtil.loadSimpleTrello(rs);
+		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/graphCondition/L.xmi", "L");
 		TGraph L = L_TG_Ecore[0];
 		Graph TG = L_TG_Ecore[1].type().src();
-		TGraph R = TestsEx3.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
-		TGraph G = TestsEx3.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G", L_TG_Ecore[1], L_TG_Ecore[2]);
+		TGraph R = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
+		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G", L_TG_Ecore[1], L_TG_Ecore[2]);
 
 		TPatternMatcher pm = new TPatternMatcher(L, R);
 		TGraphMorphism r = pm.getMonicMatches().get(0);
@@ -84,7 +82,7 @@ public class TestsEx4 {
 				TGraphDiagram d = new TGraphDiagram(TG);
 				d.objects(L, R, G, po.obj.horiz.trg())
 				 .arrows(r, m.get(i), po.obj.horiz, po.obj.vert);
-				TestsEx3.prettyPrintTEcore(d, "po_TGraphs_" + i, diagrams);
+				TestUtil.prettyPrintTEcore(d, "po_TGraphs_" + i, diagrams);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

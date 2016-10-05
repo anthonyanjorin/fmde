@@ -1,9 +1,9 @@
 package org.upb.fmde.de.tests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.upb.fmde.de.categories.concrete.finsets.OpFinSets.OpFinSets;
-import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.BeforeClass;
@@ -20,7 +20,7 @@ public class TestsEx1 {
 	
 	@BeforeClass
 	public static void clear() {
-		for(File f : new File(diagrams).listFiles()) f.delete();
+		TestUtil.clear(diagrams);
 	}
 
 	@Test

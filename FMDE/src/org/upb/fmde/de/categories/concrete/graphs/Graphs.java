@@ -2,15 +2,23 @@ package org.upb.fmde.de.categories.concrete.graphs;
 
 import static org.upb.fmde.de.categories.concrete.finsets.FinSets.FinSets;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.upb.fmde.de.categories.LabelledCategory;
 import org.upb.fmde.de.categories.colimits.CategoryWithInitOb;
 import org.upb.fmde.de.categories.colimits.CoLimit;
+import org.upb.fmde.de.categories.colimits.pushouts.CategoryWithPushoutComplements;
 import org.upb.fmde.de.categories.colimits.pushouts.CategoryWithPushouts;
 import org.upb.fmde.de.categories.colimits.pushouts.CoSpan;
+import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
-public class Graphs implements LabelledCategory<Graph, GraphMorphism>, CategoryWithInitOb<Graph, GraphMorphism>, CategoryWithPushouts<Graph, GraphMorphism> {
+public class Graphs implements LabelledCategory<Graph, GraphMorphism>, 
+							   CategoryWithInitOb<Graph, GraphMorphism>, 
+							   CategoryWithPushouts<Graph, GraphMorphism>,
+							   CategoryWithPushoutComplements<Graph, GraphMorphism> {
 
 	public static Graphs Graphs = new Graphs();
 	
@@ -87,5 +95,65 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>, CategoryW
 					TotalFunction u_V = coprodVertices.up.apply(new CoSpan<>(FinSets, cos.horiz._V(), cos.vert._V()));
 					return new GraphMorphism("u", obj, cos.horiz.trg(), u_E, u_V);
 				});
+	}
+
+	@Override
+	public Optional<Corner<GraphMorphism>> pushoutComplement(Corner<GraphMorphism> upperLeft) {
+		if(danglingEdgeConditionViolated(upperLeft))
+			return Optional.empty();
+		
+		GraphMorphism l = upperLeft.first;
+		GraphMorphism m = upperLeft.second;
+		GraphMorphism l_m = compose(l, m);
+		Graph K = l.src();
+		Graph L = l.trg();
+		Graph G = m.trg();
+		
+		FinSet V_D = new FinSet("V_D", K.vertices().elts()
+				.stream()
+				.map(v -> l_m._V().map(v))
+				.collect(Collectors.toList()));
+		
+		FinSet E_D = new FinSet("E_D", K.edges().elts()
+				.stream()
+				.map(v -> l_m._E().map(v))
+				.collect(Collectors.toList()));
+		
+		TotalFunction s_D = new TotalFunction(E_D, "s_D", V_D);
+		G.src().mappings().forEach((from, to) -> {
+			if(E_D.elts().contains(from)) 
+				s_D.addMapping(from, to);
+		});
+		
+		TotalFunction t_D = new TotalFunction(E_D, "t_D", V_D);
+		G.trg().mappings().forEach((from, to) -> {
+			if(E_D.elts().contains(from)) 
+				t_D.addMapping(from, to);
+		});
+		
+		Graph D = new Graph("D", E_D, V_D, s_D, t_D);
+		
+		TotalFunction l__E = new TotalFunction(D.edges(), "l'_E", G.edges());
+		l__E.mappings().putAll(id(D)._E().mappings());
+		
+		TotalFunction l__V = new TotalFunction(D.vertices(), "l'_V", G.vertices());
+		l__V.mappings().putAll(id(D)._V().mappings());
+		
+		GraphMorphism l_ = new GraphMorphism("l'", D, G, l__E, l__V);
+		
+		TotalFunction d_E = new TotalFunction(K.edges(), "d_E", D.edges());
+		l__E.mappings().putAll(l_m._E().mappings());
+		
+		TotalFunction d_V = new TotalFunction(K.vertices(), "d_V", D.vertices());
+		l__E.mappings().putAll(l_m._V().mappings());
+		
+		GraphMorphism d = new GraphMorphism("d", K, D, d_E, d_V);
+		
+		return Optional.of(new Corner<>(this, d, l_));
+	}
+
+	private boolean danglingEdgeConditionViolated(Corner<GraphMorphism> upperLeft) {
+		// TODO 
+		return false;
 	}
 }

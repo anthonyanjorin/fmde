@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
-import org.upb.fmde.de.categories.diagrams.CatPrinter;
 import org.upb.fmde.de.categories.Category;
 
 public class Diagram<Ob, Arr> {
@@ -17,8 +16,8 @@ public class Diagram<Ob, Arr> {
 	
 	public Diagram(Category<Ob, Arr> cat) {
 		this.cat = cat;
-		objects = new HashSet<>();
-		arrows = new HashSet<>();
+		objects = new LinkedHashSet<>();
+		arrows = new LinkedHashSet<>();
 	}
 	
 	@SuppressWarnings("unchecked")
