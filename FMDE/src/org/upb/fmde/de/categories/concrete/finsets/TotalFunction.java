@@ -26,8 +26,8 @@ public class TotalFunction extends LabelledArrow<FinSet> implements ComparableAr
 	}
 
 	public boolean isTheSameAs(TotalFunction f) {
-		return source.elts().stream()
-					 .allMatch(x -> map(x) != null && map(x).equals(f.map(x)));
+		// TODO Determine if this and f are equivalent total functions
+		throw new UnsupportedOperationException("This method has not been implemented yet!");
 	}
 	
 	public Map<Object, Object> mappings(){
