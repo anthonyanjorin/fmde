@@ -1,5 +1,7 @@
 package org.upb.fmde.de.tests;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.BiFunction;
@@ -58,13 +60,12 @@ public class TestsEx3 {
 		
 		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
 		boolean sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm);
-		System.out.println("Multiplicities are satisfied: " + sat);
+		assertTrue("Multiplicities must be satisfied", sat);
+		
 		
 		TGraph G_empty = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/EmptyBoard.xmi", "G");
 		sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G_empty), create_pm);
-		System.out.println("Multiplicities are satisfied: " + sat);
-		
-		//TODO Add some assertions
+		assertFalse("Multiplicities must not be satisfied", sat);		
 	}
 
 	@Test
@@ -105,28 +106,33 @@ public class TestsEx3 {
 			match.objects(L, G).arrows(m);
 			String label = "m_" + counter++;
 			TestUtil.prettyPrintTEcore(match, label, diagrams);
-			System.out.println(label + ": " + chosenMustHavePreviousOrNext.isSatisfiedByArrow(m, create_pm));
+			
+			if(counter < 3)
+				assertTrue(label + " fulfills the condition", chosenMustHavePreviousOrNext.isSatisfiedByArrow(m, create_pm));
+			else
+				assertFalse(label + "violates the condition", chosenMustHavePreviousOrNext.isSatisfiedByArrow(m, create_pm));
 		}
 		
 		Constraint<TGraph, TGraphMorphism> mustHavePreviousOrNext = new Constraint<>(TGraphs.TGraphsFor(TG), P, Arrays.asList(c1, c2));
-		System.out.println("Constraint is satisfied: " + mustHavePreviousOrNext.isSatisfiedByObject(G, create_pm));
+		assertFalse("Constraint is not satisfied", mustHavePreviousOrNext.isSatisfiedByObject(G, create_pm));
 		
 		SimpleConstraint<TGraph, TGraphMorphism> atLeastOneListWithACard = new SimpleConstraint<>(TGraphs.TGraphsFor(TG), P);
-		System.out.println("Simple constraint is satisfied: " + atLeastOneListWithACard.isSatisfiedByObject(G, create_pm));
-		System.out.println("Simple constraint is satisfied: " + atLeastOneListWithACard.isSatisfiedByObject(L, create_pm));
+		assertTrue("Simple constraint is satisfied", atLeastOneListWithACard.isSatisfiedByObject(G, create_pm));
+		assertFalse("Simple constraint is not satisfied", atLeastOneListWithACard.isSatisfiedByObject(L, create_pm));
 		
 		TGraph N = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/N.xmi", "N");
 		TGraph G_ = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/BoardWithTreeStructure.xmi", "G'");
 		NegativeConstraint<TGraph, TGraphMorphism> linearNextPrev = new NegativeConstraint<>(TGraphs.TGraphsFor(TG), N);
-		System.out.println("Negative constraint is satisfied: " + linearNextPrev.isSatisfiedByObject(G, create_pm));
-		System.out.println("Negative constraint is satisfied: " + linearNextPrev.isSatisfiedByObject(G_, create_pm));
+		assertTrue("Negative constraint is satisfied", linearNextPrev.isSatisfiedByObject(G, create_pm));
+		assertFalse("Negative constraint is not satisfied", linearNextPrev.isSatisfiedByObject(G_, create_pm));
 		
 		ComplexGraphCondition<TGraph, TGraphMorphism> complexgc = new And<TGraph, TGraphMorphism>(linearNextPrev, atLeastOneListWithACard, mustHavePreviousOrNext);
-		System.out.println("Complex graph condition is satisfied: " + complexgc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm));
+		assertFalse("Complex graph condition is not satisfied", complexgc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm));
 	
-		t.toc();
+		ComplexGraphCondition<TGraph, TGraphMorphism> anothercomplexgc = new And<TGraph, TGraphMorphism>(linearNextPrev, atLeastOneListWithACard);
+		assertTrue("Complex graph condition is satisfied", anothercomplexgc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm));
 		
-		//TODO Add some assertions
+		t.toc();		
 	}
 
 	@Test
@@ -138,9 +144,7 @@ public class TestsEx3 {
 		TGraphDiagram d = new TGraphDiagram(importer.getResult()[0].type().trg());
 		d.objects(importer.getResult());
 		TestUtil.prettyPrintEcore(d.getGraphDiagram(), "TrelloInstanceTyped", diagrams);
-		d.getGraphDiagram().saveAsDot(diagrams, "TrelloInstanceTyped");
-		
-		//TODO Add some assertions
+		d.getGraphDiagram().saveAsDot(diagrams, "TrelloInstanceTyped");		
 	}
 
 	@Test
@@ -168,9 +172,7 @@ public class TestsEx3 {
 			GraphDiagram d = new GraphDiagram();
 			d.objects(importer.getResult());
 			TestUtil.prettyPrintEcore(d, "TrelloInstance", diagrams);
-		}
-		
-		//TODO Add some assertions
+		}		
 	}
 
 	@Test
@@ -204,8 +206,6 @@ public class TestsEx3 {
 			TGraphDiagram d = new TGraphDiagram(TG);
 			d.objects(L_typed, G_typed).arrows(m);
 			d.prettyPrint(diagrams, "tgraph_match_" + count++);
-		}
-		
-		//TODO Add some assertions
+		}		
 	}
 }

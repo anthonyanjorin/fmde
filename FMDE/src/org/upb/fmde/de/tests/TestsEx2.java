@@ -47,9 +47,7 @@ public class TestsEx2 {
 	
 		d.saveAsDot(diagrams, "match_in_Graphs");
 		d.getSetDiagram().saveAsDot(diagrams, "match_in_FinSets");
-		d.prettyPrint(diagrams, "match_in_Graphs");
-		
-		//TODO Add some assertions here
+		d.prettyPrint(diagrams, "match_in_Graphs");		
 	}
 
 	@Test
@@ -68,9 +66,7 @@ public class TestsEx2 {
 		TGraphDiagram d_typed = new TGraphDiagram(TG);
 		d_typed.arrows(f_typed).objects(GT, GT_).saveAsDot(diagrams, "typed_match_in_TGraphs");
 		d_typed.getGraphDiagram().saveAsDot(diagrams, "typed_match_in_Graphs");
-		d_typed.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typed_match_in_FinSets");
-		
-		//TODO Add some assertions here
+		d_typed.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typed_match_in_FinSets");		
 	}
 	
 	@Test
@@ -81,9 +77,7 @@ public class TestsEx2 {
 		d_triples.objects(GT).saveAsDot(diagrams, "tripleGraph_in_TripleGraphs");
 	
 		d_triples.getGraphDiagram().saveAsDot(diagrams, "tripleGraph_in_Graphs");
-		d_triples.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleGraph_in_FinSets");	
-		
-		//TODO Add some assertions here
+		d_triples.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleGraph_in_FinSets");			
 	}
 
 	@Test
@@ -96,9 +90,7 @@ public class TestsEx2 {
 		TripleGraphDiagram d = new TripleGraphDiagram();
 		d.arrows(f).objects(GT_).saveAsDot(diagrams, "tripleMorphism_in_TripleGraphs");
 		d.getGraphDiagram().saveAsDot(diagrams, "tripleMorphism_in_Graphs");
-		d.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleMorphism_in_FinSets");	
-		
-		//TODO Add some assertions here
+		d.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleMorphism_in_FinSets");			
 	}
 
 	@Test
@@ -147,9 +139,7 @@ public class TestsEx2 {
 		d.objects(tGT, tGT_).arrows(tf).saveAsDot(diagrams, "typedTripleMorphism_in_TypedTripleGraphs");
 		d.getTripleGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_TripleGraphs");
 		d.getTripleGraphDiagram().getGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_Graphs");
-		d.getTripleGraphDiagram().getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_FinSets");
-		
-		//TODO Add some assertions here
+		d.getTripleGraphDiagram().getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_FinSets");		
 	}
 
 	private TripleGraph createPatternTriple(String name) {
