@@ -1,7 +1,12 @@
 package org.upb.fmde.de.categories.concrete.graphs;
 
+import java.util.Collection;
+
+import org.antlr.grammar.v3.ANTLRParser.id_return;
+import org.eclipse.jdt.annotation.NonNull;
 import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.Labelled;
+import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
@@ -41,5 +46,28 @@ public class Graph extends Labelled {
 	
 	public TotalFunction trg(){
 		return target;
+	}
+
+	public GraphMorphism removeEdges(Collection<Object> danglingEdges) {
+		FinSet E_ = new FinSet("E_", E.elts());
+		E_.elts().removeAll(danglingEdges);
+		
+		TotalFunction source_ = new TotalFunction(E_, "source_", V);
+		E_.elts().forEach(e -> source_.addMapping(e, source.map(e)));
+		
+		TotalFunction target_ = new TotalFunction(E_, "target_", V);
+		E_.elts().forEach(e -> target_.addMapping(e, target.map(e)));
+		
+		Graph G_ = new Graph("G_", E_, V, source_, target_);
+		
+		GraphMorphism id_G_ = Graphs.Graphs.id(G_);
+		
+		TotalFunction G_E = new TotalFunction(G_.E, "G_E", this.E);
+		G_.E.elts().forEach(e -> G_E.addMapping(e, id_G_._E().map(e)));
+		
+		TotalFunction G_V = new TotalFunction(G_.V, "G_V", this.V);
+		G_.V.elts().forEach(v -> G_V.addMapping(v, id_G_._V().map(v)));
+		
+		return new GraphMorphism("_g_", G_, this, G_E, G_V);
 	}
 }

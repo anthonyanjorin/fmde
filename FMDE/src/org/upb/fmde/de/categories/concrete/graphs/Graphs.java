@@ -2,9 +2,13 @@ package org.upb.fmde.de.categories.concrete.graphs;
 
 import static org.upb.fmde.de.categories.concrete.finsets.FinSets.FinSets;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.upb.fmde.de.categories.LabelledCategory;
 import org.upb.fmde.de.categories.colimits.CategoryWithInitOb;
 import org.upb.fmde.de.categories.colimits.CoLimit;
@@ -99,25 +103,22 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 
 	@Override
 	public Optional<Corner<GraphMorphism>> pushoutComplement(Corner<GraphMorphism> upperLeft) {
-		if(danglingEdgeConditionViolated(upperLeft))
+		if(!determineDanglingEdges(upperLeft).isEmpty())
 			return Optional.empty();
 		
 		GraphMorphism l = upperLeft.first;
 		GraphMorphism m = upperLeft.second;
-		GraphMorphism l_m = compose(l, m);
 		Graph K = l.src();
-		Graph L = l.trg();
 		Graph G = m.trg();
-		
-		FinSet V_D = new FinSet("V_D", K.vertices().elts()
-				.stream()
-				.map(v -> l_m._V().map(v))
-				.collect(Collectors.toList()));
-		
-		FinSet E_D = new FinSet("E_D", K.edges().elts()
-				.stream()
-				.map(v -> l_m._E().map(v))
-				.collect(Collectors.toList()));
+
+		return FinSets.pushoutComplement(new Corner<>(FinSets, l._V(), m._V()))
+				.flatMap(pc_V -> FinSets.pushoutComplement(new Corner<>(FinSets, l._E(), m._E()))
+				.map(pc_E -> determinePushOutComplement(pc_V, pc_E, G, K)));
+	}
+
+	private Corner<GraphMorphism> determinePushOutComplement(Corner<TotalFunction> pc_V, Corner<TotalFunction> pc_E, Graph G, Graph K) {
+		FinSet E_D = pc_E.first.trg();
+		FinSet V_D = pc_V.first.trg();
 		
 		TotalFunction s_D = new TotalFunction(E_D, "s_D", V_D);
 		G.src().mappings().forEach((from, to) -> {
@@ -133,27 +134,59 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 		
 		Graph D = new Graph("D", E_D, V_D, s_D, t_D);
 		
-		TotalFunction l__E = new TotalFunction(D.edges(), "l'_E", G.edges());
-		l__E.mappings().putAll(id(D)._E().mappings());
+		GraphMorphism d = new GraphMorphism("d", K, D, pc_E.first, pc_V.first);
+		GraphMorphism l_ = new GraphMorphism("l'", D, G, pc_E.second, pc_V.second);
 		
-		TotalFunction l__V = new TotalFunction(D.vertices(), "l'_V", G.vertices());
-		l__V.mappings().putAll(id(D)._V().mappings());
-		
-		GraphMorphism l_ = new GraphMorphism("l'", D, G, l__E, l__V);
-		
-		TotalFunction d_E = new TotalFunction(K.edges(), "d_E", D.edges());
-		l__E.mappings().putAll(l_m._E().mappings());
-		
-		TotalFunction d_V = new TotalFunction(K.vertices(), "d_V", D.vertices());
-		l__E.mappings().putAll(l_m._V().mappings());
-		
-		GraphMorphism d = new GraphMorphism("d", K, D, d_E, d_V);
-		
-		return Optional.of(new Corner<>(this, d, l_));
+		return new Corner<GraphMorphism>(this, d, l_);
 	}
 
-	private boolean danglingEdgeConditionViolated(Corner<GraphMorphism> upperLeft) {
-		// TODO 
-		return false;
+	private Collection<Object> determineDanglingEdges(Corner<GraphMorphism> upperLeft) {
+		Graph L = upperLeft.first.trg();
+		Graph G = upperLeft.second.trg();
+		GraphMorphism m = upperLeft.second;
+		GraphMorphism l = upperLeft.first;
+		
+		Map<Object, Collection<Object>> danglingPoints = new HashMap<>();
+		L.vertices().elts().stream()
+			.forEach(v -> {
+				Collection<Object> danglingEdges = G.edges().elts().stream()
+					.filter(e -> !m._E().mappings().containsValue(e))
+					.filter(e -> edgeIsIncidentToVertice(G, m, v, e))
+					.collect(Collectors.toSet());
+				
+				if(!danglingEdges.isEmpty())
+					danglingPoints.put(v, danglingEdges);
+			});
+		
+		Collection<Object> gluingPoints = l._V().mappings().values();
+		
+		gluingPoints.forEach(gp -> danglingPoints.remove(gp));
+		
+		return danglingPoints.values().stream()
+				.flatMap(edges -> edges.stream())
+				.collect(Collectors.toSet());
+	}
+
+	private boolean edgeIsIncidentToVertice(Graph G, GraphMorphism m, Object v, Object e) {
+		return G.src().map(e).equals(m._V().map(v)) || G.trg().map(e).equals(m._V().map(v));
+	}
+
+	public Corner<GraphMorphism> restrict(Corner<GraphMorphism> upperLeft) {
+		Graph G = upperLeft.second.trg();
+		Graph L = upperLeft.first.trg();
+		GraphMorphism m = upperLeft.second;
+		Collection<Object> danglingEdges = determineDanglingEdges(upperLeft);
+		
+		GraphMorphism _g_ =  G.removeEdges(danglingEdges);
+		
+		TotalFunction _m_E = new TotalFunction(L.edges(), "_m_E", _g_.src().edges());
+		_m_E.mappings().putAll(m._E().mappings());
+		
+		TotalFunction _m_V = new TotalFunction(L.vertices(), "_m_V", _g_.src().vertices());
+		_m_V.mappings().putAll(m._V().mappings());
+		
+		GraphMorphism _m_ = new GraphMorphism("_m_", L, _g_.src(), _m_E, _m_V);
+		
+		return new Corner<>(this, _m_, _g_);
 	}
 }

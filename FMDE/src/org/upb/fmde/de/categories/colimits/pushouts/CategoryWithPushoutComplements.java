@@ -6,11 +6,15 @@ public interface CategoryWithPushoutComplements<Ob, Arr> extends CategoryWithPus
 	
 	Optional<Corner<Arr>> pushoutComplement(Corner<Arr> upperLeft);
 	
+	default Corner<Arr> restrict(Corner<Arr> upperLeft){
+		return upperLeft;
+	}
+	
 	default Optional<DirectDerivation<Arr>> doublePushout(Span<Arr> L_K_R, Arr match){
-		Corner<Arr> upperLeftCorner = new Corner<>(L_K_R.vert, match);
+		Corner<Arr> upperLeftCorner = new Corner<>(L_K_R.horiz, match);
 		
 		return pushoutComplement(upperLeftCorner).map(firstBottomRightCorner -> {
-			CoSpan<Arr> secondBottomRightCorner = pushout(new Span<>(L_K_R.horiz, firstBottomRightCorner.first)).obj;
+			CoSpan<Arr> secondBottomRightCorner = pushout(new Span<>(L_K_R.vert, firstBottomRightCorner.first)).obj;
 			return new DirectDerivation<>(firstBottomRightCorner, secondBottomRightCorner);
 		});
 	}

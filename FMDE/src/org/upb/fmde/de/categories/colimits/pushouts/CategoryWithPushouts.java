@@ -6,10 +6,10 @@ import org.upb.fmde.de.categories.colimits.CoLimit;
 public interface CategoryWithPushouts<Ob, Arr> extends Category<Ob, Arr> {
 	
 	default CoLimit<CoSpan<Arr>, Arr> pushout(Span<Arr> span) {
-		Ob G = target(span.horiz);
-		Ob R = target(span.vert);
+		Ob R = target(span.horiz);
+		Ob G = target(span.vert);
 		
-		CoLimit<CoSpan<Arr>, Arr> G_Plus_R = coproduct(G, R);
+		CoLimit<CoSpan<Arr>, Arr> G_Plus_R = coproduct(R, G);
 		
 		CoLimit<Arr, Arr> coequaliser = coequaliser(
 				compose(span.horiz, G_Plus_R.obj.vert),
