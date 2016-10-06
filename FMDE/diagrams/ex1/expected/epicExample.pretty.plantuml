@@ -1,0 +1,21 @@
+@startuml
+skinparam shadowing false
+hide members
+hide circle
+class "Z.a"
+class "Z.b"
+class "Z.c"
+class "Y.1"
+class "Y.2"
+class "Y.blup"
+
+"Y.1" --> "X.a" : "g"
+"Y.2" --> "X.3" : "g"
+"Y.blup" --> "X.foo" : "g"
+"Y.1" --> "X.3" : "h"
+"Y.2" --> "X.a" : "h"
+"Y.blup" --> "X.foo" : "h"
+"Z.a" --> "Y.blup" : "f"
+"Z.b" --> "Y.blup" : "f"
+"Z.c" --> "Y.blup" : "f"
+@enduml

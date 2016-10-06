@@ -1,0 +1,14 @@
+@startuml
+digraph Diagram {
+  "E_G";
+  "V_G";
+  "E_G'";
+  "V_G'";
+  "E_G"->"E_G'" [label=" f_E"];
+  "V_G"->"V_G'" [label=" f_V"];
+  "E_G"->"V_G" [label=" s_G"];
+  "E_G"->"V_G" [label=" t_G"];
+  "E_G'"->"V_G'" [label=" s_G'"];
+  "E_G'"->"V_G'" [label=" t_G'"];
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+digraph Diagram {
+  "Z";
+  "Y";
+  "X"->"Y" [label=" op_g"];
+  "X"->"Y" [label=" op_h"];
+  "Y"->"Z" [label=" op_f"];
+}
+@enduml

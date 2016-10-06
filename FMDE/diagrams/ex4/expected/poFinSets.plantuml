@@ -1,0 +1,16 @@
+@startuml
+digraph Diagram {
+  "L";
+  "R";
+  "G";
+  "==";
+  "X";
+  "G"->"==" [label=" G->G+R;=="];
+  "R"->"==" [label=" R->G+R;=="];
+  "L"->"R" [label=" r"];
+  "L"->"G" [label=" m"];
+  "=="->"X" [label=" u"];
+  "G"->"X" [label=" h"];
+  "R"->"X" [label=" v"];
+}
+@enduml

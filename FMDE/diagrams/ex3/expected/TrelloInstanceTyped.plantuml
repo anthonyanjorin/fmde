@@ -1,0 +1,10 @@
+@startuml
+digraph Diagram {
+  "G";
+  "TG_G";
+  "Ecore";
+  "G"->"TG_G" [label=" type_G"];
+  "TG_G"->"Ecore" [label=" type_TG_G"];
+  "Ecore"->"Ecore" [label=" type_Ecore"];
+}
+@enduml

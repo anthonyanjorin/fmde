@@ -1,0 +1,20 @@
+@startuml
+skinparam shadowing false
+hide members
+hide circle
+class "G:TG.L"
+class "G:TG.C"
+"G:TG.L"-->"G:TG.C" : "cards"
+class "G':TG.i"
+class "G':TG.j"
+class "G':TG.k"
+class "G':TG.x"
+class "G':TG.y"
+"G':TG.j"-->"G':TG.i" : "prev"
+"G':TG.j"-->"G':TG.k" : "next"
+"G':TG.j"-->"G':TG.x" : "e1:cards"
+"G':TG.k"-->"G':TG.y" : "e2:cards"
+
+"G:TG.L" --> "G':TG.k" : "m"
+"G:TG.C" --> "G':TG.y" : "m"
+@enduml

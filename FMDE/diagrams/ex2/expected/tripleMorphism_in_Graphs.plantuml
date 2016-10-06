@@ -1,0 +1,12 @@
+@startuml
+digraph Diagram {
+  "GT'_S";
+  "GT'_C";
+  "GT'_T";
+  "G_S"->"GT'_S" [label=" f_S"];
+  "G_C"->"GT'_C" [label=" f_C"];
+  "G_T"->"GT'_T" [label=" f_T"];
+  "GT'_C"->"GT'_S" [label=" GT'_sigma"];
+  "GT'_C"->"GT'_T" [label=" GT'_tau"];
+}
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+skinparam shadowing false
+hide members
+hide circle
+class "L.existingCard"
+class "R.existingCard"
+class "R.buy beer"
+class "G.install new sink"
+class "G.buy some paint"
+class "==.install new sink"
+class "==.buy some paint"
+class "==.buy beer"
+class "X.foo"
+
+"G.install new sink" --> "==.install new sink" : "G->G+R;=="
+"G.buy some paint" --> "==.buy some paint" : "G->G+R;=="
+"R.existingCard" --> "==.install new sink" : "R->G+R;=="
+"R.buy beer" --> "==.buy beer" : "R->G+R;=="
+"L.existingCard" --> "R.existingCard" : "r"
+"L.existingCard" --> "G.install new sink" : "m"
+"==.install new sink" --> "X.foo" : "u"
+"==.buy some paint" --> "X.foo" : "u"
+"==.buy beer" --> "X.foo" : "u"
+"G.install new sink" --> "X.foo" : "h"
+"G.buy some paint" --> "X.foo" : "h"
+"R.existingCard" --> "X.foo" : "v"
+"R.buy beer" --> "X.foo" : "v"
+@enduml
