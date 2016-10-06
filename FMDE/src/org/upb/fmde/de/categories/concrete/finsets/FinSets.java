@@ -8,13 +8,13 @@ public class FinSets implements LabelledCategory<FinSet, TotalFunction> {
 
 	@Override
 	public TotalFunction compose(TotalFunction f, TotalFunction g) {
-		// TODO Compose arrows via function composition
+		// TODO (3) Compose arrows via function composition
 		throw new UnsupportedOperationException("This method has not been implemented yet!");
 	}
 
 	@Override
 	public TotalFunction id(FinSet a) {
-		// TODO Create and return the id function: a -> a
+		// TODO (2) Create and return the id function: a -> a
 		throw new UnsupportedOperationException("This method has not been implemented yet!");
 	}
 }

@@ -26,7 +26,7 @@ public class TotalFunction extends LabelledArrow<FinSet> implements ComparableAr
 	}
 
 	public boolean isTheSameAs(TotalFunction f) {
-		// TODO Determine if this and f are equivalent total functions
+		// TODO (1) Determine if this and f are equivalent total functions
 		throw new UnsupportedOperationException("This method has not been implemented yet!");
 	}
 	

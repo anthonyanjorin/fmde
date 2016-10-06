@@ -10,7 +10,7 @@ public class OpCounterExampleChecker {
 		Diagram<FinSet, TotalFunction> op_d = new Diagram<>(FinSets);
 		op_d.arrows(d.getArrows());
 		op_d.objects(d.getObjects()); 
-		// TODO Check if d constitutes a counter example for f being a mono
+		// TODO (6) Check if d constitutes a counter example for f being a mono
 		throw new UnsupportedOperationException("This method has not been implemented yet!");
 	}
 	
@@ -18,7 +18,7 @@ public class OpCounterExampleChecker {
 		Diagram<FinSet, TotalFunction> op_d = new Diagram<>(FinSets);
 		op_d.arrows(d.getArrows());
 		op_d.objects(d.getObjects());
-		// TODO Check if d constitutes a counter example for f being an epi
+		// TODO (7) Check if d constitutes a counter example for f being an epi
 		throw new UnsupportedOperationException("This method has not been implemented yet!");
 	}
 }
