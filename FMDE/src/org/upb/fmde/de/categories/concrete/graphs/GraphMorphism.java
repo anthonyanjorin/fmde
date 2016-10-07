@@ -1,7 +1,5 @@
 package org.upb.fmde.de.categories.concrete.graphs;
 
-import static org.upb.fmde.de.categories.concrete.finsets.FinSets.FinSets;
-
 import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.ComparableArrow;
 import org.upb.fmde.de.categories.LabelledArrow;
@@ -29,10 +27,8 @@ public class GraphMorphism extends LabelledArrow<Graph> implements ComparableArr
 	}
 
 	private boolean isStructurePreserving() {
-		return FinSets.compose(f_E, target.src()).
-				isTheSameAs(FinSets.compose(source.src(), f_V)) &&
-			   FinSets.compose(f_E, target.trg()).
-				isTheSameAs(FinSets.compose(source.trg(), f_V));
+		// TODO (01) Implement check for structure preservation
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 
 	public TotalFunction _E(){
@@ -45,7 +41,7 @@ public class GraphMorphism extends LabelledArrow<Graph> implements ComparableArr
 
 	@Override
 	public boolean isTheSameAs(GraphMorphism a) {
-		return a._E().isTheSameAs(f_E) &&
-			   a._V().isTheSameAs(f_V);	
+		// TODO (02) Equality check for graph morphisms
+		throw new UnsupportedOperationException("Has not yet been implemented.");	
 	}
 }

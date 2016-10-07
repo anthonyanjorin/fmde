@@ -1,7 +1,5 @@
 package org.upb.fmde.de.categories.concrete.tgraphs;
 
-import static org.upb.fmde.de.categories.concrete.graphs.Graphs.Graphs;
-
 import org.upb.fmde.de.categories.ComparableArrow;
 import org.upb.fmde.de.categories.LabelledArrow;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
@@ -17,8 +15,8 @@ public class TGraphMorphism extends LabelledArrow<TGraph> implements ComparableA
 	}
 
 	private boolean isValid() {
-		return Graphs.compose(f, target.type())
-				     .isTheSameAs(source.type());
+		// TODO (05) Implement check for structure preservation
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 
 	public GraphMorphism untyped(){
@@ -33,8 +31,7 @@ public class TGraphMorphism extends LabelledArrow<TGraph> implements ComparableA
 	
 	@Override
 	public boolean isTheSameAs(TGraphMorphism a) {
-		return source.type().isTheSameAs(a.source.type()) &&
-			   target.type().isTheSameAs(a.trg().type()) &&
-			   f.isTheSameAs(a.f);
+		// TODO (06) Equality check for typed graph morphisms
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 }

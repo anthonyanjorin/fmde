@@ -1,10 +1,7 @@
 package org.upb.fmde.de.categories.concrete.tgraphs;
 
-import static org.upb.fmde.de.categories.concrete.graphs.Graphs.Graphs;
-
 import org.upb.fmde.de.categories.LabelledCategory;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
-import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 
 public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism> {
 	private final Graph typeGraph;
@@ -19,14 +16,14 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism> {
 	
 	@Override
 	public TGraphMorphism compose(TGraphMorphism f, TGraphMorphism g) {
-		GraphMorphism f_g = Graphs.compose(f.untyped(), g.untyped());
-		return new TGraphMorphism(f_g.label(), f_g, f.src(), g.trg());
+		// TODO (07) Composition of typed graph morphisms
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 
 	@Override
 	public TGraphMorphism id(TGraph f) {
-		GraphMorphism id = Graphs.id(f.type().src());
-		return new TGraphMorphism(id.label(), id, f, f);
+		// TODO (08) id typed graph morphisms
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 	
 	@Override

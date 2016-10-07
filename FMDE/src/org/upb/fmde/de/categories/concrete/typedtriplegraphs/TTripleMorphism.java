@@ -1,7 +1,5 @@
 package org.upb.fmde.de.categories.concrete.typedtriplegraphs;
 
-import static org.upb.fmde.de.categories.concrete.triplegraphs.TripleGraphs.TripleGraphs;
-
 import org.upb.fmde.de.categories.ComparableArrow;
 import org.upb.fmde.de.categories.LabelledArrow;
 import org.upb.fmde.de.categories.concrete.triplegraphs.TripleMorphism;
@@ -17,8 +15,8 @@ public class TTripleMorphism extends LabelledArrow<TTripleGraph> implements Comp
 	}
 
 	private boolean isValid() {
-		return TripleGraphs.compose(f, target.getTypeMorphism())
-				     .isTheSameAs(source.getTypeMorphism());
+		// TODO (13) Structure preservation
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 
 	public TripleMorphism getUntypedMorphism(){
@@ -27,9 +25,8 @@ public class TTripleMorphism extends LabelledArrow<TTripleGraph> implements Comp
 	
 	@Override
 	public boolean isTheSameAs(TTripleMorphism a) {
-		return source.getTypeMorphism().isTheSameAs(a.source.getTypeMorphism()) &&
-			   target.getTypeMorphism().isTheSameAs(a.trg().getTypeMorphism()) &&
-			   f.isTheSameAs(a.f);
+		// TODO (14) Equality
+		throw new UnsupportedOperationException("Has not yet been implemented.");
 	}
 
 }
