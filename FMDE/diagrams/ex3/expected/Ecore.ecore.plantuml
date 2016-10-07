@@ -1,7 +1,0 @@
-@startuml
-skinparam shadowing false
-hide members
-hide circle
-class "Ecore.EClass"
-"Ecore.EClass"-->"Ecore.EClass" : "EReference"
-@enduml

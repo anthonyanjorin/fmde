@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.xtend.XTEND_CONTAINER"/>
-	<classpathentry excluding="org/upb/fmde/de/categories/tgraphs/EcoreToTGraphs.java|org/upb/fmde/de/ecore/EcoreToTGraphs.java" kind="src" path="src"/>
+	<classpathentry excluding="org/upb/fmde/de/categories/tgraphs/EcoreToTGraphs.java|org/upb/fmde/de/ecore/EcoreToTGraphs.java|org/upb/fmde/de/graphconditions/|org/upb/fmde/de/ecore/|org/upb/fmde/de/categories/colimits/" kind="src" path="src"/>
 	<classpathentry kind="src" path="xtend-gen">
 		<attributes>
 			<attribute name="ignore_optional_problems" value="true"/>

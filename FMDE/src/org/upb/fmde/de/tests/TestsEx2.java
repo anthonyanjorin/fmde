@@ -88,7 +88,7 @@ public class TestsEx2 {
 	
 		// Create and save diagrams
 		TripleGraphDiagram d = new TripleGraphDiagram();
-		d.arrows(f).objects(GT_).saveAsDot(diagrams, "tripleMorphism_in_TripleGraphs");
+		d.arrows(f).objects(GT_).objects(GT).saveAsDot(diagrams, "tripleMorphism_in_TripleGraphs");
 		d.getGraphDiagram().saveAsDot(diagrams, "tripleMorphism_in_Graphs");
 		d.getGraphDiagram().getSetDiagram().saveAsDot(diagrams, "tripleMorphism_in_FinSets");			
 	}

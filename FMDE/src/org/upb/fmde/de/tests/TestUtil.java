@@ -1,23 +1,13 @@
 package org.upb.fmde.de.tests;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
-import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
-import org.upb.fmde.de.ecore.EcorePrinter;
-import org.upb.fmde.de.ecore.ModelToTGraphs;
-import org.upb.fmde.de.ecore.TEcorePrinter;
 
 public class TestUtil {
 
@@ -114,42 +104,4 @@ public class TestUtil {
 		return TG;
 	}
 
-	public static TGraph loadBoardAsTGraph(ResourceSet rs, String fileName, String label) throws IOException {
-		return TestUtil.loadBoardAsTGraphs(rs, fileName, label)[0];
-	}
-
-	public static TGraph[] loadBoardAsTGraphs(ResourceSet rs, String fileName, String label) throws IOException {
-		EObject o = TestUtil.loadBoard(rs, fileName);
-		ModelToTGraphs importer = new ModelToTGraphs(o, label);
-		return importer.getResult();
-	}
-
-	public static TGraph loadBoardAsTGraph(ResourceSet rs, String fileName, String label, TGraph mm, TGraph mmm) throws IOException {
-		EObject o = TestUtil.loadBoard(rs, fileName);
-		ModelToTGraphs importer = new ModelToTGraphs(o, label, mm, mmm);
-		return importer.getResult()[0];
-	}
-
-	public static void prettyPrintEcore(GraphDiagram d, String label, String path) throws IOException {
-		d.saveAsDot(new File(path + label + ".ecore.plantuml"), new EcorePrinter(d));
-	}
-
-	public static void prettyPrintTEcore(TGraphDiagram d, String label, String path) throws IOException {
-		d.saveAsDot(new File(path + label + ".ecore.plantuml"), new TEcorePrinter(d));
-	}
-
-	static EObject loadBoard(ResourceSet rs, String fileName) throws IOException {
-		Resource r = rs.createResource(URI.createFileURI(fileName));
-		r.load(null);
-		EObject root = r.getContents().get(0);
-		return root;
-	}
-
-	public static EObject loadSimpleTrello(ResourceSet rs) throws IOException {
-		Resource r = rs.createResource(URI.createFileURI("models/ex3/SimpleTrello.ecore"));
-		r.load(null);
-		r.setURI(URI.createURI("platform:/resource/FMDE/models/ex3/SimpleTrello.ecore"));
-		EObject root = r.getContents().get(0);
-		return root;
-	}
 }
