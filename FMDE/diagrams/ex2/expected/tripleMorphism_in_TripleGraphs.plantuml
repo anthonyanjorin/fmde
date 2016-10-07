@@ -1,6 +1,7 @@
 @startuml
 digraph Diagram {
   "GT'";
+  "GT";
   "GT"->"GT'" [label=" f"];
 }
 @enduml

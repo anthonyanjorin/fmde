@@ -48,9 +48,9 @@ public class Graph extends Labelled {
 		return target;
 	}
 
-	public GraphMorphism removeEdges(Collection<Object> danglingEdges) {
+	public GraphMorphism removeEdges(Collection<Object> edgesToBeRemoved) {
 		FinSet E_ = new FinSet("E_", E.elts());
-		E_.elts().removeAll(danglingEdges);
+		E_.elts().removeAll(edgesToBeRemoved);
 		
 		TotalFunction source_ = new TotalFunction(E_, "source_", V);
 		E_.elts().forEach(e -> source_.addMapping(e, source.map(e)));
