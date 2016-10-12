@@ -16,12 +16,8 @@ public class Or<Ob, Arr> implements ComplexGraphCondition<Ob, Arr> {
 	}
 	
 	public Or(Collection<ComplexGraphCondition<Ob, Arr>> conditions) {
-		Collection<ComplexGraphCondition<Ob, Arr>> negatedConditions = conditions
-				.stream()
-				.map(c -> new Not<>(c))
-				.collect(Collectors.toList());
-		
-		innerCondition = new Not<>(new And<>(negatedConditions));
+		// TODO (19) Implement Def 12
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override

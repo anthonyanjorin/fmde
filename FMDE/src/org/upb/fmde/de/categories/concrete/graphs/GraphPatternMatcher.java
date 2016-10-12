@@ -40,10 +40,8 @@ public class GraphPatternMatcher extends PatternMatcher<Graph, GraphMorphism> {
 
 	private TotalFunction determinePartialMatch(TotalFunction m_E) {
 		TotalFunction m_V = new TotalFunction(pattern.vertices(), "m_V", host.vertices());
-		m_E.mappings().forEach((p_e, h_e) -> {
-			m_V.addMapping(pattern.src().map(p_e), host.src().map(h_e));
-			m_V.addMapping(pattern.trg().map(p_e), host.trg().map(h_e));
-		});
+		
+		// TODO (05) Determine partial match to speed up pattern matching process
 		
 		return m_V;
 	}

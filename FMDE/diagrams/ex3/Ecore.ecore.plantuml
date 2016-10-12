@@ -2,5 +2,6 @@
 skinparam shadowing false
 hide members
 hide circle
-class "L.C"
+class "Ecore.EClass"
+"Ecore.EClass"-->"Ecore.EClass" : "EReference"
 @enduml

@@ -13,8 +13,7 @@ public class False<Ob, Arr> implements ComplexGraphCondition<Ob, Arr> {
 	
 	@Override
 	public boolean isSatisfiedByArrow(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator) {
-		return innerCondition.isSatisfiedByArrow(m, creator);
+		// TODO (17) Implement Def 13
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
-	
-	
 }

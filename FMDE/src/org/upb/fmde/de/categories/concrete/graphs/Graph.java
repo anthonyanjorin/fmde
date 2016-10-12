@@ -2,11 +2,8 @@ package org.upb.fmde.de.categories.concrete.graphs;
 
 import java.util.Collection;
 
-import org.antlr.grammar.v3.ANTLRParser.id_return;
-import org.eclipse.jdt.annotation.NonNull;
 import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.Labelled;
-import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 

@@ -17,6 +17,7 @@ public class Constraint<Ob, Arr extends ComparableArrow<Arr>> extends Satisfiabl
 	}
 
 	public boolean isSatisfiedByObject(Ob o, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator) {
-		return isSatisfiedByArrow(catWithInitOb.initialObject().up.apply(o), creator);
+		// TODO (13) Simplify Def 7 appropriately
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

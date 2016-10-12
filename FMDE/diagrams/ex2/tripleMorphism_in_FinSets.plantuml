@@ -1,0 +1,42 @@
+@startuml
+digraph Diagram {
+  "E_GT'_S";
+  "V_GT'_S";
+  "GT'_E_C";
+  "GT'_V_C";
+  "GT'_E_T";
+  "GT'V_T";
+  "E_G_S";
+  "V_G_S";
+  "E_G_C";
+  "V_G_C";
+  "E_G_T";
+  "V_G_T";
+  "E_G_S"->"E_GT'_S" [label=" f_S_E"];
+  "V_G_S"->"V_GT'_S" [label=" f_S_V"];
+  "E_G_C"->"GT'_E_C" [label=" f_C_E"];
+  "V_G_C"->"GT'_V_C" [label=" f_C_V"];
+  "E_G_T"->"GT'_E_T" [label=" f_T_E"];
+  "V_G_T"->"GT'V_T" [label=" f_T_V"];
+  "GT'_E_C"->"E_GT'_S" [label=" GT'_sigma_E"];
+  "GT'_V_C"->"V_GT'_S" [label=" GT'_sigma_V"];
+  "GT'_E_C"->"GT'_E_T" [label=" GT'_tau_E"];
+  "GT'_V_C"->"GT'V_T" [label=" GT'_tau_V"];
+  "E_G_C"->"E_G_S" [label=" sigma_E"];
+  "V_G_C"->"V_G_S" [label=" sigma_V"];
+  "E_G_C"->"E_G_T" [label=" tau_E"];
+  "V_G_C"->"V_G_T" [label=" tau_V"];
+  "E_GT'_S"->"V_GT'_S" [label=" s_GT'_S"];
+  "E_GT'_S"->"V_GT'_S" [label=" t_GT'_S"];
+  "GT'_E_C"->"GT'_V_C" [label=" GT'_s_C"];
+  "GT'_E_C"->"GT'_V_C" [label=" GT'_t_C"];
+  "GT'_E_T"->"GT'V_T" [label=" GT'_s_T"];
+  "GT'_E_T"->"GT'V_T" [label=" GT'_t_T"];
+  "E_G_S"->"V_G_S" [label=" s_G_S"];
+  "E_G_S"->"V_G_S" [label=" t_G_S"];
+  "E_G_C"->"V_G_C" [label=" s_G_C"];
+  "E_G_C"->"V_G_C" [label=" t_G_C"];
+  "E_G_T"->"V_G_T" [label=" s_G_T"];
+  "E_G_T"->"V_G_T" [label=" t_G_T"];
+}
+@enduml

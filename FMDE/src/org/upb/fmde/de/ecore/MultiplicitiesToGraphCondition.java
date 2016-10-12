@@ -48,62 +48,12 @@ public class MultiplicitiesToGraphCondition {
 	}
 
 	private ComplexGraphCondition<TGraph, TGraphMorphism> handleLowerBound(EReference e) {
-		TGraph P = createAandBs(e, 0);
-		FinSet V_P = P.type().src().vertices();
-		FinSet E_P = P.type().src().edges();
-		
-		TGraph C = createAandBs(e, e.getLowerBound());
-		FinSet V_C = C.type().src().vertices();
-		FinSet E_C = C.type().src().edges();
-		
-		TotalFunction c_V = new TotalFunction(V_P, "c_V", V_C);
-		c_V.addMapping(V_P.get("a"), V_C.get("a"));
-		
-		TotalFunction c_E = new TotalFunction(E_P, "c_E", E_C);
-		
-		GraphMorphism c_ = new GraphMorphism("c", P.type().src(), C.type().src(), c_E, c_V);
-		TGraphMorphism c = new TGraphMorphism("c", c_, P, C);
-		
-		return new Constraint<>(TGraphs.TGraphsFor(typeGraph), P, Arrays.asList(c));
+		// TODO (21) Implement Chapter 3, Slide 38
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	private ComplexGraphCondition<TGraph, TGraphMorphism> handleUpperBound(EReference e) {
-		TGraph tN = createAandBs(e, e.getUpperBound() + 1);
-		return new NegativeConstraint<>(TGraphs.TGraphsFor(typeGraph), tN);
-	}
-
-	private TGraph createAandBs(EReference e, int numberOfBs) {
-		FinSet vertices = new FinSet("N_V", "a");
-		FinSet edges = new FinSet("E_N");
-		
-		TotalFunction src = new TotalFunction(edges, "src", vertices);
-		TotalFunction trg = new TotalFunction(edges, "trg", vertices);
-
-		edges.elts().forEach(edge -> src.addMapping(edge, vertices.get("a")));
-		for (int i = 0; i < numberOfBs; i++) {
-			addB(vertices, edges, src, trg);
-		}
-				
-		Graph N = new Graph("N", edges, vertices, src, trg);
-		
-		Object A = typeGraph.src().map(e);
-		Object B = typeGraph.trg().map(e);
-		TotalFunction type_N_V = new TotalFunction(N.vertices(), "type_N_V", typeGraph.vertices());
-		N.vertices().elts().forEach(v -> type_N_V.addMapping(v, v.equals("a")? A : B));
-		TotalFunction type_N_E = new TotalFunction(N.edges(), "type_N_E", typeGraph.edges());		
-		N.edges().elts().forEach(edge -> type_N_E.addMapping(edge, e));
-		
-		GraphMorphism type = new GraphMorphism("type_N", N, typeGraph, type_N_E, type_N_V);
-		TGraph tN = new TGraph("N", type);
-		return tN;
-	}
-
-	private void addB(FinSet vertices, FinSet edges, TotalFunction src, TotalFunction trg) {
-		String b = "b" + vertices.elts().size();
-		String a_b = "a->b" + edges.elts().size();
-		vertices.elts().add(b);
-		edges.elts().add(a_b);
-		src.addMapping(a_b, vertices.get("a"));
-		trg.addMapping(a_b, b);
+		// TODO (20) Implement Chapter 3, Slide 37
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

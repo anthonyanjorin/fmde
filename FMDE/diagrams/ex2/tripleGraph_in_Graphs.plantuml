@@ -1,0 +1,9 @@
+@startuml
+digraph Diagram {
+  "G_S";
+  "G_C";
+  "G_T";
+  "G_C"->"G_S" [label=" sigma"];
+  "G_C"->"G_T" [label=" tau"];
+}
+@enduml

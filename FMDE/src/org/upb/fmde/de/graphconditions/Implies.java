@@ -9,7 +9,8 @@ public class Implies<Ob, Arr> implements ComplexGraphCondition<Ob, Arr> {
 	private ComplexGraphCondition<Ob, Arr> innerCondition;
 	
 	public Implies(ComplexGraphCondition<Ob, Arr> premise, ComplexGraphCondition<Ob, Arr> conclusion){
-		innerCondition = new Or<>(new Not<>(premise), conclusion);
+		// TODO (18) Implement Def 12
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
 	@Override

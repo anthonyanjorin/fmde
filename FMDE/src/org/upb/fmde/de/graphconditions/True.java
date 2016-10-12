@@ -8,8 +8,9 @@ import org.upb.fmde.de.categories.PatternMatcher;
 public class True<Ob, Arr> implements ComplexGraphCondition<Ob, Arr> {
 
 	@Override
-	public boolean isSatisfiedByArrow(Arr m, @NonNull BiFunction<Ob, Ob, @NonNull PatternMatcher<Ob, Arr>> creator) {
-		return true;
+	public boolean isSatisfiedByArrow(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator) {
+		// TODO (14) Implement Def 13
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 }

@@ -1,0 +1,10 @@
+@startuml
+digraph Diagram {
+  "GT";
+  "TGT";
+  "GT'";
+  "GT"->"GT'" [label=" f"];
+  "GT"->"TGT" [label=" type"];
+  "GT'"->"TGT" [label=" type'"];
+}
+@enduml

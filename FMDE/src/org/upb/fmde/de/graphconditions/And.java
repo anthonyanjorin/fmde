@@ -21,6 +21,7 @@ public class And<Ob, Arr> implements ComplexGraphCondition<Ob, Arr> {
 	
 	@Override
 	public boolean isSatisfiedByArrow(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator) {
-		return innerConditions.stream().allMatch(c -> c.isSatisfiedByArrow(m, creator));
+		// TODO (16) Implement Def 13
+	    throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

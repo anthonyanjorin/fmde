@@ -32,17 +32,15 @@ public class TPatternMatcher extends PatternMatcher<TGraph, TGraphMorphism>{
 
 	private BiPredicate<Object, Object> createNodeTypeFilter() {
 		return (from, to) -> {
-			Object t_from = pattern.type()._V().map(from);
-			Object t_to = host.type()._V().map(to);
-			return t_from.equals(t_to);
+			// TODO (06) Filter out wrong nodes to speed up pattern matching process
+			return true;
 		};
 	}
 
 	private BiPredicate<Object, Object> createEdgeTypeFilter() {
 		return (from, to) -> {
-			Object t_from = pattern.type()._E().map(from);
-			Object t_to = host.type()._E().map(to);
-			return t_from.equals(t_to);
+			// TODO (07) Filter out wrong edges to speed up pattern matching process
+			return true;
 		};
 	}
 }

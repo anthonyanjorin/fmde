@@ -1,0 +1,22 @@
+@startuml
+digraph Diagram {
+  "E_G";
+  "V_G";
+  "E_TG";
+  "V_TG";
+  "E_G'";
+  "V_G'";
+  "E_G"->"E_G'" [label=" f_E"];
+  "V_G"->"V_G'" [label=" f_V"];
+  "E_G"->"E_TG" [label=" type_E"];
+  "V_G"->"V_TG" [label=" type_V"];
+  "E_G'"->"E_TG" [label=" type'_E"];
+  "V_G'"->"V_TG" [label=" type'_V"];
+  "E_G"->"V_G" [label=" s_G"];
+  "E_G"->"V_G" [label=" t_G"];
+  "E_TG"->"V_TG" [label=" s_TG"];
+  "E_TG"->"V_TG" [label=" t_TG"];
+  "E_G'"->"V_G'" [label=" s_G'"];
+  "E_G'"->"V_G'" [label=" t_G'"];
+}
+@enduml

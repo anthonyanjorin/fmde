@@ -21,24 +21,14 @@ public class SatisfiableGraphCondition<Ob, Arr extends ComparableArrow<Arr>> ext
 		Ob G = cat.target(m);
 		Ob P = cat.target(p);
 		
+		// TODO (09) Implement the following steps given by Def. 7 
+		
 		// determine all m_p and filter for commutativity
-		PatternMatcher<Ob, Arr> premise = creator.apply(P, G);
-		Stream<Arr> m_pi = premise.getMonicMatches()
-				.stream()
-				.filter(mp -> m.isTheSameAs(cat.compose(p, mp)));
 		
 		// determine all m_c_i
-		Map<Arr, Arr> m_ci = new HashMap<>();
-		ci.stream()
-		  .forEach(c -> {
-				PatternMatcher<Ob, Arr> conclusion = creator.apply(cat.target(c), G);
-				conclusion.getMonicMatches().forEach(m_c -> m_ci.put(m_c, c));
-		  });
 		
 		// forall m_p: there must be a m_c_i that commutes with it
-		return m_pi.allMatch(m_p -> m_ci.keySet()
-				.stream()
-				.anyMatch(m_c -> m_p.isTheSameAs(cat.compose(m_ci.get(m_c), m_c)))
-				);
+		
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

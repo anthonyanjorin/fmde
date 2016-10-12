@@ -58,27 +58,8 @@ public class ModelToTGraphs {
 	}
 
 	private TGraph determineTypeForModel(Graph m, Graph mm) {
-		TotalFunction f_E = new TotalFunction(m.edges(), "type_E_" + m.label(), mm.edges());
-		TotalFunction f_V = new TotalFunction(m.vertices(), "type_V_" + m.label(), mm.vertices());
-
-		for (Object node : m.vertices().elts()) {
-			EClass tv = ((EObject) node).eClass();
-
-			mm.vertices().elts().stream()
-					.filter(mv -> mv.equals(tv))
-					.forEach(o -> f_V.addMapping(node, o));
-		}
-
-		for (Object edge : m.edges().elts()) {
-			EReference te = (EReference) ((EcoreEdge) edge).sf;
-
-			mm.edges().elts().stream()
-					.filter(me -> me.equals(te))
-					.forEach(e -> f_E.addMapping(edge, e));
-		}
-
-		GraphMorphism type = new GraphMorphism("type_" + m.label(), m, mm, f_E, f_V);
-		return new TGraph(m.label(), type);
+		// TODO (08) Create and return m -type-> mm
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	public TGraph[] getResult() {

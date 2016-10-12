@@ -1,0 +1,20 @@
+@startuml
+digraph Diagram {
+  "E_G_S";
+  "V_G_S";
+  "E_G_C";
+  "V_G_C";
+  "E_G_T";
+  "V_G_T";
+  "E_G_C"->"E_G_S" [label=" sigma_E"];
+  "V_G_C"->"V_G_S" [label=" sigma_V"];
+  "E_G_C"->"E_G_T" [label=" tau_E"];
+  "V_G_C"->"V_G_T" [label=" tau_V"];
+  "E_G_S"->"V_G_S" [label=" s_G_S"];
+  "E_G_S"->"V_G_S" [label=" t_G_S"];
+  "E_G_C"->"V_G_C" [label=" s_G_C"];
+  "E_G_C"->"V_G_C" [label=" t_G_C"];
+  "E_G_T"->"V_G_T" [label=" s_G_T"];
+  "E_G_T"->"V_G_T" [label=" t_G_T"];
+}
+@enduml

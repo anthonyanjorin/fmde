@@ -8,10 +8,11 @@ import org.upb.fmde.de.categories.PatternMatcher;
 
 public class FinSetPatternMatcher extends PatternMatcher<FinSet, TotalFunction> {
 	
-	BiPredicate<Object, Object> filter = (from, to) -> true;
+	private BiPredicate<Object, Object> filter;
 	
 	public FinSetPatternMatcher(FinSet pattern, FinSet host) {
 		super(pattern, host);
+		filter = (from, to) -> true;
 	}
 	
 	public List<TotalFunction> determineMatches(boolean mono, TotalFunction partialMatch, BiPredicate<Object, Object> filter){
@@ -37,6 +38,7 @@ public class FinSetPatternMatcher extends PatternMatcher<FinSet, TotalFunction> 
 		}
 		
 		Object currentVariable = getNextFreeVariable(index, match);
+		index = pattern.elts().indexOf(currentVariable);
 		for(Object o : host.elts()){
 			if (!mono || notInImageOfMatch(match, o)) {
 				if (filter.test(currentVariable, o)) {
@@ -57,19 +59,23 @@ public class FinSetPatternMatcher extends PatternMatcher<FinSet, TotalFunction> 
 			return getNextFreeVariable(index + 1, match);
 	}
 
+	private boolean searchIsComplete(int index) {
+		// TODO (01) Specify condition indicating that all variables have been matched
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	private boolean partialMatchIsComplete(TotalFunction match) {
+		// TODO (02) Specify condition indicating that the match contains a match for every variable
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
 	private boolean notYetMatched(TotalFunction match, Object currentVariable) {
-		return !match.mappings().containsKey(currentVariable);
+		// TODO (03) Specify condition indicating that currentVariable is not yet mapped to anything
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	private boolean notInImageOfMatch(TotalFunction match, Object o) {
-		return !match.mappings().containsValue(o);
-	}
-
-	private boolean searchIsComplete(int index) {
-		return index == pattern.elts().size();
-	}
-
-	private boolean partialMatchIsComplete(TotalFunction match) {
-		return match.mappings().keySet().size() == pattern.elts().size();
+		// TODO (04) Specify condition indicating that match does not map any variable to o
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }
