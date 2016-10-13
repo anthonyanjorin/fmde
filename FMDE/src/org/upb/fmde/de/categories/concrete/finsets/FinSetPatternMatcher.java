@@ -8,10 +8,11 @@ import org.upb.fmde.de.categories.PatternMatcher;
 
 public class FinSetPatternMatcher extends PatternMatcher<FinSet, TotalFunction> {
 	
-	BiPredicate<Object, Object> filter = (from, to) -> true;
+	private BiPredicate<Object, Object> filter;
 	
 	public FinSetPatternMatcher(FinSet pattern, FinSet host) {
 		super(pattern, host);
+		filter = (from, to) -> true;
 	}
 	
 	public List<TotalFunction> determineMatches(boolean mono, TotalFunction partialMatch, BiPredicate<Object, Object> filter){
@@ -37,6 +38,7 @@ public class FinSetPatternMatcher extends PatternMatcher<FinSet, TotalFunction> 
 		}
 		
 		Object currentVariable = getNextFreeVariable(index, match);
+		index = pattern.elts().indexOf(currentVariable);
 		for(Object o : host.elts()){
 			if (!mono || notInImageOfMatch(match, o)) {
 				if (filter.test(currentVariable, o)) {

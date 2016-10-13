@@ -23,8 +23,9 @@ public class TestUtil {
 
 	public static void clear(String diagrams) {
 		Optional.ofNullable(new File(diagrams)).ifPresent(d -> {
-			for (File f : d.listFiles()) 
-				f.delete();
+			for (File f : d.listFiles())
+				if(!f.getName().startsWith("."))
+					f.delete();
 		});
 	}
 

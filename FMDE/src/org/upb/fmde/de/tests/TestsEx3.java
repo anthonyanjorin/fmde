@@ -50,22 +50,80 @@ public class TestsEx3 {
 	}
 	
 	@Test
-	public void multiplicities() throws IOException {
+	public void patternMatchingExamples() throws IOException {
+		FinSet X = new FinSet("X", "a", "b");
+		FinSet Y = new FinSet("Y", 1, 2, 3, 4);
+		FinSetPatternMatcher fspm = new FinSetPatternMatcher(X, Y);
+		int count = 0;
+		for (TotalFunction m : fspm.getMonicMatches()) {
+			FinSetDiagram d = new FinSetDiagram();
+			d.objects(X, Y).arrows(m);
+			d.prettyPrint(diagrams, "set_match_" + count++);
+		}
+		assertEquals(12, count);
+		assertEquals(16, fspm.getMatches().size());
+	
+		Graph L = TestUtil.createPatternGraph("L");
+		Graph G = TestUtil.createHostGraph("G");
+		GraphPatternMatcher pm = new GraphPatternMatcher(L, G);
+		count = 0;
+		for (GraphMorphism m : pm.getMatches()) {
+			GraphDiagram d = new GraphDiagram();
+			d.objects(L, G).arrows(m);
+			d.prettyPrint(diagrams, "graph_match_" + count++);
+		}
+		
+	
+		Graph TG = TestUtil.createListCardTypeGraph("TG");
+		TGraph L_typed = TestUtil.createTypedPatternGraph(TG, L);
+		TGraph G_typed = TestUtil.createTypedHostGraph(TG, G);
+		TPatternMatcher pm_t = new TPatternMatcher(L_typed, G_typed);
+		count = 0;
+		for (TGraphMorphism m : pm_t.getMatches()) {
+			TGraphDiagram d = new TGraphDiagram(TG);
+			d.objects(L_typed, G_typed).arrows(m);
+			d.prettyPrint(diagrams, "tgraph_match_" + count++);
+		}		
+	}
+
+	@Test
+	public void ecoreFormalisationAsGraphs() throws IOException {
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
-		EObject root = TestUtil.loadSimpleTrello(rs);
-		MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
-		Graph TG = importer.getResult();
-		MultiplicitiesToGraphCondition mp2gc = new MultiplicitiesToGraphCondition(TG);
-		ComplexGraphCondition<TGraph, TGraphMorphism> gc = mp2gc.createGraphConditionFromMultiplicities();
-		
-		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
-		boolean sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm);
-		assertTrue("Multiplicities must be satisfied", sat);
-		
-		
-		TGraph G_empty = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/EmptyBoard.xmi", "G");
-		sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G_empty), create_pm);
-		assertFalse("Multiplicities must not be satisfied", sat);		
+	
+		{
+			MetaMetaModelToGraphs importer = new MetaMetaModelToGraphs(EcorePackage.eINSTANCE, "Ecore");
+			GraphDiagram d = new GraphDiagram();
+			d.objects(importer.getResult());
+			TestUtil.prettyPrintEcore(d, "Ecore", diagrams);
+		}
+	
+		{
+			EObject root = TestUtil.loadSimpleTrello(rs);
+			MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
+			GraphDiagram d = new GraphDiagram();
+			d.objects(importer.getResult());
+			TestUtil.prettyPrintEcore(d, "SimpleTrello", diagrams);
+		}
+	
+		{
+			EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
+			ModelToGraphs importer = new ModelToGraphs(root, "G");
+			GraphDiagram d = new GraphDiagram();
+			d.objects(importer.getResult());
+			TestUtil.prettyPrintEcore(d, "TrelloInstance", diagrams);
+		}		
+	}
+
+	@Test
+	public void ecoreFormalisationAsTypedGraphs() throws IOException {
+		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		TestUtil.loadSimpleTrello(rs);
+		EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
+		ModelToTGraphs importer = new ModelToTGraphs(root, "G");
+		TGraphDiagram d = new TGraphDiagram(importer.getResult()[0].type().trg());
+		d.objects(importer.getResult());
+		TestUtil.prettyPrintEcore(d.getGraphDiagram(), "TrelloInstanceTyped", diagrams);
+		d.getGraphDiagram().saveAsDot(diagrams, "TrelloInstanceTyped");		
 	}
 
 	@Test
@@ -136,76 +194,22 @@ public class TestsEx3 {
 	}
 
 	@Test
-	public void ecoreFormalisationAsTypedGraphs() throws IOException {
+	public void multiplicities() throws IOException {
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
-		TestUtil.loadSimpleTrello(rs);
-		EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
-		ModelToTGraphs importer = new ModelToTGraphs(root, "G");
-		TGraphDiagram d = new TGraphDiagram(importer.getResult()[0].type().trg());
-		d.objects(importer.getResult());
-		TestUtil.prettyPrintEcore(d.getGraphDiagram(), "TrelloInstanceTyped", diagrams);
-		d.getGraphDiagram().saveAsDot(diagrams, "TrelloInstanceTyped");		
-	}
-
-	@Test
-	public void ecoreFormalisationAsGraphs() throws IOException {
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
-	
-		{
-			MetaMetaModelToGraphs importer = new MetaMetaModelToGraphs(EcorePackage.eINSTANCE, "Ecore");
-			GraphDiagram d = new GraphDiagram();
-			d.objects(importer.getResult());
-			TestUtil.prettyPrintEcore(d, "Ecore", diagrams);
-		}
-	
-		{
-			EObject root = TestUtil.loadSimpleTrello(rs);
-			MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
-			GraphDiagram d = new GraphDiagram();
-			d.objects(importer.getResult());
-			TestUtil.prettyPrintEcore(d, "SimpleTrello", diagrams);
-		}
-	
-		{
-			EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
-			ModelToGraphs importer = new ModelToGraphs(root, "G");
-			GraphDiagram d = new GraphDiagram();
-			d.objects(importer.getResult());
-			TestUtil.prettyPrintEcore(d, "TrelloInstance", diagrams);
-		}		
-	}
-
-	@Test
-	public void patternMatchingExamples() throws IOException {
-		FinSet X = new FinSet("X", "a", "b");
-		FinSet Y = new FinSet("Y", 1, 2, 3, 4);
-		FinSetPatternMatcher fspm = new FinSetPatternMatcher(X, Y);
-		int count = 0;
-		for (TotalFunction m : fspm.getMonicMatches()) {
-			FinSetDiagram d = new FinSetDiagram();
-			d.objects(X, Y).arrows(m);
-			d.prettyPrint(diagrams, "set_match_" + count++);
-		}
-	
-		Graph L = TestUtil.createPatternGraph("L");
-		Graph G = TestUtil.createHostGraph("G");
-		GraphPatternMatcher pm = new GraphPatternMatcher(L, G);
-		count = 0;
-		for (GraphMorphism m : pm.getMatches()) {
-			GraphDiagram d = new GraphDiagram();
-			d.objects(L, G).arrows(m);
-			d.prettyPrint(diagrams, "graph_match_" + count++);
-		}
-	
-		Graph TG = TestUtil.createListCardTypeGraph("TG");
-		TGraph L_typed = TestUtil.createTypedPatternGraph(TG, L);
-		TGraph G_typed = TestUtil.createTypedHostGraph(TG, G);
-		TPatternMatcher pm_t = new TPatternMatcher(L_typed, G_typed);
-		count = 0;
-		for (TGraphMorphism m : pm_t.getMatches()) {
-			TGraphDiagram d = new TGraphDiagram(TG);
-			d.objects(L_typed, G_typed).arrows(m);
-			d.prettyPrint(diagrams, "tgraph_match_" + count++);
-		}		
+		EObject root = TestUtil.loadSimpleTrello(rs);
+		MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
+		Graph TG = importer.getResult();
+		MultiplicitiesToGraphCondition mp2gc = new MultiplicitiesToGraphCondition(TG);
+		ComplexGraphCondition<TGraph, TGraphMorphism> gc = mp2gc.createGraphConditionFromMultiplicities();
+		
+		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
+		boolean sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm);
+		assertTrue("Multiplicities must be satisfied", sat);
+		
+		TGraph G_empty = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/EmptyBoard.xmi", "G");
+		sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G_empty), create_pm);
+		assertFalse("Multiplicities must not be satisfied", sat);		
 	}
 }
+
+
