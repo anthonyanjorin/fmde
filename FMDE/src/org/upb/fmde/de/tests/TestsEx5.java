@@ -79,8 +79,8 @@ public class TestsEx5 {
 					  .arrows(l, r, m)
 					  .objects(dd.pushoutComplement.first.trg())
 					  .arrows(dd.pushoutComplement.first, dd.pushoutComplement.second)
-					  .objects(dd.pushout.horiz.trg())
-					  .arrows(dd.pushout.horiz, dd.pushout.vert);
+					  .objects(dd.pushout.left.trg())
+					  .arrows(dd.pushout.left, dd.pushout.right);
 				try {
 					TestUtil.prettyPrintTEcore(result, "derivation_" + m.hashCode(), diagrams);
 				} catch (IOException e) {
@@ -137,8 +137,8 @@ public class TestsEx5 {
 					  .objects(_m.first.trg())
 					  .objects(dd.pushoutComplement.first.trg())
 					  .arrows(dd.pushoutComplement.first, dd.pushoutComplement.second)
-					  .objects(dd.pushout.horiz.trg())
-					  .arrows(dd.pushout.horiz, dd.pushout.vert);
+					  .objects(dd.pushout.left.trg())
+					  .arrows(dd.pushout.left, dd.pushout.right);
 				try {
 					TestUtil.prettyPrintTEcore(result, "derivation_" + m.hashCode(), diagrams);
 				} catch (IOException e) {

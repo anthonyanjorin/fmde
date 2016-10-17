@@ -81,26 +81,27 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 		CoLimit<CoSpan<TotalFunction>, TotalFunction> coprodEdges = FinSets.coproduct(a.edges(), b.edges());
 		CoLimit<CoSpan<TotalFunction>, TotalFunction> coprodVertices = FinSets.coproduct(a.vertices(), b.vertices());
 		
-		TotalFunction horiz_s = FinSets.compose(b.src(), coprodVertices.obj.horiz);
-		TotalFunction vert_s = FinSets.compose(a.src(), coprodVertices.obj.vert);
-		TotalFunction u_s = coprodEdges.up.apply(new CoSpan<TotalFunction>(FinSets, horiz_s, vert_s));
+		TotalFunction left_s = FinSets.compose(b.src(), coprodVertices.obj.left);
+		TotalFunction right_s = FinSets.compose(a.src(), coprodVertices.obj.right);
+		TotalFunction u_s = coprodEdges.up.apply(new CoSpan<TotalFunction>(FinSets, left_s, right_s));
 		
-		TotalFunction horiz_t = FinSets.compose(b.trg(), coprodVertices.obj.horiz);
-		TotalFunction vert_t = FinSets.compose(a.trg(), coprodVertices.obj.vert);
-		TotalFunction u_t = coprodEdges.up.apply(new CoSpan<TotalFunction>(FinSets, horiz_t, vert_t));
+		TotalFunction left_t = FinSets.compose(b.trg(), coprodVertices.obj.left);
+		TotalFunction right_t = FinSets.compose(a.trg(), coprodVertices.obj.right);
+		TotalFunction u_t = coprodEdges.up.apply(new CoSpan<TotalFunction>(FinSets, left_t, right_t));
 		
-		Graph obj = new Graph(a.label() + " + " + b.label(), coprodEdges.obj.horiz.trg(), coprodVertices.obj.horiz.trg(), u_s, u_t);
-		GraphMorphism horiz = new GraphMorphism("horiz", b, obj, coprodEdges.obj.horiz, coprodVertices.obj.horiz);
-		GraphMorphism vert = new GraphMorphism("vert", a, obj, coprodEdges.obj.vert, coprodVertices.obj.vert);
+		Graph obj = new Graph(a.label() + " + " + b.label(), coprodEdges.obj.left.trg(), coprodVertices.obj.left.trg(), u_s, u_t);
+		GraphMorphism left = new GraphMorphism("left", b, obj, coprodEdges.obj.left, coprodVertices.obj.left);
+		GraphMorphism right = new GraphMorphism("right", a, obj, coprodEdges.obj.right, coprodVertices.obj.right);
 		return new CoLimit<>(
-				new CoSpan<>(this, horiz, vert), 
+				new CoSpan<>(this, left, right), 
 				cos -> {
-					TotalFunction u_E = coprodEdges.up.apply(new CoSpan<>(FinSets, cos.horiz._E(), cos.vert._E()));
-					TotalFunction u_V = coprodVertices.up.apply(new CoSpan<>(FinSets, cos.horiz._V(), cos.vert._V()));
-					return new GraphMorphism("u", obj, cos.horiz.trg(), u_E, u_V);
+					TotalFunction u_E = coprodEdges.up.apply(new CoSpan<>(FinSets, cos.left._E(), cos.right._E()));
+					TotalFunction u_V = coprodVertices.up.apply(new CoSpan<>(FinSets, cos.left._V(), cos.right._V()));
+					return new GraphMorphism("u", obj, cos.left.trg(), u_E, u_V);
 				});
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Optional<Corner<GraphMorphism>> pushoutComplement(Corner<GraphMorphism> upperLeft) {
 		if(!determineDanglingEdges(upperLeft).isEmpty())

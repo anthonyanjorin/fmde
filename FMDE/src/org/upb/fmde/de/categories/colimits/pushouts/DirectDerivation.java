@@ -8,7 +8,7 @@ public class DirectDerivation<Arr> {
 	
 	public DirectDerivation(Category<?, Arr> cat, Corner<Arr> pushoutComplement, CoSpan<Arr> pushout) {
 		this(pushoutComplement, pushout);
-		Category.ensure(cat.target(pushoutComplement.first).equals(cat.source(pushout.horiz)), "This is not a direct derivation!");
+		Category.ensure(cat.target(pushoutComplement.first).equals(cat.source(pushout.left)), "This is not a direct derivation!");
 	}
 	
 	protected DirectDerivation(Corner<Arr> pushoutComplement, CoSpan<Arr> pushout){

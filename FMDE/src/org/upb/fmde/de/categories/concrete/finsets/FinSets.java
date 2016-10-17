@@ -79,22 +79,22 @@ public class FinSets implements LabelledCategory<FinSet, TotalFunction>,
 		FinSet G_Plus_R = new FinSet(G.label() + " + " + R.label(), G.elts());
 		G_Plus_R.elts().addAll(R.elts()); 
 		
-		TotalFunction horizontal = new TotalFunction(G, "G->G+R", G_Plus_R);
+		TotalFunction left = new TotalFunction(G, "G->G+R", G_Plus_R);
 		for(int i = 0; i <  G.elts().size(); i++){
-			horizontal.addMapping(G.elts().get(i), G_Plus_R.elts().get(i));
+			left.addMapping(G.elts().get(i), G_Plus_R.elts().get(i));
 		}
 		
-		TotalFunction vertical = new TotalFunction(R, "R->G+R", G_Plus_R);
+		TotalFunction right = new TotalFunction(R, "R->G+R", G_Plus_R);
 		for(int j = 0, i = G.elts().size(); i <  G_Plus_R.elts().size(); j++, i++){
-			vertical.addMapping(R.elts().get(j), G_Plus_R.elts().get(i));
+			right.addMapping(R.elts().get(j), G_Plus_R.elts().get(i));
 		}
 		
 		return new CoLimit<CoSpan<TotalFunction>, TotalFunction>(
-				new CoSpan<TotalFunction>(FinSets, horizontal, vertical),
+				new CoSpan<TotalFunction>(FinSets, left, right),
 				cos -> {
-					TotalFunction u = new TotalFunction(G_Plus_R, "u", cos.horiz.trg());
-					R.elts().forEach(x -> u.addMapping(vertical.map(x), cos.vert.map(x)));
-					G.elts().forEach(x -> u.addMapping(horizontal.map(x), cos.horiz.map(x)));
+					TotalFunction u = new TotalFunction(G_Plus_R, "u", cos.left.trg());
+					R.elts().forEach(x -> u.addMapping(right.map(x), cos.right.map(x)));
+					G.elts().forEach(x -> u.addMapping(left.map(x), cos.left.map(x)));
 					return u;
 				});
 	}

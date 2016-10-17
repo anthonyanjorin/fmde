@@ -79,12 +79,12 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		TGraph obj = new TGraph(a + "+" + b, type);
 		
 		return new CoLimit<>(
-				new CoSpan<>(this, new TGraphMorphism("horiz", coprod_graphs.obj.horiz, b, obj), 
-						     		new TGraphMorphism("vert", coprod_graphs.obj.vert, a, obj)), 
+				new CoSpan<>(this, new TGraphMorphism("left", coprod_graphs.obj.left, b, obj), 
+						     		new TGraphMorphism("right", coprod_graphs.obj.right, a, obj)), 
 				cos -> new TGraphMorphism("u", 
-						coprod_graphs.up.apply(new CoSpan<>(Graphs, cos.horiz.untyped(), cos.vert.untyped())),
+						coprod_graphs.up.apply(new CoSpan<>(Graphs, cos.left.untyped(), cos.right.untyped())),
 						obj,
-						cos.horiz.trg())
+						cos.left.trg())
 				);
 	}
 
