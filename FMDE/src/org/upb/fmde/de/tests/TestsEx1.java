@@ -1,6 +1,5 @@
 package org.upb.fmde.de.tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.upb.fmde.de.categories.concrete.finsets.OpFinSets.OpFinSets;
 
@@ -30,8 +29,7 @@ public class TestsEx1 {
 		d.saveAsDot(diagrams, "monicExample")
 		 .prettyPrint(diagrams, "monicExample");
 		
-		assertTrue(CounterExampleChecker.isCounterExampleForMono(d));	
-		assertFalse(CounterExampleChecker.isCounterExampleForMono(createDiagram2()));
+		assertTrue(CounterExampleChecker.isCounterExampleForMono(d));
 	}
 	
 	@Test
@@ -42,7 +40,6 @@ public class TestsEx1 {
 		  .prettyPrint(diagrams, "epicExample");
 		
 		assertTrue(CounterExampleChecker.isCounterExampleForEpi(d));
-		assertFalse(CounterExampleChecker.isCounterExampleForEpi(createDiagram1()));
 	}
 	
 	@Test
@@ -55,7 +52,6 @@ public class TestsEx1 {
 		opd1.saveAsDot(diagrams, "dualityExampleEpi");
 		
 		assertTrue(OpCounterExampleChecker.isCounterExampleForEpi(opd1));
-		assertFalse(OpCounterExampleChecker.isCounterExampleForMono(opd1));
 		
 		FinSetDiagram d2 = createDiagram2();
 		Diagram<FinSet, TotalFunction> opd2 = new Diagram<FinSet, TotalFunction>(OpFinSets)
@@ -65,7 +61,6 @@ public class TestsEx1 {
 		opd2.saveAsDot(diagrams, "dualityExampleMono");
 		
 		assertTrue(OpCounterExampleChecker.isCounterExampleForMono(opd2));
-		assertFalse(OpCounterExampleChecker.isCounterExampleForEpi(opd2));
 	}
 	
 	private FinSetDiagram createDiagram1() {
