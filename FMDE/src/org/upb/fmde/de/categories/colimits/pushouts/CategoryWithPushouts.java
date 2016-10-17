@@ -6,7 +6,7 @@ import org.upb.fmde.de.categories.colimits.CoLimit;
 public interface CategoryWithPushouts<Ob, Arr> extends Category<Ob, Arr> {
 	
 	default CoLimit<CoSpan<Arr>, Arr> pushout(Span<Arr> span) {
-		// TODO (1) Implement pushout construction based on coequalisers
+		// TODO (1) Implement generic pushout construction based on coequalisers
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	

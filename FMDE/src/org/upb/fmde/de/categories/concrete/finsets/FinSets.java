@@ -40,13 +40,13 @@ public class FinSets implements LabelledCategory<FinSet, TotalFunction>,
 
 	@Override
 	public CoLimit<TotalFunction, TotalFunction> coequaliser(TotalFunction f, TotalFunction g) {
-		// TODO
+		// TODO (3) Coequaliser in Sets is an equivalence relation as described in the lecture
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public CoLimit<CoSpan<TotalFunction>, TotalFunction> coproduct(FinSet R, FinSet G) {
-		// TODO
+		// TODO (2) Coproduct in Sets is a disjoint union
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

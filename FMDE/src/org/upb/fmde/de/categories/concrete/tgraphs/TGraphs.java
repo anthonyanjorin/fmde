@@ -54,13 +54,13 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 
 	@Override
 	public CoLimit<TGraphMorphism, TGraphMorphism> coequaliser(TGraphMorphism f, TGraphMorphism g) {
-		// TODO
+		// TODO (7) Calculate componentwise for edges and nodes, use universal properties to induce all necessary arrows  
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public CoLimit<CoSpan<TGraphMorphism>, TGraphMorphism> coproduct(TGraph a, TGraph b) {
-		// TODO
+		// TODO (6) Calculate componentwise for edges and nodes, use universal properties to induce all necessary arrows  
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

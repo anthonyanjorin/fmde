@@ -50,13 +50,13 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 
 	@Override
 	public CoLimit<GraphMorphism, GraphMorphism> coequaliser(GraphMorphism f, GraphMorphism g) {
-		// TODO
+		// TODO (5) Calculate componentwise for edges and nodes, use universal properties to induce all necessary arrows  
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public CoLimit<CoSpan<GraphMorphism>, GraphMorphism> coproduct(Graph a, Graph b) {
-		// TODO
+		// TODO (4) Calculate componentwise for edges and nodes, use universal properties to induce all necessary arrows  
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }
