@@ -1,6 +1,0 @@
-@startuml
-skinparam shadowing false
-hide members
-hide circle
-class "L.C"
-@enduml

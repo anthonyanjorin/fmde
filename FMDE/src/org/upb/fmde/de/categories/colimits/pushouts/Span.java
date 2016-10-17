@@ -3,16 +3,16 @@ package org.upb.fmde.de.categories.colimits.pushouts;
 import org.upb.fmde.de.categories.Category;
 
 public class Span<Arr> {
-	public final Arr horiz;
-	public final Arr vert;
+	public final Arr left;
+	public final Arr right;
 	
-	public Span(Category<?, Arr> cat, Arr horizontal, Arr vertical) {
-		this(horizontal, vertical);
-		Category.ensure(cat.source(horizontal).equals(cat.source(vertical)), "This is not a span!");
+	public Span(Category<?, Arr> cat, Arr left, Arr right) {
+		this(left, right);
+		Category.ensure(cat.source(left).equals(cat.source(right)), "This is not a span!");
 	}
 	
-	protected Span(Arr horizontal, Arr vertical){
-		this.horiz = horizontal;
-		this.vert = vertical;
+	protected Span(Arr left, Arr right){
+		this.left = left;
+		this.right = right;
 	}
 }

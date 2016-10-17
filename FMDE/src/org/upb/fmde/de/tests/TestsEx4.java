@@ -52,8 +52,8 @@ public class TestsEx4 {
 		TotalFunction u = pushout.up.apply(wrong_po);
 		
 		new FinSetDiagram()
-				.objects(L, R, G, pushout.obj.horiz.trg(), wrong)
-				.arrows(pushout.obj.horiz, pushout.obj.vert, r, m, u, h, v)
+				.objects(L, R, G, pushout.obj.left.trg(), wrong)
+				.arrows(pushout.obj.left, pushout.obj.right, r, m, u, h, v)
 				.saveAsDot(diagrams, "poFinSets")
 				.prettyPrint(diagrams, "poFinSets");
 	}
@@ -80,8 +80,8 @@ public class TestsEx4 {
 			CoLimit<CoSpan<TGraphMorphism>, TGraphMorphism> po = TGraphsFor(TG).pushout(new Span<>(TGraphsFor(TG), r, m.get(i)));
 			try {
 				TGraphDiagram d = new TGraphDiagram(TG);
-				d.objects(L, R, G, po.obj.horiz.trg())
-				 .arrows(r, m.get(i), po.obj.horiz, po.obj.vert);
+				d.objects(L, R, G, po.obj.left.trg())
+				 .arrows(r, m.get(i), po.obj.left, po.obj.right);
 				TestUtil.prettyPrintTEcore(d, "po_TGraphs_" + i, diagrams);
 			} catch (IOException e) {
 				e.printStackTrace();
