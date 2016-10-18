@@ -108,18 +108,8 @@ public class FinSets implements LabelledCategory<FinSet, TotalFunction>,
 		FinSet L = l.trg();
 		FinSet G = m.trg();
 		
-		Collection<Object> elts_D = new ArrayList<>(); 
-		elts_D.addAll(G.elts());
-		elts_D.removeAll(m.mappings().values());
-		elts_D.addAll(l_m.mappings().values());
-		FinSet D = new FinSet("D", elts_D.toArray());
+		// TODO (2) Implement pushout complement in FinSets
 		
-		TotalFunction l_ = new TotalFunction(D, "l'", G);
-		l_.mappings().putAll(id(D).mappings());
-		
-		TotalFunction d = new TotalFunction(K, "d", D);
-		d.mappings().putAll(l_m.mappings());
-		
-		return Optional.of(new Corner<>(this, d, l_));
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

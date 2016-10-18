@@ -121,24 +121,8 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 		FinSet E_D = pc_E.first.trg();
 		FinSet V_D = pc_V.first.trg();
 		
-		TotalFunction s_D = new TotalFunction(E_D, "s_D", V_D);
-		G.src().mappings().forEach((from, to) -> {
-			if(E_D.elts().contains(from)) 
-				s_D.addMapping(from, to);
-		});
-		
-		TotalFunction t_D = new TotalFunction(E_D, "t_D", V_D);
-		G.trg().mappings().forEach((from, to) -> {
-			if(E_D.elts().contains(from)) 
-				t_D.addMapping(from, to);
-		});
-		
-		Graph D = new Graph("D", E_D, V_D, s_D, t_D);
-		
-		GraphMorphism d = new GraphMorphism("d", K, D, pc_E.first, pc_V.first);
-		GraphMorphism l_ = new GraphMorphism("l'", D, G, pc_E.second, pc_V.second);
-		
-		return new Corner<GraphMorphism>(this, d, l_);
+		// TODO (3) Construct the pushout complement as Graph D, k: K -> D, and l': D -> G
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	private Collection<Object> determineDanglingEdges(Corner<GraphMorphism> upperLeft) {
@@ -147,25 +131,15 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 		GraphMorphism m = upperLeft.second;
 		GraphMorphism l = upperLeft.first;
 		
-		Map<Object, Collection<Object>> danglingPoints = new HashMap<>();
-		L.vertices().elts().stream()
-			.forEach(v -> {
-				Collection<Object> danglingEdges = G.edges().elts().stream()
-					.filter(e -> !m._E().mappings().containsValue(e))
-					.filter(e -> edgeIsIncidentToVertice(G, m, v, e))
-					.collect(Collectors.toSet());
-				
-				if(!danglingEdges.isEmpty())
-					danglingPoints.put(v, danglingEdges);
-			});
+		// TODO (4) Implement the following steps:
 		
-		Collection<Object> gluingPoints = l._V().mappings().values();
+		// Determine dangling points
 		
-		gluingPoints.forEach(gp -> danglingPoints.remove(gp));
+		// Determine gluing points
 		
-		return danglingPoints.values().stream()
-				.flatMap(edges -> edges.stream())
-				.collect(Collectors.toSet());
+		// Check the dangling edge condition to determine all dangling edges
+	
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	private boolean edgeIsIncidentToVertice(Graph G, GraphMorphism m, Object v, Object e) {
@@ -176,18 +150,12 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 		Graph G = upperLeft.second.trg();
 		Graph L = upperLeft.first.trg();
 		GraphMorphism m = upperLeft.second;
-		Collection<Object> danglingEdges = determineDanglingEdges(upperLeft);
 		
+		Collection<Object> danglingEdges = determineDanglingEdges(upperLeft);
 		GraphMorphism _g_ =  G.removeEdges(danglingEdges);
 		
-		TotalFunction _m_E = new TotalFunction(L.edges(), "_m_E", _g_.src().edges());
-		_m_E.mappings().putAll(m._E().mappings());
-		
-		TotalFunction _m_V = new TotalFunction(L.vertices(), "_m_V", _g_.src().vertices());
-		_m_V.mappings().putAll(m._V().mappings());
-		
-		GraphMorphism _m_ = new GraphMorphism("_m_", L, _g_.src(), _m_E, _m_V);
-		
-		return new Corner<>(this, _m_, _g_);
+		// TODO (6) Construct a restriction of the match m: L -> G to be used for rule application
+	
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

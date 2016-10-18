@@ -102,38 +102,17 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 	private Corner<TGraphMorphism> determinedTypedPushoutComplement(Corner<GraphMorphism> pc_G, TGraph K, TGraph G) {
 		Graph D = pc_G.first.trg();
 		
-		TotalFunction type_E = new TotalFunction(D.edges(), "type_E", typeGraph.edges());
-		D.edges().elts().forEach(e -> type_E.addMapping(e, G.type()._E().map(e)));
+		// TODO (5) Extend D to a typed graph D' and determine typed graph morphisms k: K -> D' and l': D' -> G
 		
-		TotalFunction type_V = new TotalFunction(D.vertices(), "type_V", typeGraph.vertices());
-		D.vertices().elts().forEach(v -> type_V.addMapping(v, G.type()._V().map(v)));
-		
-		GraphMorphism type_D = new GraphMorphism("type_D", D, typeGraph, type_E, type_V);
-		TGraph D_ = new TGraph("D", type_D);
-		
-		TGraphMorphism d = new TGraphMorphism("d", pc_G.first, K, D_);
-		TGraphMorphism l_ = new TGraphMorphism("l'", pc_G.second, D_, G);
-		
-		return new Corner<>(this, d, l_);
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public Corner<TGraphMorphism> restrict(Corner<TGraphMorphism> upperLeft) {
 		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<>(Graphs.Graphs, upperLeft.first.untyped(), upperLeft.second.untyped()));
 		
-		TGraph G = upperLeft.second.trg();
-		Graph G_ = untyped.first.trg();
-		
-		TotalFunction type_G_E = new TotalFunction(G_.edges(), "type_G_E", typeGraph.edges());
-		G_.edges().elts().forEach(e -> type_G_E.addMapping(e, G.type()._E().map(e)));
-		
-		TotalFunction type_G_V = new TotalFunction(G_.vertices(), "type_G_V", typeGraph.vertices());
-		G_.vertices().elts().forEach(v -> type_G_V.addMapping(v, G.type()._V().map(v)));
-		
-		GraphMorphism type_G = new GraphMorphism("type_G", G_, typeGraph, type_G_E, type_G_V);
-		TGraph _G_ = new TGraph("G_", type_G);
-		
-		return new Corner<>(this, new TGraphMorphism("_m_", untyped.first, upperLeft.first.trg(), _G_),
-								  new TGraphMorphism("_g_", untyped.second, _G_, G));
+		// TODO (7) Extend corner to a typed corner
+
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

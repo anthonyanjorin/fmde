@@ -10,13 +10,15 @@ public interface CategoryWithPushoutComplements<Ob, Arr> extends CategoryWithPus
 		return upperLeft;
 	}
 	
-	@SuppressWarnings("null")
 	default Optional<DirectDerivation<Arr>> doublePushout(Span<Arr> L_K_R, Arr match){
 		Corner<Arr> upperLeftCorner = new Corner<>(L_K_R.left, match);
 		
-		return pushoutComplement(upperLeftCorner).map(firstBottomRightCorner -> {
-			CoSpan<Arr> secondBottomRightCorner = pushout(new Span<>(L_K_R.right, firstBottomRightCorner.first)).obj;
-			return new DirectDerivation<>(firstBottomRightCorner, secondBottomRightCorner);
-		});
+		// TODO (1) Implement double pushout construction
+		
+		// Determine first bottom right corner as a pushout complement
+		
+		// Determine second bottom right corner as a pushout
+		
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }
