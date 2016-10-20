@@ -27,7 +27,13 @@ public class TotalFunction extends LabelledArrow<FinSet> implements ComparableAr
 
 	public boolean isTheSameAs(TotalFunction f) {
 		return source.elts().stream()
-					 .allMatch(x -> map(x) != null && map(x).equals(f.map(x)));
+					 .allMatch(x -> {
+						 if (map(x) == null) {
+							 throw new IllegalArgumentException("Detected a null value mapping. " +
+									 "Functions may have unequal domains.");
+						 }
+						 return map(x).equals(f.map(x));
+					 });
 	}
 	
 	public Map<Object, Object> mappings(){
