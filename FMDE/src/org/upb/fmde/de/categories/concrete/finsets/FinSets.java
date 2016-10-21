@@ -30,7 +30,13 @@ public class FinSets implements LabelledCategory<FinSet, TotalFunction>,
 	@Override
 	public TotalFunction compose(TotalFunction f, TotalFunction g) {
 		TotalFunction f_then_g = new TotalFunction(f.src(), f + ";" + g, g.trg());
-		f.src().elts().forEach(x -> f_then_g.addMapping(x, g.map(f.map(x))));
+		f.src().elts().forEach(x -> {
+			Object mapping = g.map(f.map(x));
+			if (mapping == null) {
+				throw new IllegalArgumentException("Functions cannot be composed.");
+			}
+			f_then_g.addMapping(x, mapping);
+		});
 		return f_then_g;
 	}
 
