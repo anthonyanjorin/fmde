@@ -5,6 +5,8 @@ import org.upb.fmde.de.categories.Labelled;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
+import java.util.HashSet;
+
 public class EGraph extends Labelled {
 
     /**
@@ -109,6 +111,6 @@ public class EGraph extends Labelled {
         Category.ensure(targetEA.trg().equals(Vd), s + "targetEA function doesn't fit to set of data nodes");
 
         // Check for duplicate data nodes
-        Category.ensure(Vd.elts().stream().noneMatch(attr -> Vd.elts().contains(attr)), s + "duplicate data node");
+        Category.ensure(new HashSet<>(Vd.elts()).size() == Vd.elts().size(), s + "duplicate data node");
     }
 }
