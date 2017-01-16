@@ -4,9 +4,6 @@ import org.upb.fmde.de.categories.LabelledCategory;
 
 import static org.upb.fmde.de.categories.concrete.finsets.FinSets.FinSets;
 
-/**
- * Created by svenv on 09.01.2017.
- */
 public class EGraphs implements LabelledCategory<EGraph, EGraphMorphism> {
 
     public static EGraphs eGraphs = new EGraphs();

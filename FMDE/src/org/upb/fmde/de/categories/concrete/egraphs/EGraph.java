@@ -1,12 +1,10 @@
 package org.upb.fmde.de.categories.concrete.egraphs;
 
+import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.Labelled;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
-/**
- * Created by svenv on 09.01.2017.
- */
 public class EGraph extends Labelled {
 
     /**
@@ -88,5 +86,29 @@ public class EGraph extends Labelled {
         this.targetNA = targetNA;
         this.sourceEA = sourceEA;
         this.targetEA = targetEA;
+        ensureValidity();
+    }
+
+    private void ensureValidity() {
+        String s = "EGraph " + label + " is invalid: ";
+
+        // Check graph nodes and edges
+        Category.ensure(sourceG.src().equals(Eg), s + "sourceG function doesn't fit to set of graph edges");
+        Category.ensure(sourceG.trg().equals(Vg), s + "sourceG function doesn't fit to set of graph vertices");
+        Category.ensure(targetG.src().equals(Eg), s + "targetG function doesn't fit to set of graph edges");
+        Category.ensure(targetG.trg().equals(Vg), s + "targetG function doesn't fit to set of graph vertices");
+
+        // Check data nodes and node/edge attribute edges
+        Category.ensure(sourceNA.src().equals(Ena), s + "sourceNA function doesn't fit to set of node attribute edges");
+        Category.ensure(sourceNA.trg().equals(Vg), s + "sourceNA function doesn't fit to set of graph nodes");
+        Category.ensure(targetNA.src().equals(Ena), s + "targetNA function doesn't fit to set of node attribute edges");
+        Category.ensure(targetNA.trg().equals(Vd), s + "targetNA function doesn't fit to set of data nodes");
+        Category.ensure(sourceEA.src().equals(Eea), s + "sourceEA function doesn't fit to set of edge attribute edges");
+        Category.ensure(sourceEA.trg().equals(Eg), s + "sourceEA function doesn't fit to set of graph edges");
+        Category.ensure(targetEA.src().equals(Eea), s + "targetEA function doesn't fit to set of edge attribute edges");
+        Category.ensure(targetEA.trg().equals(Vd), s + "targetEA function doesn't fit to set of data nodes");
+
+        // Check for duplicate data nodes
+        Category.ensure(Vd.elts().stream().noneMatch(attr -> Vd.elts().contains(attr)), s + "duplicate data node");
     }
 }
