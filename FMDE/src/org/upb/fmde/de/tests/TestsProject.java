@@ -6,6 +6,9 @@ import org.upb.fmde.de.categories.concrete.egraphs.EGraphMorphism;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
+import static org.junit.Assert.assertTrue;
+import static org.upb.fmde.de.categories.concrete.egraphs.EGraphs.eGraphs;
+
 public class TestsProject {
 
     @Test
@@ -30,6 +33,9 @@ public class TestsProject {
         tEea.addMapping("edge1to2.color", "PlayerEdge.color");
 
         EGraphMorphism type = new EGraphMorphism("type", hostGraph, typeGraph, tVg, tVd, tEg, tEna, tEea);
+
+        assertTrue(eGraphs.compose(eGraphs.id(hostGraph), type).isTheSameAs(type));
+        assertTrue(eGraphs.compose(type, eGraphs.id(typeGraph)).isTheSameAs(type));
     }
 
     private EGraph createHostGraph() {

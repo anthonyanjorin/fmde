@@ -15,12 +15,12 @@ public class EGraphs implements LabelledCategory<EGraph, EGraphMorphism> {
         return new EGraphMorphism(
             f.label() + ";" + g.label(),
             f.src(),
-            f.trg(),
+            g.trg(),
             FinSets.compose(f.fVg, g.fVg),
             FinSets.compose(f.fVd, g.fVd),
-            FinSets.compose(f.fVg, g.fVg),
-            FinSets.compose(f.fVg, g.fVg),
-            FinSets.compose(f.fVg, g.fVg)
+            FinSets.compose(f.fEg, g.fEg),
+            FinSets.compose(f.fEna, g.fEna),
+            FinSets.compose(f.fEea, g.fEea)
         );
     }
 
