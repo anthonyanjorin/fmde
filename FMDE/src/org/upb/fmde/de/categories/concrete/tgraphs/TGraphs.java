@@ -216,7 +216,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 
 	@Override
 	public Corner<TGraphMorphism> restrict(Corner<TGraphMorphism> upperLeft) {
-		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<>(Graphs.Graphs, upperLeft.first.untyped(), upperLeft.second.untyped()));
+		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<>(Graphs, upperLeft.first.untyped(), upperLeft.second.untyped()));
 		
 		TGraph G = upperLeft.second.trg();
 		Graph G_ = untyped.first.trg();
@@ -313,7 +313,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		//s => t;ti
 	}
 	
-	private static class Glue{
+	private class Glue implements Comparable<Glue> {
 		
 		TGraphMorphism p;
 		
@@ -373,18 +373,23 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			}
 			
 			Glue g = (Glue) o;
-			
-			if (gluedObjects.entrySet().size() != g.gluedObjects.entrySet().size()) {
+			if (this.gluedObjects.keySet().size() != g.gluedObjects.keySet().size()) {
 				return false;
 			}
-			
-			for (Object pVertice: gluedObjects.entrySet()) {
-				if (!gluedObjects.get(pVertice).equals(g.gluedObjects.get(pVertice))) {
+			for (Object pVertice: this.gluedObjects.keySet()) {
+				if (!this.gluedObjects.get(pVertice).equals(g.gluedObjects.get(pVertice))) {
 					return false;
 				}
 			}
 			return true;
 		}
-		
+
+		@Override
+		public int compareTo(Glue arg0) {
+			if (this.equals(arg0)) {
+				return 0;
+			}
+			return 1;
+		}
 	}
 }

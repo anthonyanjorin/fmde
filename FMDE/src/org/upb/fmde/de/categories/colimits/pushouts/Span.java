@@ -11,7 +11,7 @@ public class Span<Arr> {
 		Category.ensure(cat.source(left).equals(cat.source(right)), "This is not a span!");
 	}
 	
-	protected Span(Arr left, Arr right){
+	public Span(Arr left, Arr right){
 		this.left = left;
 		this.right = right;
 	}
