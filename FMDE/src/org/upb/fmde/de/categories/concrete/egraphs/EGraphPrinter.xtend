@@ -10,7 +10,7 @@ class EGraphPrinter implements DotPrinter {
         this.d = d
     }
 
-    override print() { // TODO: EGraphMorphisms; separaten Sub-Graph für Attribute, da wir diese ja nur einmal haben wollen
+    override print() { // TODO: morphism-edges between node/edge-attribute-edges
         return '''
 digraph G
 {
@@ -51,6 +51,9 @@ digraph G
     «FOR f : d.arrows»
         «FOR v : f.fVg.src.elts»
             "«f.src.label».«v»" -> "«f.trg.label».«f.fVg.map(v)»" [label="«f.label»", style=bold, fontname="times-bold", color="#3E5C91", fontcolor="#3E5C91"]
+        «ENDFOR»
+        «FOR v : f.fVd.src.elts»
+            "«v»" -> "«f.fVd.map(v)»" [label="«f.label»", style=bold, fontname="times-bold", color="#3E5C91", fontcolor="#3E5C91"]
         «ENDFOR»
         «FOR e : f.fEg.src.elts»
             "«f.src.label».«e»" -> "«f.trg.label».«f.fEg.map(e)»" [label="«f.label»", style=bold, fontname="times-bold", color="#3E5C91", fontcolor="#3E5C91"]
