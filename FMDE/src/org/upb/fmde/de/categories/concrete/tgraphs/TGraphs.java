@@ -18,6 +18,7 @@ import org.upb.fmde.de.categories.colimits.pushouts.CategoryWithPushouts;
 import org.upb.fmde.de.categories.colimits.pushouts.CoSpan;
 import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.colimits.pushouts.Span;
+import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
@@ -132,10 +133,14 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		CoSpan<TGraphMorphism> q_t = PO.obj;
 		
 		List<TGraphMorphism> allT_TiArrows = new ArrayList<TGraphMorphism>();
-		//find all Ti
-		for(Glue glue: constructEpimorphicGlues(q_t)) {
-			allT_TiArrows.add(glue.s);
-		}
+		
+		//find all Ti TODO find all tis
+		allT_TiArrows.add(q_t.right);
+		
+		
+//		for(Glue glue: constructEpimorphicGlues(q_t)) {
+//			allT_TiArrows.add(glue.s);
+//		}
 		//return t;ti
 		return allT_TiArrows;
 	}
@@ -278,7 +283,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		Map<Object, List<Object>> typeMappingR = constructTypeMapping(R);
 		
 		Set<Glue> allGlues = new TreeSet<Glue>();
-		Glue unglued = new Glue();
+		Glue unglued = new Glue("S");
 		allGlues.add(unglued);
 		allGlues.addAll(findGlues(typeMappingR, P, unglued));
 		
@@ -315,6 +320,10 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 	
 	private class Glue implements Comparable<Glue> {
 		
+		private TGraph S;
+		
+		GraphMorphism type;
+		
 		TGraphMorphism p;
 		
 		TGraphMorphism s;
@@ -325,13 +334,108 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		Map<Object,Object> gluedObjects = new HashMap<Object, Object>();
 		
 		private void constructMorphismsFromMapping(TGraph P, TGraph R) {
-			//construct p and s from gluedObjects
+			//construct p from gluedObjects
 			
-			//map vertice
+			TotalFunction f_E = new TotalFunction(P.type().src().edges(), "f_E", S.type().src().edges());
+			TotalFunction f_V = new TotalFunction(P.type().src().vertices(), "f_V", S.type().src().vertices());
 			
-			//map edge
-			//TODO
+			for(Object vertice: P.type().src().vertices().elts()) {
+				//map all vertices
+				Object mapTarget = vertice;
+				Object mappedType = P.type()._V().map(vertice);
+				
+				if(gluedObjects.containsKey(vertice)) { //vertice is glued -> map to glue
+					mapTarget = gluedObjects.get(vertice);
+				}
+				
+				S.type().src().vertices().elts().add(mapTarget);
+				f_V.addMapping(vertice, mapTarget);
+				
+				//map vertice type
+				S.type()._V().addMapping(mapTarget, mappedType);
+			}
+			for(Object edge: P.type().src().edges().elts()) {
+				
+				Object mappedType = P.type()._E().map(edge);
+				Object src = P.type().src().src().map(edge);
+				Object trg = P.type().src().trg().map(edge);
+				
+				if(gluedObjects.containsKey(P.type().src().src().map(edge))) {
+					src = gluedObjects.get(P.type().src().src().map(edge));
+					//edge src has been glued
+					if(gluedObjects.containsKey(P.type().src().trg().map(edge))) {
+						trg = gluedObjects.get(P.type().src().trg().map(edge));
+						//edge src and target have been glued
+						Object origSrc = P.type().src().src().map(edge);
+						Object origTrg = P.type().src().trg().map(edge);
+						
+						if(gluedObjects.get(origSrc).equals(src) && gluedObjects.get(origTrg).equals(trg)) {
+							//find existing edge and map edge to existing edge
+							for(Object edgeInR: R.type().src().edges().elts()) {
+								Object rSrc = R.type().src().src().map(edgeInR);
+								Object rTrg = R.type().src().trg().map(edgeInR);;
+								if(rSrc.equals(src) && rTrg.equals(trg)) { //found edge
+									S.type().src().edges().elts().add(edgeInR);
+									f_E.addMapping(edge, edgeInR);
+									break;
+								}
+							}
+							break;
+						}
+						//else add edge
+					}
+				}
+				else {
+					if(gluedObjects.containsKey(P.type().src().trg().map(edge))) {
+						//edge target has been glued, but not src
+						trg = gluedObjects.get(P.type().src().trg().map(edge));
+					}
+				}
+				S.type().src().edges().elts().add(edge);
+				f_E.addMapping(edge, edge);
+				//map edge src and edge trg
+				S.type().src().src().addMapping(edge, src);
+				S.type().src().trg().addMapping(edge, trg);
+				//map edge type
+				S.type()._E().addMapping(edge, mappedType);
+			}
+			
+			GraphMorphism pS = new GraphMorphism("p", P.type().src(), S.type().src(), f_E, f_V);
+			p = new TGraphMorphism("p", pS, P, S);
+			
+			//construct s from gluedObjects
+			f_E = new TotalFunction(R.type().src().edges(), "f_E", S.type().src().edges());
+			f_V = new TotalFunction(R.type().src().vertices(), "f_V", S.type().src().vertices());
+			
+			for(Object vertice: R.type().src().vertices().elts()) {
+				//map all vertices
+				S.type().src().vertices().elts().add(vertice);
+				f_V.addMapping(vertice, vertice);
+				//map vertice type
+				Object mappedType = R.type()._V().map(vertice);
+				S.type()._V().addMapping(vertice, mappedType);
+			}
+			for(Object edge: R.type().src().edges().elts()) {
+				//map edge
+				S.type().src().edges().elts().add(edge);
+				f_E.addMapping(edge, edge);
+				
+				//map edge src and edge trg
+				Object src = R.type().src().src().map(edge);
+				Object trg = R.type().src().trg().map(edge);
+				
+				S.type().src().src().addMapping(edge, src);
+				S.type().src().trg().addMapping(edge, trg);
+				//map edge type
+				Object mappedType = R.type()._E().map(edge);
+				S.type()._E().addMapping(edge, mappedType);
+			}
+			
+			GraphMorphism rS = new GraphMorphism("s", R.type().src(), S.type().src(), f_E, f_V);
+			s = new TGraphMorphism("s", rS, R, S);
 		}
+		
+		
 		
 		public Glue(CoSpan<TGraphMorphism> q_t) {
 			TGraphMorphism q = q_t.left;
@@ -347,9 +451,24 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			}
 		}
 		
-		public Glue(){}
+		private void initTGraph(String name) {
+			FinSet vertices = new FinSet("vertices");
+			FinSet edges = new FinSet("edges");
+			TotalFunction src = new TotalFunction(edges, "src", vertices);
+			TotalFunction trg = new TotalFunction(edges, "trg", vertices);
+			Graph untyped = new Graph(name, edges, vertices, src, trg);
+			TotalFunction f_E = new TotalFunction(edges, "f_E", typeGraph.edges());
+			TotalFunction f_V = new TotalFunction(vertices, "f_V", typeGraph.vertices());
+			type = new GraphMorphism("type", untyped, typeGraph, f_E, f_V);
+			S = new TGraph(name, type);
+		}
+		
+		public Glue(String name) {
+			initTGraph(name);
+		}
 		
 		public Glue(Glue old) {
+			this.initTGraph(old.S.label());
 			this.gluedPVertices = new ArrayList<Object>();
 			this.gluedPVertices.addAll(old.gluedPVertices);
 			
