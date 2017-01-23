@@ -21,24 +21,8 @@ public class TestsProject {
     public void testEGraphComposition() {
 
         EGraph hostGraph = createHostGraph();
-        EGraph typeGraph = createTypeGraph();
-
-        TotalFunction tVg = new TotalFunction(hostGraph.Vg, "tVg", typeGraph.Vg);
-        TotalFunction tVd = new TotalFunction(hostGraph.Vd, "tVd", typeGraph.Vd);
-        TotalFunction tEg = new TotalFunction(hostGraph.Eg, "tEg", typeGraph.Eg);
-        TotalFunction tEna = new TotalFunction(hostGraph.Ena, "tEna", typeGraph.Ena);
-        TotalFunction tEea = new TotalFunction(hostGraph.Eea, "tEea", typeGraph.Eea);
-
-        tVg.addMapping("node1", "Player");
-        tVg.addMapping("node2", "Player");
-        tVd.addMapping("yellow", "Color");
-        tVd.addMapping("blue", "Color");
-        tEg.addMapping("edge1to2", "PlayerEdge");
-        tEna.addMapping("node1.color", "Player.color");
-        tEna.addMapping("node2.color", "Player.color");
-        tEea.addMapping("edge1to2.color", "PlayerEdge.color");
-
-        EGraphMorphism type = new EGraphMorphism("type", hostGraph, typeGraph, tVg, tVd, tEg, tEna, tEea);
+        EGraph typeGraph = createPatternGraph();
+        EGraphMorphism type = createMorphism();
 
         assertTrue(eGraphs.compose(eGraphs.id(hostGraph), type).isTheSameAs(type));
         assertTrue(eGraphs.compose(type, eGraphs.id(typeGraph)).isTheSameAs(type));
@@ -58,10 +42,37 @@ public class TestsProject {
     public void createDiagram() throws IOException {
 
         EGraph hostGraph = createHostGraph();
+        EGraph typeGraph = createTypeGraph();
+        EGraphMorphism typeMorphism = createMorphism();
 
         EGraphDiagram diagram = new EGraphDiagram();
-        diagram.objects(hostGraph).prettyPrint(diagramsDir, "diagram");
+        diagram
+            .objects(hostGraph, typeGraph)
+            .arrows(typeMorphism)
+            .prettyPrint(diagramsDir, "diagram");
 
+    }
+
+    private EGraphMorphism createMorphism() {
+        EGraph hostGraph = createHostGraph();
+        EGraph typeGraph = createTypeGraph();
+
+        TotalFunction tVg = new TotalFunction(hostGraph.Vg, "tVg", typeGraph.Vg);
+        TotalFunction tVd = new TotalFunction(hostGraph.Vd, "tVd", typeGraph.Vd);
+        TotalFunction tEg = new TotalFunction(hostGraph.Eg, "tEg", typeGraph.Eg);
+        TotalFunction tEna = new TotalFunction(hostGraph.Ena, "tEna", typeGraph.Ena);
+        TotalFunction tEea = new TotalFunction(hostGraph.Eea, "tEea", typeGraph.Eea);
+
+        tVg.addMapping("node1", "Player");
+        tVg.addMapping("node2", "Player");
+        tVd.addMapping("yellow", "Color");
+        tVd.addMapping("blue", "Color");
+        tEg.addMapping("edge1to2", "PlayerEdge");
+        tEna.addMapping("node1.color", "Player.color");
+        tEna.addMapping("node2.color", "Player.color");
+        tEea.addMapping("edge1to2.color", "PlayerEdge.color");
+
+        return new EGraphMorphism("type", hostGraph, typeGraph, tVg, tVd, tEg, tEna, tEea);
     }
 
     private EGraph createPatternGraph() {
