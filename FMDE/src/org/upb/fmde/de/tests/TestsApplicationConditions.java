@@ -66,9 +66,9 @@ public class TestsApplicationConditions {
 		TestUtil.prettyPrintTEcore(d, "moveCard", diagrams);
 		
 		// Load P and C
-		TGraph P = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "K", L_TG_Ecore[1], L_TG_Ecore[2]);
+		TGraph P = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "P", L_TG_Ecore[1], L_TG_Ecore[2]);
 		
-		TGraph C = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "K", L_TG_Ecore[1], L_TG_Ecore[2]);
+		TGraph C = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/C1.xmi", "C", L_TG_Ecore[1], L_TG_Ecore[2]);
 		
 		// Construct graph condition a: P -> C
 		pm = new TPatternMatcher(P, C);
@@ -85,17 +85,15 @@ public class TestsApplicationConditions {
 		
 		for (GraphCondition<TGraph, TGraphMorphism> applicationCondition : applicationConditions) {
 			d = new TGraphDiagram(TG);
-			TGraph t = P; // TODO: get TGraph from applicationCondition
-			TGraphMorphism m = a; // TODO: get morphism from applicationCondition
-			d.objects(t).arrows(m);
+			
+			TGraphMorphism p = applicationCondition.getP();
+			d.objects(p.src(), p.trg()).arrows(p);
+			
+			List<TGraphMorphism> cis = applicationCondition.getCi();
+			for (TGraphMorphism ci : cis) {
+				d.objects(ci.trg()).arrows(ci);
+			}
 			TestUtil.prettyPrintTEcore(d, "graphcondition_" + applicationCondition.hashCode(), diagrams);
 		}
-		
-		// TODO: Write test
-		assertTrue(true);
-		
-		
-		
-		// TestUtil.prettyPrintTEcore(result, "derivation_" + m.hashCode(), diagrams);
 	}
 }

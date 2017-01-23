@@ -29,4 +29,12 @@ public abstract class GraphCondition<Ob, Arr> implements ComplexGraphCondition<O
 
 	@Override
 	public abstract boolean isSatisfiedByArrow(Arr m, BiFunction<Ob, Ob, PatternMatcher<Ob, Arr>> creator);
+
+	public Arr getP() {
+		return p;
+	}
+
+	public List<Arr> getCi() {
+		return ci;
+	}
 }
