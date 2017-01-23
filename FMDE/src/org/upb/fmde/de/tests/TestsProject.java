@@ -48,7 +48,7 @@ public class TestsProject {
 
         EGraphPatternMatcher matcher = new EGraphPatternMatcher(patternGraph, hostGraph);
         List<EGraphMorphism> matches = matcher.determineMatches(false);
-        int i = 5;
+        assertTrue(matches.size() == 1);
     }
 
     private EGraph createPatternGraph() {
