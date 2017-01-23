@@ -1,12 +1,12 @@
 package org.upb.fmde.de.categories.concrete.graphs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiPredicate;
-
 import org.upb.fmde.de.categories.PatternMatcher;
 import org.upb.fmde.de.categories.concrete.finsets.FinSetPatternMatcher;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiPredicate;
 
 public class GraphPatternMatcher extends PatternMatcher<Graph, GraphMorphism> {
 

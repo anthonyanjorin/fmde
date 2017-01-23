@@ -3,8 +3,11 @@ package org.upb.fmde.de.tests;
 import org.junit.Test;
 import org.upb.fmde.de.categories.concrete.egraphs.EGraph;
 import org.upb.fmde.de.categories.concrete.egraphs.EGraphMorphism;
+import org.upb.fmde.de.categories.concrete.egraphs.EGraphPatternMatcher;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
+
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.upb.fmde.de.categories.concrete.egraphs.EGraphs.eGraphs;
@@ -36,6 +39,39 @@ public class TestsProject {
 
         assertTrue(eGraphs.compose(eGraphs.id(hostGraph), type).isTheSameAs(type));
         assertTrue(eGraphs.compose(type, eGraphs.id(typeGraph)).isTheSameAs(type));
+    }
+
+    @Test
+    public void testEGraphPatternMatcher() {
+        EGraph hostGraph = createHostGraph();
+        EGraph patternGraph = createPatternGraph();
+
+        EGraphPatternMatcher matcher = new EGraphPatternMatcher(patternGraph, hostGraph);
+        List<EGraphMorphism> matches = matcher.determineMatches(false);
+        int i = 5;
+    }
+
+    private EGraph createPatternGraph() {
+        FinSet vg = new FinSet("graph nodes", "node");
+        FinSet vd = new FinSet("data nodes", "yellow");
+
+        FinSet eg = new FinSet("graph edges");
+        FinSet ena = new FinSet("node attribute edges", "node.color");
+        FinSet eea = new FinSet("edge attribute edges");
+
+        TotalFunction sourceG = new TotalFunction(eg, "sourceG", vg);
+        TotalFunction targetG = new TotalFunction(eg, "targetG", vg);
+
+        TotalFunction sourceNA = new TotalFunction(ena, "sourceNA", vg);
+        sourceNA.addMapping("node.color", "node");
+
+        TotalFunction targetNA = new TotalFunction(ena, "targetNA", vd);
+        targetNA.addMapping("node.color", "yellow");
+
+        TotalFunction sourceEA = new TotalFunction(eea, "sourceEA", eg);
+        TotalFunction targetEA = new TotalFunction(eea, "targetEA", vd);
+
+        return new EGraph("PatternGraph", vg, vd, eg, ena, eea, sourceG, targetG, sourceNA, targetNA, sourceEA, targetEA);
     }
 
     private EGraph createHostGraph() {
