@@ -2,6 +2,7 @@ package org.upb.fmde.de.categories.concrete.tgraphs;
 
 import static org.upb.fmde.de.categories.concrete.graphs.Graphs.Graphs;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 import org.upb.fmde.de.graphconditions.GraphCondition;
 import org.upb.fmde.de.graphconditions.SatisfiableGraphCondition;
+import org.upb.fmde.de.tests.TestUtil;
 
 public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>, 
 								CategoryWithInitOb<TGraph, TGraphMorphism>, 
@@ -31,6 +33,8 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 	private final Graph typeGraph;
 	private final TGraph EMPTY_TYPED_GRAPH;
 	private final CoLimit<TGraph, TGraphMorphism> INITIAL_OBJECT;
+	
+	private static final String diagrams = "diagrams/application-conditions/";
 	
 	public static TGraphs TGraphsFor(Graph typeGraph) {
 		return new TGraphs(typeGraph);
@@ -151,6 +155,15 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		Set<Glue> all_p_s = constructEpimorphicGlues(P, R);
 		
 		for (Glue glue : all_p_s) {
+			try {
+				TGraphDiagram d = new TGraphDiagram(this.typeGraph);				
+				TGraph S = glue.p.trg();
+				d.objects(P, S, R).arrows(glue.p, glue.s);
+				TestUtil.prettyPrintTEcore(d, "P_S_R" + glue.hashCode(), diagrams);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			Span<TGraphMorphism> upperLeftCorner = new Span<TGraphMorphism>(this, a, glue.p);
 			List<TGraphMorphism> all_t_ti = constructConditions(upperLeftCorner);
 			
@@ -186,6 +199,18 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		TGraphMorphism y = Y.obj.right;
 		TGraphMorphism l_star = Y.obj.left; //TODO check
 		
+		try {
+			TGraphDiagram d = new TGraphDiagram(this.typeGraph);
+			
+			TGraph Y_TGraph = Y.obj.left.trg();
+			TGraph Z_TGraph = Z.get().first.trg();
+			TGraph X_TGraph = s.trg(); // X = S
+			
+			d.objects(Y_TGraph, Z_TGraph, X_TGraph).arrows(l_star, r_star);
+			TestUtil.prettyPrintTEcore(d, "Y_Z_X", diagrams);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		List<TGraphMorphism> allYis = new ArrayList<TGraphMorphism>();
 		
@@ -202,6 +227,23 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			TGraphMorphism yi = Di.obj.right; //TODO check
 			
 			allYis.add(yi);
+			
+			try {
+				TGraphDiagram d = new TGraphDiagram(this.typeGraph);
+				
+				TGraph Y_TGraph = Y.obj.left.trg();
+				TGraph Z_TGraph = Z.get().first.trg();
+				TGraph X_TGraph = s.trg(); // X = S
+				TGraph Di_TGraph = Di.obj.left.trg();
+				TGraph Zi_TGraph = Zi.get().first.trg();
+				TGraph Ci_TGraph = xi.trg(); // C_i = T_i
+				
+				d.objects(Y_TGraph, Z_TGraph, X_TGraph, Di_TGraph, Zi_TGraph, Ci_TGraph)
+					.arrows(l_star, r_star, zi, yi, xi);
+				TestUtil.prettyPrintTEcore(d, "Y_Z_X_Di_Zi_Ci", diagrams);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(allYis.isEmpty()) {
