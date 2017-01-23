@@ -2,17 +2,20 @@ package org.upb.fmde.de.tests;
 
 import org.junit.Test;
 import org.upb.fmde.de.categories.concrete.egraphs.EGraph;
+import org.upb.fmde.de.categories.concrete.egraphs.EGraphDiagram;
 import org.upb.fmde.de.categories.concrete.egraphs.EGraphMorphism;
 import org.upb.fmde.de.categories.concrete.egraphs.EGraphPatternMatcher;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.upb.fmde.de.categories.concrete.egraphs.EGraphs.eGraphs;
 
 public class TestsProject {
+    private static final String diagramsDir = "diagrams/project/";
 
     @Test
     public void testEGraphComposition() {
@@ -49,6 +52,16 @@ public class TestsProject {
         EGraphPatternMatcher matcher = new EGraphPatternMatcher(patternGraph, hostGraph);
         List<EGraphMorphism> matches = matcher.determineMatches(false);
         assertTrue(matches.size() == 1);
+    }
+
+    @Test
+    public void createDiagram() throws IOException {
+
+        EGraph hostGraph = createHostGraph();
+
+        EGraphDiagram diagram = new EGraphDiagram();
+        diagram.objects(hostGraph).prettyPrint(diagramsDir, "diagram");
+
     }
 
     private EGraph createPatternGraph() {
