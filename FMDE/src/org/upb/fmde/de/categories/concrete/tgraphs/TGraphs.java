@@ -154,7 +154,22 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		// Add all other Tis.
 		for(Glue glue: constructEpimorphicGlues(q_t)) {
 			allT_TiArrows.add(glue.s);
+			
+			try {
+				TGraphDiagram d = new TGraphDiagram(this.typeGraph);
+				TGraph S = q_t.left.src();
+				S.type().src().label("S");
+				TGraph T = q_t.right.trg();
+				T.type().src().label("T");
+				TGraph Ti = glue.S;
+				Ti.type().src().label("Ti");
+				d.objects(S, T, Ti).arrows(glue.s);
+				TestUtil.prettyPrintTEcore(d, "T_Ti_" + T.hashCode() + "_" + Ti.hashCode(), diagrams + "T_Ti/");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		
 		//return t;ti
 		return allT_TiArrows;
 	}
@@ -170,15 +185,6 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		List<Glue> all_p_s = constructEpimorphicGlues(P, R);
 		
 		for (Glue glue : all_p_s) {
-			try {
-				TGraphDiagram d = new TGraphDiagram(this.typeGraph);				
-				TGraph S = glue.p.trg();
-				d.objects(P, S, R).arrows(glue.p, glue.s);
-				TestUtil.prettyPrintTEcore(d, "P_S_R_" + glue.hashCode(), diagrams + "P_S_R/");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
 			Span<TGraphMorphism> upperLeftCorner = new Span<TGraphMorphism>(this, a, glue.p);
 			List<TGraphMorphism> all_t_ti = constructConditions(upperLeftCorner);
 			
@@ -234,21 +240,21 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				TGraphDiagram d = new TGraphDiagram(this.typeGraph);
 				
 				TGraph Y_TGraph = y.trg();
-				Y_TGraph.label("Y");
+				Y_TGraph.type().src().label("Y");
 				TGraph Z_TGraph = z.trg();
-				Z_TGraph.label("Z");
+				Z_TGraph.type().src().label("Z");
 				TGraph X_TGraph = s.trg(); // X = S
-				X_TGraph.label("X=S");
+				X_TGraph.type().src().label("X=S");
 				TGraph Di_TGraph = yi.trg();
-				Di_TGraph.label("Di");
+				Di_TGraph.type().src().label("Di");
 				TGraph Zi_TGraph = zi.trg();
-				Zi_TGraph.label("Zi");
+				Zi_TGraph.type().src().label("Zi");
 				TGraph Ci_TGraph = xi.trg(); // C_i = T_i
-				Ci_TGraph.label("Ci=Ti");
+				Ci_TGraph.type().src().label("Ci=Ti");
 				
 				d.objects(Y_TGraph, Z_TGraph, X_TGraph, Di_TGraph, Zi_TGraph, Ci_TGraph)
 					.arrows(l_star, r_star, zi, yi, xi);
-				TestUtil.prettyPrintTEcore(d, "Y_Z_X_Di_Zi_Ci" + X_TGraph.hashCode() + "_" + Di_TGraph.hashCode(), diagrams + "Y_Z_X_Di_Zi_Ci/");
+				TestUtil.prettyPrintTEcore(d, "Y_Z_X_Di_Zi_Ci_" + X_TGraph.hashCode() + "_" + Di_TGraph.hashCode(), diagrams + "Y_Z_X_Di_Zi_Ci/");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

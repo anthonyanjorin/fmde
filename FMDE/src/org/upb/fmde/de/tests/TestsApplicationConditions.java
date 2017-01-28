@@ -27,9 +27,10 @@ public class TestsApplicationConditions {
 	@BeforeClass
 	public static void clear() {
 		TestUtil.clear(diagrams);
-		String[] directories = { "graphconditions", "P_C_S_T", "P_R_S", "P_S_R", "Y_Z_X_Di_Zi_Ci" };
+		String[] directories = { "application_conditions", "P_C_S_T", "P_R_S", "T_Ti", "Y_Z_X_Di_Zi_Ci" };
 		for (String directory : directories) {
 			new File(diagrams + directory).mkdir();
+			TestUtil.clear(diagrams + directory + "/");
 		}
 	}
 
@@ -101,10 +102,11 @@ public class TestsApplicationConditions {
 			for (TGraphMorphism ci : cis) {
 				graphs.add(ci.trg());
 				arrows.add(ci);
+				break;
 			}
 			
 			d.objects(graphs).arrows(arrows);
-			TestUtil.prettyPrintTEcore(d, "graphcondition_" + applicationCondition.hashCode(), diagrams + "graphconditions/");
+			TestUtil.prettyPrintTEcore(d, "application_condition_" + applicationCondition.hashCode(), diagrams + "application_conditions/");
 		}
 	}
 }
