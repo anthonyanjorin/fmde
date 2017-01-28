@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.upb.fmde.de.categories.LabelledCategory;
 import org.upb.fmde.de.categories.colimits.CategoryWithInitOb;
@@ -157,7 +156,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		TGraph R = L_K_R.right.trg();
 		
 		//construct all possible S
-		Set<Glue> all_p_s = constructEpimorphicGlues(P, R);
+		List<Glue> all_p_s = constructEpimorphicGlues(P, R);
 		
 		for (Glue glue : all_p_s) {
 			try {
@@ -181,7 +180,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		
 		return allConditions;
 	}
-	
+
 	private Optional<GraphCondition<TGraph, TGraphMorphism>> constructLeftSideApplCond(
 			Span<TGraphMorphism> L_K_R, 
 			TGraphMorphism s, 
@@ -281,8 +280,8 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 								  new TGraphMorphism("_g_", untyped.second, _G_, G));
 	}
 	
-	private Set<Glue> findGlues(Map<Object, List<Object>> typeMappingR, TGraph P, Glue g) {
-		Set<Glue> foundGlues = new TreeSet<Glue>();
+	private List<Glue> findGlues(Map<Object, List<Object>> typeMappingR, TGraph P, Glue g) {
+		List<Glue> foundGlues = new ArrayList<Glue>();
 		
 		for(Object vertice: P.type().src().vertices().elts() ) {
 			if(g.gluedPVertices.contains(vertice)) {
@@ -300,7 +299,11 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				x.addGlue(vertice, candidate);
 				foundGlues.add(x);
 				
-				foundGlues.addAll(findGlues(typeMappingR, P, x));
+				for (Glue glue : findGlues(typeMappingR, P, x)) {
+					if (!foundGlues.contains(glue)) {
+						foundGlues.add(glue);
+					}
+				}
 			}
 		}
 		
@@ -321,13 +324,17 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		return typeMapping;
 	}
 	
-	public Set<Glue> constructEpimorphicGlues(TGraph P, TGraph R) {
+	public List<Glue> constructEpimorphicGlues(TGraph P, TGraph R) {
 		Map<Object, List<Object>> typeMappingR = constructTypeMapping(R);
 		
-		Set<Glue> allGlues = new TreeSet<Glue>();
+		List<Glue> allGlues = new ArrayList<Glue>();
 		Glue unglued = new Glue("S");
 		allGlues.add(unglued);
-		allGlues.addAll(findGlues(typeMappingR, P, unglued));
+		for (Glue glue : findGlues(typeMappingR, P, unglued)) {
+			if (!allGlues.contains(glue)) {
+				allGlues.add(glue);
+			}
+		}
 		
 		for(Glue g: allGlues) {
 			g.constructMorphismsFromMapping(P, R);
@@ -336,7 +343,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		return allGlues;
 	}
 
-	public Set<Glue> constructEpimorphicGlues(CoSpan<TGraphMorphism> q_t) {
+	public List<Glue> constructEpimorphicGlues(CoSpan<TGraphMorphism> q_t) {
 		TGraphMorphism q = q_t.left;
 		TGraphMorphism t = q_t.right;
 		
@@ -345,7 +352,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		
 		Map<Object, List<Object>> typeMappingS = constructTypeMapping(S);
 		
-		Set<Glue> allGlues = new TreeSet<Glue>();
+		List<Glue> allGlues = new ArrayList<Glue>();
 		Glue pushoutGlue = new Glue(q_t);
 		allGlues.add(pushoutGlue);
 		allGlues.addAll(findGlues(typeMappingS, C, pushoutGlue));
@@ -360,7 +367,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		//s => t;ti
 	}
 	
-	private class Glue implements Comparable<Glue> {
+	private class Glue {
 		
 		private TGraph S;
 		
@@ -377,9 +384,8 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		
 		private void constructMorphismsFromMapping(TGraph P, TGraph R) {
 			//construct p from gluedObjects
-			
-			TotalFunction f_E = new TotalFunction(P.type().src().edges(), "f_E", S.type().src().edges());
-			TotalFunction f_V = new TotalFunction(P.type().src().vertices(), "f_V", S.type().src().vertices());
+			TotalFunction f_E_p = new TotalFunction(P.type().src().edges(), "f_E", S.type().src().edges());
+			TotalFunction f_V_p = new TotalFunction(P.type().src().vertices(), "f_V", S.type().src().vertices());
 			
 			for(Object vertice: P.type().src().vertices().elts()) {
 				//map all vertices
@@ -391,7 +397,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				}
 				
 				S.type().src().vertices().elts().add(mapTarget);
-				f_V.addMapping(vertice, mapTarget);
+				f_V_p.addMapping(vertice, mapTarget);
 				
 				//map vertice type
 				S.type()._V().addMapping(mapTarget, mappedType);
@@ -402,29 +408,26 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				Object src = P.type().src().src().map(edge);
 				Object trg = P.type().src().trg().map(edge);
 				
-				if(gluedObjects.containsKey(P.type().src().src().map(edge))) {
-					src = gluedObjects.get(P.type().src().src().map(edge));
+				if(gluedObjects.containsKey(src)) {
+					src = gluedObjects.get(src);
 					//edge src has been glued
-					if(gluedObjects.containsKey(P.type().src().trg().map(edge))) {
-						trg = gluedObjects.get(P.type().src().trg().map(edge));
+					if(gluedObjects.containsKey(trg)) {
 						//edge src and target have been glued
-						Object origSrc = P.type().src().src().map(edge);
-						Object origTrg = P.type().src().trg().map(edge);
+						trg = gluedObjects.get(trg);
 						
-						if(gluedObjects.get(origSrc).equals(src) && gluedObjects.get(origTrg).equals(trg)) {
-							//find existing edge and map edge to existing edge
-							for(Object edgeInR: R.type().src().edges().elts()) {
-								Object rSrc = R.type().src().src().map(edgeInR);
-								Object rTrg = R.type().src().trg().map(edgeInR);;
-								if(rSrc.equals(src) && rTrg.equals(trg)) { //found edge
-									S.type().src().edges().elts().add(edgeInR);
-									f_E.addMapping(edge, edgeInR);
-									break;
-								}
+						boolean foundEdgeInR = false;
+						for(Object edgeInR: R.type().src().edges().elts()) {
+							Object rSrc = R.type().src().src().map(edgeInR);
+							Object rTrg = R.type().src().trg().map(edgeInR);;
+							if(rSrc.equals(src) && rTrg.equals(trg)) { //found edge  // TODO check edge type
+								foundEdgeInR = true;
+								f_E_p.addMapping(edge, edgeInR);
+								break;
 							}
-							break;
 						}
-						//else add edge
+						if (foundEdgeInR) {
+							continue;
+						}
 					}
 				}
 				else {
@@ -434,7 +437,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 					}
 				}
 				S.type().src().edges().elts().add(edge);
-				f_E.addMapping(edge, edge);
+				f_E_p.addMapping(edge, edge);
 				//map edge src and edge trg
 				S.type().src().src().addMapping(edge, src);
 				S.type().src().trg().addMapping(edge, trg);
@@ -442,25 +445,24 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				S.type()._E().addMapping(edge, mappedType);
 			}
 			
-			GraphMorphism pS = new GraphMorphism("p", P.type().src(), S.type().src(), f_E, f_V);
-			p = new TGraphMorphism("p", pS, P, S);
-			
 			//construct s from gluedObjects
-			f_E = new TotalFunction(R.type().src().edges(), "f_E", S.type().src().edges());
-			f_V = new TotalFunction(R.type().src().vertices(), "f_V", S.type().src().vertices());
+			TotalFunction f_E_s = new TotalFunction(R.type().src().edges(), "f_E", S.type().src().edges());
+			TotalFunction f_V_s = new TotalFunction(R.type().src().vertices(), "f_V", S.type().src().vertices());
 			
 			for(Object vertice: R.type().src().vertices().elts()) {
 				//map all vertices
-				S.type().src().vertices().elts().add(vertice);
-				f_V.addMapping(vertice, vertice);
-				//map vertice type
-				Object mappedType = R.type()._V().map(vertice);
-				S.type()._V().addMapping(vertice, mappedType);
+				if (!this.gluedObjects.containsValue(vertice)) {
+					S.type().src().vertices().elts().add(vertice);
+					//map vertice type
+					Object mappedType = R.type()._V().map(vertice);
+					S.type()._V().addMapping(vertice, mappedType);
+				}
+				f_V_s.addMapping(vertice, vertice);
 			}
 			for(Object edge: R.type().src().edges().elts()) {
 				//map edge
 				S.type().src().edges().elts().add(edge);
-				f_E.addMapping(edge, edge);
+				f_E_s.addMapping(edge, edge);
 				
 				//map edge src and edge trg
 				Object src = R.type().src().src().map(edge);
@@ -468,16 +470,30 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				
 				S.type().src().src().addMapping(edge, src);
 				S.type().src().trg().addMapping(edge, trg);
+				
 				//map edge type
 				Object mappedType = R.type()._E().map(edge);
 				S.type()._E().addMapping(edge, mappedType);
 			}
 			
-			GraphMorphism rS = new GraphMorphism("s", R.type().src(), S.type().src(), f_E, f_V);
+			GraphMorphism pS = new GraphMorphism("p", P.type().src(), S.type().src(), f_E_p, f_V_p);
+			p = new TGraphMorphism("p", pS, P, S);
+			
+			GraphMorphism rS = new GraphMorphism("s", R.type().src(), S.type().src(), f_E_s, f_V_s);
 			s = new TGraphMorphism("s", rS, R, S);
-		}
-		
-		
+			
+			TGraphDiagram d = new TGraphDiagram(P.type().src());
+			d.objects(P, R, S).arrows(p, s);
+			try {
+//				System.out.println(S.hashCode() + " Mappings:");
+//				for(Object vertice: gluedObjects.keySet()) {
+//					System.out.println(vertice + " - " + gluedObjects.get(vertice));
+//				}
+				TestUtil.prettyPrintTEcore(d, "P_R_S_" + S.hashCode(), diagrams);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}		
 		
 		public Glue(CoSpan<TGraphMorphism> q_t) {
 			TGraphMorphism q = q_t.left;
@@ -534,23 +550,22 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			}
 			
 			Glue g = (Glue) o;
-			if (this.gluedObjects.keySet().size() != g.gluedObjects.keySet().size()) {
+			if (this.gluedObjects.entrySet().size() != g.gluedObjects.entrySet().size()) {
 				return false;
 			}
-			for (Object pVertice: this.gluedObjects.keySet()) {
-				if (!this.gluedObjects.get(pVertice).equals(g.gluedObjects.get(pVertice))) {
+			for (Entry<Object, Object> verticeMapping: this.gluedObjects.entrySet()) {
+				Object pVertice = verticeMapping.getKey();
+				if (verticeMapping.getValue() != g.gluedObjects.get(pVertice)) {
+					return false;
+				}
+			}
+			for (Entry<Object, Object> verticeMapping: g.gluedObjects.entrySet()) {
+				Object pVertice = verticeMapping.getKey();
+				if (verticeMapping.getValue() != this.gluedObjects.get(pVertice)) {
 					return false;
 				}
 			}
 			return true;
-		}
-
-		@Override
-		public int compareTo(Glue arg0) {
-			if (this.equals(arg0)) {
-				return 0;
-			}
-			return 1;
 		}
 	}
 }
