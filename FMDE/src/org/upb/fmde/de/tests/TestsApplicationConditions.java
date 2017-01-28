@@ -2,7 +2,9 @@ package org.upb.fmde.de.tests;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -25,6 +27,10 @@ public class TestsApplicationConditions {
 	@BeforeClass
 	public static void clear() {
 		TestUtil.clear(diagrams);
+		String[] directories = { "graphconditions", "P_C_S_T", "P_R_S", "P_S_R", "Y_Z_X_Di_Zi_Ci" };
+		for (String directory : directories) {
+			new File(diagrams + directory).mkdir();
+		}
 	}
 
 	@Test
@@ -73,11 +79,7 @@ public class TestsApplicationConditions {
 		// Construct graph condition a: P -> C
 		pm = new TPatternMatcher(P, C);
 		TGraphMorphism a = pm.getMonicMatches().get(0);
-		r.label("a");
-		
-		d = new TGraphDiagram(TG);
-		d.objects(P, C).arrows(a);
-		TestUtil.prettyPrintTEcore(d, "graphcondition", diagrams);
+		a.label("a");
 		
 		// calculate application conditions
 		List<GraphCondition<TGraph, TGraphMorphism>> applicationConditions = 
@@ -85,15 +87,24 @@ public class TestsApplicationConditions {
 		
 		for (GraphCondition<TGraph, TGraphMorphism> applicationCondition : applicationConditions) {
 			d = new TGraphDiagram(TG);
+
+			
+			List<TGraph> graphs = new ArrayList<TGraph>();
+			List<TGraphMorphism> arrows = new ArrayList<TGraphMorphism>();
 			
 			TGraphMorphism p = applicationCondition.getP();
-			d.objects(p.src(), p.trg()).arrows(p);
+			graphs.add(p.src());
+			graphs.add(p.trg());
+			arrows.add(p);
 			
 			List<TGraphMorphism> cis = applicationCondition.getCi();
 			for (TGraphMorphism ci : cis) {
-				d.objects(ci.trg()).arrows(ci);
+				graphs.add(ci.trg());
+				arrows.add(ci);
 			}
-			TestUtil.prettyPrintTEcore(d, "graphcondition_" + applicationCondition.hashCode(), diagrams);
+			
+			d.objects(graphs).arrows(arrows);
+			TestUtil.prettyPrintTEcore(d, "graphcondition_" + applicationCondition.hashCode(), diagrams + "graphconditions/");
 		}
 	}
 }

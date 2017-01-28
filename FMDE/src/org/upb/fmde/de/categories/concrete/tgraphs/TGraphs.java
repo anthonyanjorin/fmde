@@ -136,14 +136,25 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		CoSpan<TGraphMorphism> q_t = PO.obj;
 		
 		List<TGraphMorphism> allT_TiArrows = new ArrayList<TGraphMorphism>();
+		allT_TiArrows.add(q_t.left);
 		
-		//find all Ti TODO find all tis
-		allT_TiArrows.add(q_t.right);
+		try {
+			TGraphDiagram d = new TGraphDiagram(this.typeGraph);				
+			TGraph P = upperLeftCorner.left.src();
+			TGraph C = upperLeftCorner.left.trg();
+			TGraph S = q_t.left.src();
+			TGraph T = q_t.right.trg();
+			T.label("T");
+			d.objects(P, C, S, T).arrows(q_t.left, q_t.right, upperLeftCorner.left, upperLeftCorner.right);
+			TestUtil.prettyPrintTEcore(d, "P_C_S_T_" + q_t.hashCode(), diagrams + "P_C_S_T/");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		
-//		for(Glue glue: constructEpimorphicGlues(q_t)) {
-//			allT_TiArrows.add(glue.s);
-//		}
+		// Add all other Tis.
+		for(Glue glue: constructEpimorphicGlues(q_t)) {
+			allT_TiArrows.add(glue.s);
+		}
 		//return t;ti
 		return allT_TiArrows;
 	}
@@ -163,7 +174,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				TGraphDiagram d = new TGraphDiagram(this.typeGraph);				
 				TGraph S = glue.p.trg();
 				d.objects(P, S, R).arrows(glue.p, glue.s);
-				TestUtil.prettyPrintTEcore(d, "P_S_R" + glue.hashCode(), diagrams);
+				TestUtil.prettyPrintTEcore(d, "P_S_R_" + glue.hashCode(), diagrams + "P_S_R/");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -195,26 +206,13 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		if(!Z.isPresent()) {
 			return Optional.empty();
 		}
-		TGraphMorphism z = Z.get().first; //TODO corner?
+		TGraphMorphism z = Z.get().first;
 		TGraphMorphism r_star = Z.get().second;
 		
 		//Calculate Y
 		CoLimit<CoSpan<TGraphMorphism>, TGraphMorphism> Y = pushout(new Span<TGraphMorphism>(this, l, z));
 		TGraphMorphism y = Y.obj.right;
-		TGraphMorphism l_star = Y.obj.left; //TODO check
-		
-		try {
-			TGraphDiagram d = new TGraphDiagram(this.typeGraph);
-			
-			TGraph Y_TGraph = Y.obj.left.trg();
-			TGraph Z_TGraph = Z.get().first.trg();
-			TGraph X_TGraph = s.trg(); // X = S
-			
-			d.objects(Y_TGraph, Z_TGraph, X_TGraph).arrows(l_star, r_star);
-			TestUtil.prettyPrintTEcore(d, "Y_Z_X", diagrams);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		TGraphMorphism l_star = Y.obj.left;
 		
 		List<TGraphMorphism> allYis = new ArrayList<TGraphMorphism>();
 		
@@ -224,27 +222,33 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			if(!Zi.isPresent()) {
 				continue;
 			}
+			TGraphMorphism zi = Zi.get().first;
 			
-			TGraphMorphism zi = Z.get().first; //TODO corner?
 			//Calculate Di
 			CoLimit<CoSpan<TGraphMorphism>, TGraphMorphism> Di = pushout(new Span<TGraphMorphism>(this, l_star, zi));
-			TGraphMorphism yi = Di.obj.right; //TODO check
+			TGraphMorphism yi = Di.obj.right;
 			
 			allYis.add(yi);
 			
 			try {
 				TGraphDiagram d = new TGraphDiagram(this.typeGraph);
 				
-				TGraph Y_TGraph = Y.obj.left.trg();
-				TGraph Z_TGraph = Z.get().first.trg();
+				TGraph Y_TGraph = y.trg();
+				Y_TGraph.label("Y");
+				TGraph Z_TGraph = z.trg();
+				Z_TGraph.label("Z");
 				TGraph X_TGraph = s.trg(); // X = S
-				TGraph Di_TGraph = Di.obj.left.trg();
-				TGraph Zi_TGraph = Zi.get().first.trg();
+				X_TGraph.label("X=S");
+				TGraph Di_TGraph = yi.trg();
+				Di_TGraph.label("Di");
+				TGraph Zi_TGraph = zi.trg();
+				Zi_TGraph.label("Zi");
 				TGraph Ci_TGraph = xi.trg(); // C_i = T_i
+				Ci_TGraph.label("Ci=Ti");
 				
 				d.objects(Y_TGraph, Z_TGraph, X_TGraph, Di_TGraph, Zi_TGraph, Ci_TGraph)
 					.arrows(l_star, r_star, zi, yi, xi);
-				TestUtil.prettyPrintTEcore(d, "Y_Z_X_Di_Zi_Ci", diagrams);
+				TestUtil.prettyPrintTEcore(d, "Y_Z_X_Di_Zi_Ci" + X_TGraph.hashCode() + "_" + Di_TGraph.hashCode(), diagrams + "Y_Z_X_Di_Zi_Ci/");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -329,23 +333,21 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		
 		List<Glue> allGlues = new ArrayList<Glue>();
 		Glue unglued = new Glue("S");
+		unglued.constructMorphismsFromMapping(P, R);
 		allGlues.add(unglued);
 		for (Glue glue : findGlues(typeMappingR, P, unglued)) {
 			if (!allGlues.contains(glue)) {
+				glue.constructMorphismsFromMapping(P, R);
 				allGlues.add(glue);
 			}
-		}
-		
-		for(Glue g: allGlues) {
-			g.constructMorphismsFromMapping(P, R);
 		}
 		
 		return allGlues;
 	}
 
 	public List<Glue> constructEpimorphicGlues(CoSpan<TGraphMorphism> q_t) {
-		TGraphMorphism q = q_t.left;
-		TGraphMorphism t = q_t.right;
+		TGraphMorphism t = q_t.left;
+		TGraphMorphism q = q_t.right;
 		
 		TGraph C = q.src();
 		TGraph S = t.src();
@@ -354,11 +356,11 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		
 		List<Glue> allGlues = new ArrayList<Glue>();
 		Glue pushoutGlue = new Glue(q_t);
-		allGlues.add(pushoutGlue);
-		allGlues.addAll(findGlues(typeMappingS, C, pushoutGlue));
-		
-		for(Glue g: allGlues) {
-			g.constructMorphismsFromMapping(C, S);;
+		for (Glue glue : findGlues(typeMappingS, C, pushoutGlue)) {
+			if (!allGlues.contains(glue) && !glue.equals(pushoutGlue))  {
+				glue.constructMorphismsFromMapping(C, S);
+				allGlues.add(glue);
+			}
 		}
 		
 		return allGlues;
@@ -408,18 +410,18 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 				Object src = P.type().src().src().map(edge);
 				Object trg = P.type().src().trg().map(edge);
 				
-				if(gluedObjects.containsKey(src)) {
+				if (gluedObjects.containsKey(src)) {
 					src = gluedObjects.get(src);
 					//edge src has been glued
-					if(gluedObjects.containsKey(trg)) {
+					if (gluedObjects.containsKey(trg)) {
 						//edge src and target have been glued
 						trg = gluedObjects.get(trg);
 						
 						boolean foundEdgeInR = false;
-						for(Object edgeInR: R.type().src().edges().elts()) {
+						for (Object edgeInR: R.type().src().edges().elts()) {
 							Object rSrc = R.type().src().src().map(edgeInR);
-							Object rTrg = R.type().src().trg().map(edgeInR);;
-							if(rSrc.equals(src) && rTrg.equals(trg)) { //found edge  // TODO check edge type
+							Object rTrg = R.type().src().trg().map(edgeInR);
+							if (rSrc.equals(src) && rTrg.equals(trg) && mappedType == R.type()._E().map(edgeInR)) { //found edge
 								foundEdgeInR = true;
 								f_E_p.addMapping(edge, edgeInR);
 								break;
@@ -485,11 +487,7 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			TGraphDiagram d = new TGraphDiagram(P.type().src());
 			d.objects(P, R, S).arrows(p, s);
 			try {
-//				System.out.println(S.hashCode() + " Mappings:");
-//				for(Object vertice: gluedObjects.keySet()) {
-//					System.out.println(vertice + " - " + gluedObjects.get(vertice));
-//				}
-				TestUtil.prettyPrintTEcore(d, "P_R_S_" + S.hashCode(), diagrams);
+				TestUtil.prettyPrintTEcore(d, "P_R_S_" + S.hashCode(), diagrams + "P_R_S/");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -498,6 +496,8 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		public Glue(CoSpan<TGraphMorphism> q_t) {
 			TGraphMorphism q = q_t.left;
 			TGraphMorphism t = q_t.right;
+			
+			this.initTGraph("T");
 			
 			for(Object verticeInC: q.untyped()._V().src().elts()) {
 				for(Object verticeInS: t.untyped()._V().src().elts()) {
@@ -526,6 +526,12 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		}
 		
 		public Glue(Glue old) {
+			if (old == null) {
+				System.out.println("old is null");
+			}
+			if (old.S == null) {
+				System.out.println("old.S is null");
+			}
 			this.initTGraph(old.S.label());
 			this.gluedPVertices = new ArrayList<Object>();
 			this.gluedPVertices.addAll(old.gluedPVertices);
