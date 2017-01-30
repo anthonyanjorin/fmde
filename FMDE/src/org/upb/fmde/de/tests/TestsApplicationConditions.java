@@ -100,9 +100,10 @@ public class TestsApplicationConditions {
 			
 			List<TGraphMorphism> cis = applicationCondition.getCi();
 			for (TGraphMorphism ci : cis) {
-				graphs.add(ci.trg());
+				TGraph ciTarget = ci.trg();
+				ciTarget.type().src().label("Ci"+ciTarget.hashCode());
+				graphs.add(ciTarget);
 				arrows.add(ci);
-				break;
 			}
 			
 			d.objects(graphs).arrows(arrows);

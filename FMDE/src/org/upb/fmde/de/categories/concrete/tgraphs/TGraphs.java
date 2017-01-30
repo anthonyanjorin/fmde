@@ -158,12 +158,13 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 			try {
 				TGraphDiagram d = new TGraphDiagram(this.typeGraph);
 				TGraph S = q_t.left.src();
+				TGraph C = q_t.right.src();
 				S.type().src().label("S");
 				TGraph T = q_t.right.trg();
 				T.type().src().label("T");
 				TGraph Ti = glue.S;
 				Ti.type().src().label("Ti");
-				d.objects(S, T, Ti).arrows(glue.s);
+				d.objects(C, S, T, Ti).arrows(glue.s, glue.p, q_t.left, q_t.right);
 				TestUtil.prettyPrintTEcore(d, "T_Ti_" + T.hashCode() + "_" + Ti.hashCode(), diagrams + "T_Ti/");
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -500,13 +501,15 @@ public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>,
 		}		
 		
 		public Glue(CoSpan<TGraphMorphism> q_t) {
-			TGraphMorphism q = q_t.left;
-			TGraphMorphism t = q_t.right;
+			TGraphMorphism q = q_t.right;
+			TGraphMorphism t = q_t.left;
+			TGraph C = q.src();
+			TGraph S = t.src();
 			
 			this.initTGraph("T");
 			
-			for(Object verticeInC: q.untyped()._V().src().elts()) {
-				for(Object verticeInS: t.untyped()._V().src().elts()) {
+			for(Object verticeInC: C.type().src().vertices().elts()) {
+				for(Object verticeInS: S.type().src().vertices().elts()) {
 					if(q.untyped()._V().map(verticeInC).equals(t.untyped()._V().map(verticeInS))) {
 						addGlue(verticeInC, verticeInS);
 						break;
