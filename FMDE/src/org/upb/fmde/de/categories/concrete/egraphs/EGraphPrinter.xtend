@@ -30,17 +30,19 @@ digraph G
         	fontcolor = cornflowerblue
         	style = bold
             «FOR e : graph.Eg.elts»
+                "«graph.label».«e»" [label="«e»", shape=none, width=0, height=0, margin=0]
                 "«graph.label».«graph.sourceG.map(e)»" -> "«graph.label».«e»" [arrowhead=none]
                 "«graph.label».«e»" -> "«graph.label».«graph.targetG.map(e)»"
             «ENDFOR»
             «FOR e : graph.Ena.elts»
-                "«graph.label».«graph.sourceNA.map(e)»" -> "«graph.targetNA.map(e)»" [label="«e»", color=lightgray, fontcolor=gray, style=dashed]
+                "«graph.label».«e»" [label="«e»", fontcolor=gray, shape=none, width=0, height=0, margin=0]
+                "«graph.label».«graph.sourceNA.map(e)»" -> "«graph.label».«e»" [color=lightgray, style=dashed, arrowhead=none]
+                "«graph.label».«e»" -> "«graph.targetNA.map(e)»"               [color=lightgray, style=dashed]
             «ENDFOR»
             «FOR e : graph.Eea.elts»
-                "«graph.label».«graph.sourceEA.map(e)»" -> "«graph.targetEA.map(e)»" [label="«e»", color=lightgray, fontcolor=gray, style=dashed]
-            «ENDFOR»
-            «FOR e : graph.Eg.elts»
-                "«graph.label».«e»" [label="«e»", shape=none, width=0, height=0, margin=0]
+                "«graph.label».«e»" [label="«e»", fontcolor=gray, shape=none, width=0, height=0, margin=0]
+                "«graph.label».«graph.sourceEA.map(e)»" -> "«graph.label».«e»" [color=lightgray, style=dashed, arrowhead=none]
+                "«graph.label».«e»" -> "«graph.targetEA.map(e)»"               [color=lightgray, style=dashed]
             «ENDFOR»
             «FOR v : graph.Vg.elts»
                 "«graph.label».«v»" [label="«v»"]

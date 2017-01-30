@@ -21,7 +21,7 @@ public class TestsProject {
     public void testEGraphComposition() {
 
         EGraph hostGraph = createHostGraph();
-        EGraph typeGraph = createPatternGraph();
+        EGraph typeGraph = createTypeGraph();
         EGraphMorphism type = createMorphism();
 
         assertTrue(eGraphs.compose(eGraphs.id(hostGraph), type).isTheSameAs(type));
