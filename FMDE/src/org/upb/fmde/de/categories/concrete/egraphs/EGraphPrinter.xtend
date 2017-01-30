@@ -60,6 +60,12 @@ digraph G
         «FOR e : f.fEg.src.elts»
             "«f.src.label».«e»" -> "«f.trg.label».«f.fEg.map(e)»" [label="«f.label»", style=bold, fontname="times-bold", color="#3E5C91", fontcolor="#3E5C91"]
         «ENDFOR»
+        «FOR e : f.fEna.src.elts»
+            "«f.src.label».«e»" -> "«f.trg.label».«f.fEna.map(e)»" [label="«f.label»", style=bold, fontname="times-bold", color="#3E5C91", fontcolor="#3E5C91"]
+        «ENDFOR»
+        «FOR e : f.fEea.src.elts»
+            "«f.src.label».«e»" -> "«f.trg.label».«f.fEea.map(e)»" [label="«f.label»", style=bold, fontname="times-bold", color="#3E5C91", fontcolor="#3E5C91"]
+        «ENDFOR»
     «ENDFOR»
 }
         '''
