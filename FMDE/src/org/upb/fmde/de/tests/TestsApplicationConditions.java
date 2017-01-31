@@ -42,14 +42,16 @@ public class TestsApplicationConditions {
 		// Load L and R
 		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex5/L.xmi", "L");
 		TGraph L = L_TG_Ecore[0];
-		
+		removeBoards(L);
 		Graph TG = L_TG_Ecore[1].type().src();
 		TGraphs cat = TGraphs.TGraphsFor(TG);
 		
 		TGraph R = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
+		removeBoards(R);
 		
 		// construct K and l: K -> L, r: K -> R
 		TGraph K = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "K", L_TG_Ecore[1], L_TG_Ecore[2]);
+		removeBoards(K);
 		Object cardsEdge = K.type().src().edges().get("cards");
 		Graph graphK = K.type().src();
 		K.type()._E().mappings().remove(cardsEdge);
@@ -74,8 +76,10 @@ public class TestsApplicationConditions {
 		
 		// Load P and C
 		TGraph P = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "P", L_TG_Ecore[1], L_TG_Ecore[2]);
+		removeBoards(P);
 		
 		TGraph C = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/C1.xmi", "C", L_TG_Ecore[1], L_TG_Ecore[2]);
+		removeBoards(C);
 		
 		// Construct graph condition a: P -> C
 		pm = new TPatternMatcher(P, C);
@@ -108,6 +112,27 @@ public class TestsApplicationConditions {
 			
 			d.objects(graphs).arrows(arrows);
 			TestUtil.prettyPrintTEcore(d, "application_condition_" + applicationCondition.hashCode(), diagrams + "application_conditions/");
+		}
+	}
+	
+	private void removeBoards(TGraph g) {
+		ArrayList vertices = new ArrayList(g.type().src().vertices().elts());
+		for(Object vertice: vertices) {
+			Object mappedType = g.type()._V().map(vertice); 
+			if(mappedType.toString().contains("Board")) {
+				g.type().src().vertices().elts().remove(vertice);
+				g.type()._V().mappings().remove(vertice);
+				
+			}
+		}
+		ArrayList edges = new ArrayList(g.type().src().edges().elts());
+		for(Object edge: edges) {
+			Object mappedType = g.type()._E().map(edge); 
+			if(mappedType.toString().contains("lists")) {
+				g.type().src().edges().elts().remove(edge);
+				g.type()._E().mappings().remove(edge);
+				
+			}
 		}
 	}
 }
