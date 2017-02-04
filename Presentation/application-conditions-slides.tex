@@ -174,6 +174,17 @@
 
 	\begin{frame}
 		\frametitle{Construction of Left from Right Application Conditions}
+		\framesubtitle{Left and Right Application Conditions}
+		\begin{block}{Right application condition}
+			Rule is applicable if the right application condition holds in $H$ (i. e. after rule application).
+		\end{block}
+		\begin{block}{Left application condition}
+			Rule is applicable if the left application condition holds in $G$ (i. e. before rule application), so the application of the rule doesn't result in a graph violating one of the constraints.
+		\end{block}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Construction of Left from Right Application Conditions}
 		\framesubtitle{From Right to Left Application Conditions -- Schema}
 		\centering
 		\includegraphics[height=.8\textheight]{Images/50_RightAC-To-LeftAC_Schema}
@@ -202,7 +213,7 @@
 
 	\begin{frame}
 		\frametitle{Construction of Left from Right Application Conditions}
-		\framesubtitle{Construct pushout complement $D_i$ -- Example}
+		\framesubtitle{Construct pushout $D_i$ -- Example}
 		\centering
 		\includegraphics[height=.8\textheight]{Images/55_RightAC-To-LeftAC_Example_Step5}
 	\end{frame}
@@ -221,22 +232,21 @@
 		\includegraphics[width=\linewidth]{Images/01_Rule_Example}
 	\end{frame}
 
-\section{Lessions Learned}
+\section{Conclusion}
 	\begin{frame}
 		\frametitle{Contents}
 		\tableofcontents[currentsection]
 	\end{frame}
 	
 	\begin{frame}
-		\frametitle{Lessions Learned}
+		\frametitle{Conclusion}
 		\framesubtitle{}
 		\begin{block}{Our implementation}
 			\begin{itemize}
-				\item interesting topic, worth repeating with focus on current performance limitations
-				\item The construction of applications conditions can be implemented with the code from the exercises
+				\item interesting topic, worth repeating with focus on current performance limitations on larger examples
+				\item The construction of application conditions can be implemented with the code from the exercises
 				\begin{itemize}
-					\item currently only implemented for $c: P \rightarrow C$ (not multiple conclusions)
-					\item Performance has to be improved for application on larger examples
+					\item currently only implemented for constraint $c: P \rightarrow C$ (not multiple conclusions)
 				\end{itemize}
 			\end{itemize}
 		\end{block}
@@ -244,10 +254,20 @@
 		\begin{block}{Problems during implementation}
 			\begin{itemize}
 				\item difficult to output diagrams in PlantUML as labels are used to identify objects in the diagrams (but there exist multiple objects with the same label) - only limited help for debugging
-				\item choose left or right and first or second in corners/spans?
+				\item choose left or right and first or second in corners/spans? (missing documentation!)
 			\end{itemize}
 			$\Rightarrow$ code generation from category diagrams would be great!
 		\end{block}
-	\end{frame}		
+	\end{frame}
 	
+	\begin{frame}
+		\frametitle{Literature}
+		\framesubtitle{}
+		Hartmut Ehrig, Karsten Ehrig, Ulrike Prange, and Gabriele
+		Taentzer: \\
+		Fundamentals of Algebraic Graph Transformation. \\
+		Monographs in Theoretical Computer Science. An EATCS
+		Series. Springer, 2006. \\
+		Sections 7.2 and 7.3 (pp. 156-164)
+	\end{frame}
 \end{document}
