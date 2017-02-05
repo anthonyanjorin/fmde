@@ -54,37 +54,6 @@
 \section{Introduction}
 	\begin{frame}
 		\frametitle{Introduction}
-		\framesubtitle{Why do we want to construct application conditions from constraints?}		
-		\begin{itemize}
-			\item model transformation system containing sets of rules and constraints
-			\item need to ensure: graph after rule application does not violate a constraint
-			\item idea: construct application conditions to ensure this (checked before rule application)
-			\item regeneration after changes in rules / constraints necessary \\
-				$\Rightarrow$ construction needs to be automatized 
-		\end{itemize}
-	\end{frame}
-
-	\begin{frame}
-		\frametitle{Contents}
-		\tableofcontents
-	\end{frame}
-
-%	\begin{frame}
-%		\frametitle{Introduction}
-%		\framesubtitle{Constraint Schema}
-%		\centering
-%		\includegraphics[width=\linewidth]{Images/00_Constraint_Schema}
-%	\end{frame}
-%	
-%	\begin{frame}
-%		\frametitle{Introduction}
-%		\framesubtitle{Rule Schema}
-%		\centering
-%		\includegraphics[width=\linewidth]{Images/00_Rule_Schema}
-%	\end{frame}
-
-	\begin{frame}
-		\frametitle{Introduction}
 		\framesubtitle{Constraint Example: Each List $J$ with a card $X$ has a previous list $K$}
 		\centering
 		\includegraphics[width=\linewidth]{Images/01_Constraint_Example}
@@ -95,6 +64,23 @@
 		\framesubtitle{Rule Example: Moving Card $C$ from List $L$ to $L'$}
 		\centering
 		\includegraphics[width=\linewidth]{Images/01_Rule_Example}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Introduction}
+		\framesubtitle{Why do we want to construct application conditions from constraints?}		
+		\begin{itemize}
+			\item model transformation system containing sets of rules and constraints
+			\item need to ensure: graph after rule application does not violate a constraint
+			\item idea: construct application conditions to check this before rule application
+			\item regeneration after changes in rules / constraints necessary \\
+			$\Rightarrow$ construction needs to be automatized 
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{Contents}
+		\tableofcontents
 	\end{frame}
 
 \section{Construction of Right Application Conditions from Constraints}
