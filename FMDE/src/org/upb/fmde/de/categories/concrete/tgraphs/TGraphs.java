@@ -1,33 +1,22 @@
 package org.upb.fmde.de.categories.concrete.tgraphs;
 
-import org.upb.fmde.de.categories.LabelledCategory;
-import org.upb.fmde.de.categories.concrete.graphs.Graph;
+import static org.upb.fmde.de.categories.concrete.graphs.Graphs.Graphs;
 
-public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism> {
-	private final Graph typeGraph;
+import org.upb.fmde.de.categories.Category;
+import org.upb.fmde.de.categories.concrete.graphs.Graph;
+import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
+import org.upb.fmde.de.categories.concrete.slicecat.SliceCategory;
+import org.upb.fmde.de.categories.concrete.slicecat.Triangle;
+
+public class TGraphs extends SliceCategory<Graph,GraphMorphism>  {
+
 	
-	public static TGraphs TGraphsFor(Graph typeGraph) {
+	public static Category<GraphMorphism, Triangle<Graph,GraphMorphism>> TGraphsFor(Graph typeGraph) {
 		return new TGraphs(typeGraph);
 	}
 	
 	public TGraphs(Graph typeGraph) {
-		this.typeGraph = typeGraph;
-	}
-	
-	@Override
-	public TGraphMorphism compose(TGraphMorphism f, TGraphMorphism g) {
-		// TODO (07) Composition of typed graph morphisms
-		throw new UnsupportedOperationException("Has not yet been implemented.");
+		super(Graphs.Graphs,typeGraph);
 	}
 
-	@Override
-	public TGraphMorphism id(TGraph f) {
-		// TODO (08) id typed graph morphisms
-		throw new UnsupportedOperationException("Has not yet been implemented.");
-	}
-	
-	@Override
-	public String showOb(TGraph o) {
-		return LabelledCategory.super.showOb(o) + ":" + o.type().trg().label();
-	}
 }

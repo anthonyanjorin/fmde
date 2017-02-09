@@ -5,9 +5,11 @@ import java.io.IOException;
 
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram;
+import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
+import org.upb.fmde.de.categories.concrete.slicecat.Triangle;
 import org.upb.fmde.de.categories.diagrams.Diagram;
 
-public class TGraphDiagram extends Diagram<TGraph, TGraphMorphism> {
+public class TGraphDiagram extends Diagram<GraphMorphism, Triangle<Graph,GraphMorphism>> {
 
 	public TGraphDiagram(Graph typeGraph) {
 		super(TGraphs.TGraphsFor(typeGraph));
@@ -15,9 +17,9 @@ public class TGraphDiagram extends Diagram<TGraph, TGraphMorphism> {
 	
 	public GraphDiagram getGraphDiagram(){
 		GraphDiagram d =  new GraphDiagram();
-		getArrows().forEach(a -> d.arrows(a.untyped()));
-		getObjects().forEach(o -> d.objects(o.type().src(), o.type().trg()));
-		getObjects().forEach(o -> d.arrows(o.type()));
+		getArrows().forEach(a -> d.arrows(a.getM()));
+		getObjects().forEach(o -> d.objects(o.src(), o.trg()));
+		getObjects().forEach(o -> d.arrows(o));
 		return d;
 	}
 		
