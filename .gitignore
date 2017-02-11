@@ -1,0 +1,4 @@
+.metadata/
+*.class
+FMDE/.settings/
+FMDE/diagrams/application-conditions/
