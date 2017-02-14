@@ -1,0 +1,18 @@
+@startuml
+skinparam shadowing false
+hide members
+hide circle
+class "Pattern_G.field1"
+class "Pattern_G.field2"
+"Pattern_G.field1"-->"Pattern_G.field2" : "path"
+class "Host_G.h:field1"
+class "Host_G.h:field2"
+class "Host_G.h:field3"
+class "Host_G.h:field4"
+"Host_G.h:field1"-->"Host_G.h:field2" : "h:path1"
+"Host_G.h:field2"-->"Host_G.h:field4" : "h:path2"
+"Host_G.h:field3"-->"Host_G.h:field1" : "h:path3"
+
+"Pattern_G.field1" --> "Host_G.h:field1" : "f"
+"Pattern_G.field2" --> "Host_G.h:field2" : "f"
+@enduml

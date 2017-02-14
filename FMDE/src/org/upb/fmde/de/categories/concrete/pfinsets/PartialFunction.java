@@ -1,37 +1,37 @@
-package org.upb.fmde.de.categories.concrete.finsets;
+package org.upb.fmde.de.categories.concrete.pfinsets;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.upb.fmde.de.categories.ComparableArrow;
 import org.upb.fmde.de.categories.LabelledArrow;
-import org.upb.fmde.de.categories.concrete.pfinsets.PartialFunction;
+import org.upb.fmde.de.categories.concrete.finsets.FinSet;
+import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
-public class TotalFunction extends PartialFunction {
+public class PartialFunction extends LabelledArrow<FinSet> implements ComparableArrow<PartialFunction> {
 
 	private Map<Object, Object> elementMappings;
-
-	public TotalFunction(FinSet source, String label, FinSet target) {
-		super(source, label, target);
+	
+	public PartialFunction(FinSet source, String label, FinSet target) {
+		super(label, source, target);
 		elementMappings = new HashMap<Object, Object>();
 	}
 
-	@SuppressWarnings("null") 
+
 	public Object map(Object x) {
 		return elementMappings.get(x);
 	}
 
-	public TotalFunction addMapping(Object from, Object to) {
+	public PartialFunction addMapping(Object from, Object to) {
 		elementMappings.put(from, to);
 		return this;
 	}
 
-	public boolean isTheSameAs(TotalFunction f) {
+	public boolean isTheSameAs(PartialFunction f) {
 		return source.elts().stream()
 					 .allMatch(x -> {
 						 if (map(x) == null) {
-							 throw new IllegalArgumentException("Detected a null value mapping. " +
-									 "Functions may have unequal domains.");
+							 return f.map(x) == null;
 						 }
 						 return map(x).equals(f.map(x));
 					 });

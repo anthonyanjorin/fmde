@@ -21,6 +21,7 @@ import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 import org.upb.fmde.de.categories.concrete.graphs.GraphPatternMatcher;
+import org.upb.fmde.de.categories.concrete.pgraphs.PGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
@@ -92,7 +93,7 @@ public class TestsEx3 {
 	
 		{
 			MetaMetaModelToGraphs importer = new MetaMetaModelToGraphs(EcorePackage.eINSTANCE, "Ecore");
-			GraphDiagram d = new GraphDiagram();
+			PGraphDiagram d = new PGraphDiagram();
 			d.objects(importer.getResult());
 			TestUtil.prettyPrintEcore(d, "Ecore", diagrams);
 		}
@@ -100,7 +101,7 @@ public class TestsEx3 {
 		{
 			EObject root = TestUtil.loadSimpleTrello(rs);
 			MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
-			GraphDiagram d = new GraphDiagram();
+			PGraphDiagram d = new PGraphDiagram();
 			d.objects(importer.getResult());
 			TestUtil.prettyPrintEcore(d, "SimpleTrello", diagrams);
 		}
@@ -108,7 +109,7 @@ public class TestsEx3 {
 		{
 			EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
 			ModelToGraphs importer = new ModelToGraphs(root, "G");
-			GraphDiagram d = new GraphDiagram();
+			PGraphDiagram d = new PGraphDiagram();
 			d.objects(importer.getResult());
 			TestUtil.prettyPrintEcore(d, "TrelloInstance", diagrams);
 		}		

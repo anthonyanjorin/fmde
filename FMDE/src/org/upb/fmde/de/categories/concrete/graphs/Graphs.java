@@ -22,7 +22,7 @@ import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 public class Graphs implements LabelledCategory<Graph, GraphMorphism>, 
 							   CategoryWithInitOb<Graph, GraphMorphism>, 
 							   CategoryWithPushouts<Graph, GraphMorphism>,
-							   CategoryWithPushoutComplements<Graph, GraphMorphism> {
+							   CategoryWithPushoutComplements<Graph, GraphMorphism>  {
 
 	public static Graphs Graphs = new Graphs();
 	

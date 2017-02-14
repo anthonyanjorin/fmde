@@ -1,0 +1,14 @@
+@startuml
+digraph Diagram {
+  "E_Pattern_G";
+  "V_Pattern_G";
+  "E_Host_G";
+  "V_Host_G";
+  "E_Pattern_G"->"E_Host_G" [label=" f_E"];
+  "V_Pattern_G"->"V_Host_G" [label=" f_V"];
+  "E_Pattern_G"->"V_Pattern_G" [label=" s_Pattern_G"];
+  "E_Pattern_G"->"V_Pattern_G" [label=" t_Pattern_G"];
+  "E_Host_G"->"V_Host_G" [label=" s_Host_G"];
+  "E_Host_G"->"V_Host_G" [label=" t_Host_G"];
+}
+@enduml

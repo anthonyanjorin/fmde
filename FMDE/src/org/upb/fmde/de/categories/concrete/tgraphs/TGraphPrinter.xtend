@@ -27,7 +27,9 @@ class TGraphPrinter implements DotPrinter {
 			
 			«FOR f : d.arrows»
 				«FOR v : f.untyped._V.src.elts»
+				«IF (f.untyped._V.map(v) != null)»
 					"«d.cat.showOb(f.src)».«v»" --> "«d.cat.showOb(f.trg)».«f.untyped._V.map(v)»" : "«f.label»"
+				«ENDIF»
 				«ENDFOR»
 			«ENDFOR»
 			@enduml

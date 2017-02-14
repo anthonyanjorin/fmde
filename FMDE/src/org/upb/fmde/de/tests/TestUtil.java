@@ -13,6 +13,9 @@ import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
+import org.upb.fmde.de.categories.concrete.pfinsets.PartialFunction;
+import org.upb.fmde.de.categories.concrete.pgraphs.PGraphDiagram;
+import org.upb.fmde.de.categories.concrete.pgraphs.PGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.ecore.EcorePrinter;
@@ -40,6 +43,7 @@ public class TestUtil {
 		return new Graph(name, edges, vertices, source, target);
 	}
 
+
 	public static Graph createHostGraph(String name) {
 		FinSet edges_ = new FinSet("E_" + name, "prev", "next", "e1:cards", "e2:cards");
 		FinSet vertices_ = new FinSet("V_" + name, "i", "j", "k", "x", "y");
@@ -63,6 +67,17 @@ public class TestUtil {
 				.addMapping(pattern.vertices().get("C"), hostGraph.vertices().get("x"));
 	
 		GraphMorphism f = new GraphMorphism("f", pattern, hostGraph, f_E, f_V);
+		return f;
+	}
+	
+	public static PGraphMorphism createPGraphMorphism(Graph pattern, Graph hostGraph) {
+		PartialFunction f_E = new PartialFunction(pattern.edges(), "f_E", hostGraph.edges())
+				.addMapping(pattern.edges().get("cards"), hostGraph.edges().get("e1:cards"));
+		PartialFunction f_V = new PartialFunction(pattern.vertices(), "f_V", hostGraph.vertices())
+				.addMapping(pattern.vertices().get("L"), hostGraph.vertices().get("j"))
+				.addMapping(pattern.vertices().get("C"), hostGraph.vertices().get("x"));
+	
+		PGraphMorphism f = new PGraphMorphism("f", pattern, hostGraph, f_E, f_V);
 		return f;
 	}
 
@@ -131,7 +146,7 @@ public class TestUtil {
 		return importer.getResult()[0];
 	}
 
-	public static void prettyPrintEcore(GraphDiagram d, String label, String path) throws IOException {
+	public static void prettyPrintEcore(PGraphDiagram d, String label, String path) throws IOException {
 		d.saveAsDot(new File(path + label + ".ecore.plantuml"), new EcorePrinter(d));
 	}
 

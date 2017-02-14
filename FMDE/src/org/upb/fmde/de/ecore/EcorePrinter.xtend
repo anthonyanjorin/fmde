@@ -5,12 +5,13 @@ import org.eclipse.emf.ecore.EObject
 import org.moflon.core.utilities.eMoflonEMFUtil
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram
 import org.upb.fmde.de.categories.diagrams.DotPrinter
+import org.upb.fmde.de.categories.concrete.pgraphs.PGraphDiagram
 
 class EcorePrinter implements DotPrinter {
 	
-	protected GraphDiagram d
+	protected PGraphDiagram d
 	
-	new (GraphDiagram d){
+	new (PGraphDiagram d){
 		this.d = d
 	}
 	

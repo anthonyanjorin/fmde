@@ -1,0 +1,8 @@
+@startuml
+digraph Diagram {
+  "E_Pattern_G";
+  "V_Pattern_G";
+  "E_Pattern_G"->"V_Pattern_G" [label=" s_Pattern_G"];
+  "E_Pattern_G"->"V_Pattern_G" [label=" t_Pattern_G"];
+}
+@enduml

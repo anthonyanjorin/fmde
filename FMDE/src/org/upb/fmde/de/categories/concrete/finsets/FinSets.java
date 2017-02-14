@@ -13,6 +13,7 @@ import org.upb.fmde.de.categories.colimits.pushouts.CategoryWithPushouts;
 import org.upb.fmde.de.categories.colimits.pushouts.CoSpan;
 import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.colimits.pushouts.Span;
+import org.upb.fmde.de.categories.concrete.pfinsets.PartialFunction;
 
 public class FinSets implements LabelledCategory<FinSet, TotalFunction>, 
 							    CategoryWithInitOb<FinSet, TotalFunction>,
@@ -29,6 +30,10 @@ public class FinSets implements LabelledCategory<FinSet, TotalFunction>,
 
 	@Override
 	public TotalFunction compose(TotalFunction f, TotalFunction g) {
+		return this.compose((PartialFunction)f, (PartialFunction)g);
+	}
+	
+	public TotalFunction compose(PartialFunction f, PartialFunction g) {
 		TotalFunction f_then_g = new TotalFunction(f.src(), f + ";" + g, g.trg());
 		f.src().elts().forEach(x -> {
 			Object mapping = g.map(f.map(x));
