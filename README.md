@@ -1,5 +1,5 @@
 # fmde
-FMDE Material and Exercises
+Material and exercises for the lecture Fundamentals of Model-Driven Engineering (FMDE) currently being held at Paderborn University:  https://cs.uni-paderborn.de/dbis/lehre/veranstaltungen/ws-201617/fundamentals-of-model-driven-engineering/news/ 
 
 # Installation
 
