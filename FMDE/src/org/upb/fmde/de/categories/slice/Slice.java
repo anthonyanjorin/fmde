@@ -1,18 +1,20 @@
-package org.upb.fmde.de.categories.comma;
+package org.upb.fmde.de.categories.slice;
 
 import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.LabelledArrow;
 
-public class Slice<Ob, Arr extends LabelledArrow<Ob>> extends Comma<Ob, Arr, Ob, Arr> implements Category<Arr, Square<Ob, Arr>>{
+public class Slice<Ob, Arr extends LabelledArrow<Ob>> implements Category<Arr, Triangle<Ob, Arr>>{
 	
 	private Ob X;
+	private Category<Ob, Arr> cat;
 	
 	public Slice(Category<Ob, Arr> cat, Ob X) {
-		super(cat, cat);
+		this.cat = cat;
+		this.X = X;
 	}
 
 	@Override
-		public Triangle<Ob, Arr> compose(Square<Ob, Arr> f, Square<Ob, Arr> g) {
+		public Triangle<Ob, Arr> compose(Triangle<Ob, Arr> f, Triangle<Ob, Arr> g) {
 			((Triangle<Ob,Arr>)f).checkValidity(X);
 			((Triangle<Ob,Arr>)g).checkValidity(X);
 			return new Triangle<Ob, Arr>(f.label()+";"+g.label(),cat_L.compose(f.getM(), g.getM()),f.getF(),g.getG());
