@@ -3,25 +3,18 @@ package org.upb.fmde.de.categories.concrete.typedtriplegraphs;
 import static org.upb.fmde.de.categories.concrete.triplegraphs.TripleGraphs.TripleGraphs;
 
 import org.upb.fmde.de.categories.LabelledCategory;
+import org.upb.fmde.de.categories.concrete.triplegraphs.TripleGraph;
 import org.upb.fmde.de.categories.concrete.triplegraphs.TripleMorphism;
+import org.upb.fmde.de.categories.slice.Slice;
+import org.upb.fmde.de.categories.slice.Triangle;
 
-public class TypedTripleGraphs implements LabelledCategory<TTripleGraph, TTripleMorphism> {
+public class TypedTripleGraphs extends    Slice<TripleGraph,TripleMorphism>
+                               implements LabelledCategory<TripleMorphism, Triangle<TripleGraph, TripleMorphism>> {
 
-	public static final TypedTripleGraphs TypedTripleGraphs = new TypedTripleGraphs();
+	public static final TypedTripleGraphs TypedTripleGraphs = new TypedTripleGraphs(null);
 
-	@Override
-	public TTripleMorphism compose(TTripleMorphism f, TTripleMorphism g) {
-		TripleMorphism f_g = TripleGraphs.compose(f.getUntypedMorphism(), g.getUntypedMorphism());
-		return new TTripleMorphism(f_g.label(), f_g, f.src(), g.trg());
+	public TypedTripleGraphs(TripleGraph typeTripleGraph) {
+		super(TripleGraphs.TripleGraphs,typeTripleGraph);
 	}
 
-	@Override
-	public TTripleMorphism id(TTripleGraph o) {
-		return new TTripleMorphism("id_" + o.label(), TripleGraphs.id(o.getTypeMorphism().src()), o, o);
-	}
-	
-	@Override
-	public String showOb(TTripleGraph o) {
-		return LabelledCategory.super.showOb(o) + ":" + o.getTypeMorphism().trg().label();
-	}
 }

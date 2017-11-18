@@ -11,7 +11,7 @@ class TEcorePrinter extends EcorePrinter {
 	}
 	
 	def fillGraphDiagram(TGraphDiagram td){
-		td.objects.forEach[o | d.objects(o.type.src)]
-		td.arrows.forEach[a | d.arrows(a.untyped)]
+		td.objects.forEach[o | d.objects(o.src)]
+		td.arrows.forEach[a | d.arrows(a.getF)]
 	}
 }

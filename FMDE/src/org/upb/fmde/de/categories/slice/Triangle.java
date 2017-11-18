@@ -1,8 +1,9 @@
 package org.upb.fmde.de.categories.slice;
 
+import org.upb.fmde.de.categories.ComparableArrow;
 import org.upb.fmde.de.categories.LabelledArrow;
 
-public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<Arr> {
+public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<Arr> implements ComparableArrow<Triangle<Ob, Arr>>{
 	
 	private Arr f;
 	private Arr m;
@@ -31,7 +32,7 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 		}
 			else return false;
 	}
-
+	
 	public Arr getF() {
 		return f;
 	}
@@ -54,5 +55,10 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 
 	public void setG(Arr g) {
 		this.g = g;
+	}
+
+	@Override
+	public boolean isTheSameAs(Triangle<Ob, Arr> a) {
+		return m.equals(a.m) && f.equals(a.f) && g.equals(a.g);
 	}
 }

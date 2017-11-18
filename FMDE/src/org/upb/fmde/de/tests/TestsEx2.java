@@ -18,6 +18,7 @@ import org.upb.fmde.de.categories.concrete.triplegraphs.TripleMorphism;
 import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleGraph;
 import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleGraphDiagram;
 import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleMorphism;
+import org.upb.fmde.de.categories.slice.Triangle;
 
 public class TestsEx2 {
 	private static final String diagrams = "diagrams/ex2/";
@@ -125,14 +126,14 @@ public class TestsEx2 {
 	
 		// Create typed triple graphs
 		TripleGraph GT = createPatternTriple("GT");
-		TTripleGraph tGT = createTypedPatternTriple(TG_S, TG_C, TG_T, TGT, GT);
+		TripleMorphism tGT = createTypedPatternTriple(TG_S, TG_C, TG_T, TGT, GT);
 	
 		TripleGraph GT_ = createHostTriple("GT'");
-		TTripleGraph tGT_ = createTypedHostTriple(TG_S, TG_C, TG_T, TGT, GT_);
+		TripleMorphism tGT_ = createTypedHostTriple(TG_S, TG_C, TG_T, TGT, GT_);
 	
 		// Created type triple morphism
 		TripleMorphism f = createTripleMorphism("f", GT, GT_);
-		TTripleMorphism tf = new TTripleMorphism("f", f, tGT, tGT_);
+		Triangle<TripleGraph, TripleMorphism> tf = new Triangle<TripleGraph, TripleMorphism>("f", f, tGT, tGT_);
 	
 		// Create and save diagrams
 		TTripleGraphDiagram d = new TTripleGraphDiagram();
@@ -221,7 +222,7 @@ public class TestsEx2 {
 		return GT_;
 	}
 
-	private TTripleGraph createTypedHostTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT, TripleGraph GT_) {
+	private TripleMorphism createTypedHostTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT, TripleGraph GT_) {
 		TotalFunction type_S_E_ = new TotalFunction(GT_.getG_S().edges(), "type'_S_E", TG_S.edges())
 						.addMapping(GT_.getG_S().edges().get("e1:cards"),
 								TG_S.edges().get("cards"))
@@ -259,11 +260,11 @@ public class TestsEx2 {
 		GraphMorphism type_T_ = new GraphMorphism("type'_T", GT_.getG_T(), TG_T, type_T_E_, type_T_V_);
 
 		TripleMorphism type_ = new TripleMorphism("type'", GT_, TGT, type_S_, type_C_, type_T_);
-		TTripleGraph tGT_ = new TTripleGraph("GT'", type_);
-		return tGT_;
+		//TTripleGraph tGT_ = new TTripleGraph("GT'", type_);
+		return type_;
 	}
 
-	private TTripleGraph createTypedPatternTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT, TripleGraph GT) {
+	private TripleMorphism createTypedPatternTriple(Graph TG_S, Graph TG_C, Graph TG_T, TripleGraph TGT, TripleGraph GT) {
 		TotalFunction type_S_V = new TotalFunction(GT.getG_S().vertices(), "type_S_V",TG_S.vertices())
 				.addMapping(GT.getG_S().vertices().get("L"), TG_S.vertices().get("List"))
 				.addMapping(GT.getG_S().vertices().get("C"), TG_S.vertices().get("Card"));
@@ -282,7 +283,7 @@ public class TestsEx2 {
 		GraphMorphism type_T = new GraphMorphism("type_T", GT.getG_T(), TG_T, type_T_E, type_T_V);
 
 		TripleMorphism type = new TripleMorphism("type", GT, TGT, type_S, type_C, type_T);
-		TTripleGraph tGT = new TTripleGraph("GT", type);
-		return tGT;
+		//TripleGraph tGT = new TTripleGraph("GT", type);
+		return type;
 	}
 }

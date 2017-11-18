@@ -12,6 +12,7 @@ import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
+import org.upb.fmde.de.categories.slice.Triangle;
 import org.upb.fmde.de.graphconditions.And;
 import org.upb.fmde.de.graphconditions.ComplexGraphCondition;
 import org.upb.fmde.de.graphconditions.Constraint;
@@ -25,9 +26,9 @@ public class MultiplicitiesToGraphCondition {
 		this.typeGraph = typeGraph;
 	}
 	
-	public ComplexGraphCondition<TGraph, TGraphMorphism> createGraphConditionFromMultiplicities(){		
+	public ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> createGraphConditionFromMultiplicities(){		
 		FinSet eRefs = typeGraph.edges();
-		Collection<ComplexGraphCondition<TGraph, TGraphMorphism>> conditions = eRefs.elts()
+		Collection<ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>>> conditions = eRefs.elts()
 				.stream()
 				.map(e ->  multiplicityToCondition((EReference) e))
 				.collect(Collectors.toList());
@@ -35,7 +36,7 @@ public class MultiplicitiesToGraphCondition {
 		return new And<>(conditions);
 	}
 
-	private ComplexGraphCondition<TGraph, TGraphMorphism> multiplicityToCondition(EReference e) {
+	private ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> multiplicityToCondition(EReference e) {
 		int lower = e.getLowerBound();
 		int upper = e.getUpperBound();
 		
@@ -47,32 +48,32 @@ public class MultiplicitiesToGraphCondition {
 		}
 	}
 
-	private ComplexGraphCondition<TGraph, TGraphMorphism> handleLowerBound(EReference e) {
-		TGraph P = createAandBs(e, 0);
-		FinSet V_P = P.type().src().vertices();
-		FinSet E_P = P.type().src().edges();
+	private ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> handleLowerBound(EReference e) {
+		GraphMorphism P = createAandBs(e, 0);
+		FinSet V_P = P.src().vertices();
+		FinSet E_P = P.src().edges();
 		
-		TGraph C = createAandBs(e, e.getLowerBound());
-		FinSet V_C = C.type().src().vertices();
-		FinSet E_C = C.type().src().edges();
+		GraphMorphism C = createAandBs(e, e.getLowerBound());
+		FinSet V_C = C.src().vertices();
+		FinSet E_C = C.src().edges();
 		
 		TotalFunction c_V = new TotalFunction(V_P, "c_V", V_C);
 		c_V.addMapping(V_P.get("a"), V_C.get("a"));
 		
 		TotalFunction c_E = new TotalFunction(E_P, "c_E", E_C);
 		
-		GraphMorphism c_ = new GraphMorphism("c", P.type().src(), C.type().src(), c_E, c_V);
-		TGraphMorphism c = new TGraphMorphism("c", c_, P, C);
+		GraphMorphism c_ = new GraphMorphism("c", P.src(), C.src(), c_E, c_V);
+		Triangle<Graph, GraphMorphism> c = new Triangle<Graph, GraphMorphism>("c", c_, P, C);
 		
-		return new Constraint<>(TGraphs.TGraphsFor(typeGraph), P, Arrays.asList(c));
+		return new Constraint(TGraphs.TGraphsFor(typeGraph), P, Arrays.asList(c));
 	}
 
-	private ComplexGraphCondition<TGraph, TGraphMorphism> handleUpperBound(EReference e) {
-		TGraph tN = createAandBs(e, e.getUpperBound() + 1);
-		return new NegativeConstraint<>(TGraphs.TGraphsFor(typeGraph), tN);
+	private ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> handleUpperBound(EReference e) {
+		GraphMorphism tN = createAandBs(e, e.getUpperBound() + 1);
+		return new NegativeConstraint(TGraphs.TGraphsFor(typeGraph), tN);
 	}
 
-	private TGraph createAandBs(EReference e, int numberOfBs) {
+	private GraphMorphism createAandBs(EReference e, int numberOfBs) {
 		FinSet vertices = new FinSet("N_V", "a");
 		FinSet edges = new FinSet("E_N");
 		
@@ -94,8 +95,8 @@ public class MultiplicitiesToGraphCondition {
 		N.edges().elts().forEach(edge -> type_N_E.addMapping(edge, e));
 		
 		GraphMorphism type = new GraphMorphism("type_N", N, typeGraph, type_N_E, type_N_V);
-		TGraph tN = new TGraph("N", type);
-		return tN;
+		//TGraph tN = new TGraph("N", type);
+		return type;
 	}
 
 	private void addB(FinSet vertices, FinSet edges, TotalFunction src, TotalFunction trg) {

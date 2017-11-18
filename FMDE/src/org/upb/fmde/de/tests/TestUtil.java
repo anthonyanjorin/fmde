@@ -115,17 +115,17 @@ public class TestUtil {
 		return TG;
 	}
 
-	public static TGraph loadBoardAsTGraph(ResourceSet rs, String fileName, String label) throws IOException {
+	public static GraphMorphism loadBoardAsTGraph(ResourceSet rs, String fileName, String label) throws IOException {
 		return TestUtil.loadBoardAsTGraphs(rs, fileName, label)[0];
 	}
 
-	public static TGraph[] loadBoardAsTGraphs(ResourceSet rs, String fileName, String label) throws IOException {
+	public static GraphMorphism[] loadBoardAsTGraphs(ResourceSet rs, String fileName, String label) throws IOException {
 		EObject o = TestUtil.loadBoard(rs, fileName);
 		ModelToTGraphs importer = new ModelToTGraphs(o, label);
 		return importer.getResult();
 	}
 
-	public static TGraph loadBoardAsTGraph(ResourceSet rs, String fileName, String label, TGraph mm, TGraph mmm) throws IOException {
+	public static GraphMorphism loadBoardAsTGraph(ResourceSet rs, String fileName, String label, GraphMorphism mm, GraphMorphism mmm) throws IOException {
 		EObject o = TestUtil.loadBoard(rs, fileName);
 		ModelToTGraphs importer = new ModelToTGraphs(o, label, mm, mmm);
 		return importer.getResult()[0];

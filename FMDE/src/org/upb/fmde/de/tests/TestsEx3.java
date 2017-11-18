@@ -27,6 +27,7 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
 import org.upb.fmde.de.categories.concrete.tgraphs.Timer;
+import org.upb.fmde.de.categories.slice.Triangle;
 import org.upb.fmde.de.ecore.MetaMetaModelToGraphs;
 import org.upb.fmde.de.ecore.MetaModelToGraphs;
 import org.upb.fmde.de.ecore.ModelToGraphs;
@@ -41,7 +42,7 @@ import org.upb.fmde.de.graphconditions.SimpleConstraint;
 
 public class TestsEx3 {
 	private static final String diagrams = "diagrams/ex3/";
-	private static final BiFunction<TGraph, TGraph, PatternMatcher<TGraph, TGraphMorphism>> 
+	private static final BiFunction<GraphMorphism, GraphMorphism, PatternMatcher<GraphMorphism, Triangle<Graph, GraphMorphism>>> 
 	create_pm = (_L, _G) -> new TPatternMatcher(_L, _G);
 	
 	@BeforeClass
@@ -75,11 +76,11 @@ public class TestsEx3 {
 		
 	
 		Graph TG = TestUtil.createListCardTypeGraph("TG");
-		TGraph L_typed = TestUtil.createTypedPatternGraph(TG, L);
-		TGraph G_typed = TestUtil.createTypedHostGraph(TG, G);
+		GraphMorphism L_typed = TestUtil.createTypedPatternGraph(TG, L);
+		GraphMorphism G_typed = TestUtil.createTypedHostGraph(TG, G);
 		TPatternMatcher pm_t = new TPatternMatcher(L_typed, G_typed);
 		count = 0;
-		for (TGraphMorphism m : pm_t.getMatches()) {
+		for (Triangle<Graph, GraphMorphism> m : pm_t.getMatches()) {
 			TGraphDiagram d = new TGraphDiagram(TG);
 			d.objects(L_typed, G_typed).arrows(m);
 			d.prettyPrint(diagrams, "tgraph_match_" + count++);
@@ -120,7 +121,7 @@ public class TestsEx3 {
 		TestUtil.loadSimpleTrello(rs);
 		EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
 		ModelToTGraphs importer = new ModelToTGraphs(root, "G");
-		TGraphDiagram d = new TGraphDiagram(importer.getResult()[0].type().trg());
+		TGraphDiagram d = new TGraphDiagram(importer.getResult()[0].trg());
 		d.objects(importer.getResult());
 		TestUtil.prettyPrintEcore(d.getGraphDiagram(), "TrelloInstanceTyped", diagrams);
 		d.getGraphDiagram().saveAsDot(diagrams, "TrelloInstanceTyped");		
@@ -130,23 +131,23 @@ public class TestsEx3 {
 	public void graphConditions() throws IOException {
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
-		TGraph L = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/L.xmi", "L");
-		TGraph P = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "P");
-		TGraph C1 = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/C1.xmi", "C1");
-		TGraph C2 = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/C2.xmi", "C2");
-		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
-		Graph TG = G.type().trg();
+		GraphMorphism L = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/L.xmi", "L");
+		GraphMorphism P = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "P");
+		GraphMorphism C1 = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/C1.xmi", "C1");
+		GraphMorphism C2 = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/C2.xmi", "C2");
+		GraphMorphism G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
+		Graph TG = G.trg();
 		
 		TPatternMatcher pm = new TPatternMatcher(L, P);
-		TGraphMorphism p = pm.getMonicMatches().get(0);
+		Triangle<Graph, GraphMorphism> p = pm.getMonicMatches().get(0);
 		p.label("p");
 		
 		pm = new TPatternMatcher(P, C1);
-		TGraphMorphism c1 = pm.getMonicMatches().get(0);
+		Triangle<Graph, GraphMorphism> c1 = pm.getMonicMatches().get(0);
 		c1.label("c1");
 		
 		pm = new TPatternMatcher(P, C2);
-		TGraphMorphism c2 = pm.getMonicMatches().get(0);
+		Triangle<Graph, GraphMorphism> c2 = pm.getMonicMatches().get(0);
 		c2.label("c2");
 		
 		TGraphDiagram d_gc = new TGraphDiagram(TG);
@@ -154,12 +155,12 @@ public class TestsEx3 {
 		TestUtil.prettyPrintTEcore(d_gc, "GraphCondition", diagrams);
 		d_gc.saveAsDot(diagrams, "GraphCondition");
 				
-		SatisfiableGraphCondition<TGraph, TGraphMorphism> chosenMustHavePreviousOrNext = new SatisfiableGraphCondition<>(TGraphs.TGraphsFor(TG), p, Arrays.asList(c1, c2));
+		SatisfiableGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> chosenMustHavePreviousOrNext = new SatisfiableGraphCondition(TGraphs.TGraphsFor(TG), p, Arrays.asList(c1, c2));
 		pm = new TPatternMatcher(L, G);
 		int counter = 0;
 		Timer t = new Timer();
 		t.tic();
-		for (TGraphMorphism m : pm.getMatches()) {
+		for (Triangle<Graph, GraphMorphism> m : pm.getMatches()) {
 			TGraphDiagram match = new TGraphDiagram(TG);
 			match.objects(L, G).arrows(m);
 			String label = "m_" + counter++;
@@ -171,23 +172,23 @@ public class TestsEx3 {
 				assertFalse(label + "violates the condition", chosenMustHavePreviousOrNext.isSatisfiedByArrow(m, create_pm));
 		}
 		
-		Constraint<TGraph, TGraphMorphism> mustHavePreviousOrNext = new Constraint<>(TGraphs.TGraphsFor(TG), P, Arrays.asList(c1, c2));
+		Constraint<GraphMorphism, Triangle<Graph, GraphMorphism>> mustHavePreviousOrNext = new Constraint(TGraphs.TGraphsFor(TG), P, Arrays.asList(c1, c2));
 		assertFalse("Constraint is not satisfied", mustHavePreviousOrNext.isSatisfiedByObject(G, create_pm));
 		
-		SimpleConstraint<TGraph, TGraphMorphism> atLeastOneListWithACard = new SimpleConstraint<>(TGraphs.TGraphsFor(TG), P);
+		SimpleConstraint<GraphMorphism, Triangle<Graph, GraphMorphism>> atLeastOneListWithACard = new SimpleConstraint<>(TGraphs.TGraphsFor(TG), P);
 		assertTrue("Simple constraint is satisfied", atLeastOneListWithACard.isSatisfiedByObject(G, create_pm));
 		assertFalse("Simple constraint is not satisfied", atLeastOneListWithACard.isSatisfiedByObject(L, create_pm));
 		
-		TGraph N = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/N.xmi", "N");
-		TGraph G_ = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/BoardWithTreeStructure.xmi", "G'");
-		NegativeConstraint<TGraph, TGraphMorphism> linearNextPrev = new NegativeConstraint<>(TGraphs.TGraphsFor(TG), N);
+		GraphMorphism N = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/N.xmi", "N");
+		GraphMorphism G_ = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/BoardWithTreeStructure.xmi", "G'");
+		NegativeConstraint<GraphMorphism, Triangle<Graph, GraphMorphism>> linearNextPrev = new NegativeConstraint<>(TGraphs.TGraphsFor(TG), N);
 		assertTrue("Negative constraint is satisfied", linearNextPrev.isSatisfiedByObject(G, create_pm));
 		assertFalse("Negative constraint is not satisfied", linearNextPrev.isSatisfiedByObject(G_, create_pm));
 		
-		ComplexGraphCondition<TGraph, TGraphMorphism> complexgc = new And<TGraph, TGraphMorphism>(linearNextPrev, atLeastOneListWithACard, mustHavePreviousOrNext);
+		ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> complexgc = new And<GraphMorphism, Triangle<Graph, GraphMorphism>>(linearNextPrev, atLeastOneListWithACard, mustHavePreviousOrNext);
 		assertFalse("Complex graph condition is not satisfied", complexgc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm));
 	
-		ComplexGraphCondition<TGraph, TGraphMorphism> anothercomplexgc = new And<TGraph, TGraphMorphism>(linearNextPrev, atLeastOneListWithACard);
+		ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> anothercomplexgc = new And<GraphMorphism, Triangle<Graph, GraphMorphism>>(linearNextPrev, atLeastOneListWithACard);
 		assertTrue("Complex graph condition is satisfied", anothercomplexgc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm));
 		
 		t.toc();		
@@ -200,13 +201,13 @@ public class TestsEx3 {
 		MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
 		Graph TG = importer.getResult();
 		MultiplicitiesToGraphCondition mp2gc = new MultiplicitiesToGraphCondition(TG);
-		ComplexGraphCondition<TGraph, TGraphMorphism> gc = mp2gc.createGraphConditionFromMultiplicities();
+		ComplexGraphCondition<GraphMorphism, Triangle<Graph, GraphMorphism>> gc = mp2gc.createGraphConditionFromMultiplicities();
 		
-		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
+		GraphMorphism G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G");
 		boolean sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G), create_pm);
 		assertTrue("Multiplicities must be satisfied", sat);
 		
-		TGraph G_empty = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/EmptyBoard.xmi", "G");
+		GraphMorphism G_empty = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/EmptyBoard.xmi", "G");
 		sat = gc.isSatisfiedByArrow(TGraphs.TGraphsFor(TG).initialObject().up.apply(G_empty), create_pm);
 		assertFalse("Multiplicities must not be satisfied", sat);		
 	}

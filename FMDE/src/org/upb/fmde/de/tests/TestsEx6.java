@@ -21,7 +21,7 @@ import org.upb.fmde.de.categories.concrete.graphs.Graphs;
 import org.upb.fmde.de.categories.diagrams.Diagram;
 
 public class TestsEx6 {
-	private static final String diagrams = "diagrams/ex6/";
+/*	private static final String diagrams = "diagrams/ex6/";
 	
 	@BeforeClass
 	public static void clear() {
@@ -181,5 +181,5 @@ public class TestsEx6 {
 		
 		SliceDiagram<Graph, GraphMorphism> d2 = new SliceDiagram(Graphs.Graphs);
 		
-	}
+	}*/
 }

@@ -18,10 +18,12 @@ import org.upb.fmde.de.categories.concrete.finsets.FinSetDiagram;
 import org.upb.fmde.de.categories.concrete.finsets.FinSets;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
+import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
+import org.upb.fmde.de.categories.slice.Triangle;
 
 public class TestsEx4 {
 	private static final String diagrams = "diagrams/ex4/";
@@ -62,22 +64,22 @@ public class TestsEx4 {
 	public void colimitsGraphs() throws IOException{
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
 		EObject root = TestUtil.loadSimpleTrello(rs);
-		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/graphCondition/L.xmi", "L");
-		TGraph L = L_TG_Ecore[0];
-		Graph TG = L_TG_Ecore[1].type().src();
-		TGraph R = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
-		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G", L_TG_Ecore[1], L_TG_Ecore[2]);
+		GraphMorphism[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/graphCondition/L.xmi", "L");
+		GraphMorphism L = L_TG_Ecore[0];
+		Graph TG = L_TG_Ecore[1].src();
+		GraphMorphism R = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
+		GraphMorphism G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G", L_TG_Ecore[1], L_TG_Ecore[2]);
 
 		TPatternMatcher pm = new TPatternMatcher(L, R);
-		TGraphMorphism r = pm.getMonicMatches().get(0);
+		Triangle<Graph, GraphMorphism> r = pm.getMonicMatches().get(0);
 		r.label("r");
 		
 		TPatternMatcher pm_ = new TPatternMatcher(L, G);
 		
-		List<TGraphMorphism> m = pm_.getMonicMatches();
+		List<Triangle<Graph, GraphMorphism>> m = pm_.getMonicMatches();
 		for(int i = 0; i < m.size(); i++){
 			m.get(i).label("m"); 
-			CoLimit<CoSpan<TGraphMorphism>, TGraphMorphism> po = TGraphsFor(TG).pushout(new Span<>(TGraphsFor(TG), r, m.get(i)));
+			CoLimit<CoSpan<Triangle<Graph, GraphMorphism>>, Triangle<Graph, GraphMorphism>> po = TGraphsFor(TG).pushout(new Span<>(TGraphsFor(TG), r, m.get(i)));
 			try {
 				TGraphDiagram d = new TGraphDiagram(TG);
 				d.objects(L, R, G, po.obj.left.trg())

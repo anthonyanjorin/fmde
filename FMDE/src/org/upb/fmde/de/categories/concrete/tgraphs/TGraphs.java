@@ -5,6 +5,7 @@ import static org.upb.fmde.de.categories.concrete.graphs.Graphs.Graphs;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.upb.fmde.de.categories.Category;
 import org.upb.fmde.de.categories.LabelledCategory;
 import org.upb.fmde.de.categories.colimits.CategoryWithInitOb;
 import org.upb.fmde.de.categories.colimits.CoLimit;
@@ -15,125 +16,112 @@ import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
+import org.upb.fmde.de.categories.slice.Slice;
+import org.upb.fmde.de.categories.slice.Triangle;
 
-public class TGraphs implements LabelledCategory<TGraph, TGraphMorphism>, 
-								CategoryWithInitOb<TGraph, TGraphMorphism>, 
-								CategoryWithPushouts<TGraph, TGraphMorphism>,
-								CategoryWithPushoutComplements<TGraph, TGraphMorphism> {
-	private final Graph typeGraph;
-	private final TGraph EMPTY_TYPED_GRAPH;
-	private final CoLimit<TGraph, TGraphMorphism> INITIAL_OBJECT;
+public class TGraphs extends    Slice<Graph,GraphMorphism>
+                     implements LabelledCategory<GraphMorphism, Triangle<Graph, GraphMorphism>>, 
+								CategoryWithInitOb<GraphMorphism, Triangle<Graph, GraphMorphism>>, 
+								CategoryWithPushouts<GraphMorphism, Triangle<Graph, GraphMorphism>>,
+								CategoryWithPushoutComplements<GraphMorphism, Triangle<Graph, GraphMorphism>> {
+	//private final Graph typeGraph;
+	private final GraphMorphism EMPTY_TYPED_GRAPH;
+	private final CoLimit<GraphMorphism, Triangle<Graph, GraphMorphism>> INITIAL_OBJECT;
 	
 	public static TGraphs TGraphsFor(Graph typeGraph) {
 		return new TGraphs(typeGraph);
 	}
 	
 	public TGraphs(Graph typeGraph) {
-		this.typeGraph = typeGraph;
-		EMPTY_TYPED_GRAPH = new TGraph("EMPTY_TYPED_GRAPH", Graphs.initialObject().up.apply(typeGraph));
+		super(Graphs.Graphs,typeGraph);
+		//this.typeGraph = typeGraph;
+		EMPTY_TYPED_GRAPH = Graphs.initialObject().up.apply(typeGraph);
 		INITIAL_OBJECT = new CoLimit<>(
 				EMPTY_TYPED_GRAPH, 
-				G -> new TGraphMorphism("initial_" + G.label(), Graphs.initialObject().up.apply(G.type().src()), EMPTY_TYPED_GRAPH, G)
+				G -> new Triangle<Graph, GraphMorphism>("initial_" + G.label(), Graphs.initialObject().up.apply(G.src()), EMPTY_TYPED_GRAPH, G)
 			);
 	}
-	
-	@Override
-	public TGraphMorphism compose(TGraphMorphism f, TGraphMorphism g) {
-		GraphMorphism f_g = Graphs.compose(f.untyped(), g.untyped());
-		return new TGraphMorphism(f_g.label(), f_g, f.src(), g.trg());
-	}
 
 	@Override
-	public TGraphMorphism id(TGraph f) {
-		GraphMorphism id = Graphs.id(f.type().src());
-		return new TGraphMorphism(id.label(), id, f, f);
-	}
-	
-	@Override
-	public String showOb(TGraph o) {
-		return LabelledCategory.super.showOb(o) + ":" + o.type().trg().label();
-	}
-
-	@Override
-	public CoLimit<TGraph, TGraphMorphism> initialObject() {
+	public CoLimit<GraphMorphism, Triangle<Graph, GraphMorphism>> initialObject() {
 		return INITIAL_OBJECT;
 	}
 
 	@Override
-	public CoLimit<TGraphMorphism, TGraphMorphism> coequaliser(TGraphMorphism f, TGraphMorphism g) {
-		CoLimit<GraphMorphism, GraphMorphism> coeq_graphs = Graphs.coequaliser(f.untyped(), g.untyped());
-		GraphMorphism type = coeq_graphs.up.apply(f.trg().type());
-		TGraph obj = new TGraph("==", type);
-		TGraphMorphism coeq_obj = new TGraphMorphism("==", coeq_graphs.obj, f.trg(), obj);
+	public CoLimit<Triangle<Graph, GraphMorphism>, Triangle<Graph, GraphMorphism>> coequaliser(Triangle<Graph, GraphMorphism> f, Triangle<Graph, GraphMorphism> g) {
+		CoLimit<GraphMorphism, GraphMorphism> coeq_graphs = Graphs.coequaliser(f.getF(), g.getF());
+		GraphMorphism type = coeq_graphs.up.apply(f.trg());
+		//TGraph obj = new TGraph("==", type);
+		Triangle<Graph, GraphMorphism> coeq_obj = new Triangle<Graph, GraphMorphism>("==", coeq_graphs.obj, f.trg(), type);
 		
-		return new CoLimit<TGraphMorphism, TGraphMorphism>(
+		return new CoLimit<Triangle<Graph, GraphMorphism>, Triangle<Graph, GraphMorphism>>(
 				coeq_obj, 
-				tm -> new TGraphMorphism("u", coeq_graphs.up.apply(tm.untyped()), obj, tm.trg())
+				tm -> new Triangle<Graph, GraphMorphism>("u", coeq_graphs.up.apply(tm.getF()), type, tm.trg())
 				);
 	}
 
 	@Override
-	public CoLimit<CoSpan<TGraphMorphism>, TGraphMorphism> coproduct(TGraph a, TGraph b) {
-		CoLimit<CoSpan<GraphMorphism>, GraphMorphism> coprod_graphs = Graphs.coproduct(a.type().src(), b.type().src());
-		GraphMorphism type = coprod_graphs.up.apply(new CoSpan<>(Graphs, b.type(), a.type()));
-		TGraph obj = new TGraph(a + "+" + b, type);
+	public CoLimit<CoSpan<Triangle<Graph, GraphMorphism>>, Triangle<Graph, GraphMorphism>> coproduct(GraphMorphism a, GraphMorphism b) {
+		CoLimit<CoSpan<GraphMorphism>, GraphMorphism> coprod_graphs = Graphs.coproduct(a.src(), b.src());
+		GraphMorphism type = coprod_graphs.up.apply(new CoSpan<>(Graphs, b, a));
+		//GraphMorphism obj = new GraphMorphism(a + "+" + b, type);
 		
 		return new CoLimit<>(
-				new CoSpan<>(this, new TGraphMorphism("left", coprod_graphs.obj.left, b, obj), 
-						     		new TGraphMorphism("right", coprod_graphs.obj.right, a, obj)), 
-				cos -> new TGraphMorphism("u", 
-						coprod_graphs.up.apply(new CoSpan<>(Graphs, cos.left.untyped(), cos.right.untyped())),
-						obj,
+				new CoSpan<Triangle<Graph, GraphMorphism>>(this, new Triangle<Graph, GraphMorphism>("left", coprod_graphs.obj.left, b, type), 
+						     		new Triangle<Graph, GraphMorphism>("right", coprod_graphs.obj.right, a, type)), 
+				cos -> new Triangle<Graph, GraphMorphism>("u", 
+						coprod_graphs.up.apply(new CoSpan<GraphMorphism>(Graphs, cos.left.getF(), cos.right.getF())),
+						type,
 						cos.left.trg())
 				);
 	}
 
 	@Override
-	public Optional<Corner<TGraphMorphism>> pushoutComplement(Corner<TGraphMorphism> upperLeft) {
-		TGraphMorphism l = upperLeft.first;
-		TGraphMorphism m = upperLeft.second;
-		TGraph K = l.src();
-		TGraph G = m.trg();
+	public Optional<Corner<Triangle<Graph, GraphMorphism>>> pushoutComplement(Corner<Triangle<Graph, GraphMorphism>> upperLeft) {
+		Triangle<Graph, GraphMorphism> l = upperLeft.first;
+		Triangle<Graph, GraphMorphism> m = upperLeft.second;
+		GraphMorphism K = l.src();
+		GraphMorphism G = m.trg();
 		
-		return Graphs.pushoutComplement(new Corner<>(Graphs, l.untyped(), m.untyped()))
+		return Graphs.pushoutComplement(new Corner<GraphMorphism>(Graphs, l.getF(), m.getF()))
 				.map(pc_G -> determinedTypedPushoutComplement(pc_G, K, G));
 	}
 
-	private Corner<TGraphMorphism> determinedTypedPushoutComplement(Corner<GraphMorphism> pc_G, TGraph K, TGraph G) {
+	private Corner<Triangle<Graph, GraphMorphism>> determinedTypedPushoutComplement(Corner<GraphMorphism> pc_G, GraphMorphism K, GraphMorphism G) {
 		Graph D = pc_G.first.trg();
 		
-		TotalFunction type_E = new TotalFunction(D.edges(), "type_E", typeGraph.edges());
-		D.edges().elts().forEach(e -> type_E.addMapping(e, G.type()._E().map(e)));
+		TotalFunction type_E = new TotalFunction(D.edges(), "type_E", T.edges());
+		D.edges().elts().forEach(e -> type_E.addMapping(e, G._E().map(e)));
 		
-		TotalFunction type_V = new TotalFunction(D.vertices(), "type_V", typeGraph.vertices());
-		D.vertices().elts().forEach(v -> type_V.addMapping(v, G.type()._V().map(v)));
+		TotalFunction type_V = new TotalFunction(D.vertices(), "type_V", T.vertices());
+		D.vertices().elts().forEach(v -> type_V.addMapping(v, G._V().map(v)));
 		
-		GraphMorphism type_D = new GraphMorphism("type_D", D, typeGraph, type_E, type_V);
+		GraphMorphism type_D = new GraphMorphism("type_D", D, T, type_E, type_V);
 		TGraph D_ = new TGraph("D", type_D);
 		
-		TGraphMorphism d = new TGraphMorphism("d", pc_G.first, K, D_);
-		TGraphMorphism l_ = new TGraphMorphism("l'", pc_G.second, D_, G);
+		Triangle<Graph, GraphMorphism> d = new Triangle<Graph, GraphMorphism>("d", pc_G.first, K, D_);
+		Triangle<Graph, GraphMorphism> l_ = new Triangle<Graph, GraphMorphism>("l'", pc_G.second, D_, G);
 		
 		return new Corner<>(this, d, l_);
 	}
 
 	@Override
-	public Corner<TGraphMorphism> restrict(Corner<TGraphMorphism> upperLeft) {
-		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<>(Graphs.Graphs, upperLeft.first.untyped(), upperLeft.second.untyped()));
+	public Corner<Triangle<Graph, GraphMorphism>> restrict(Corner<Triangle<Graph, GraphMorphism>> upperLeft) {
+		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<>(Graphs.Graphs, source(upperLeft.first), source(upperLeft.second)));
 		
-		TGraph G = upperLeft.second.trg();
+		Triangle<Graph, GraphMorphism> G = upperLeft.second;
 		Graph G_ = untyped.first.trg();
 		
-		TotalFunction type_G_E = new TotalFunction(G_.edges(), "type_G_E", typeGraph.edges());
-		G_.edges().elts().forEach(e -> type_G_E.addMapping(e, G.type()._E().map(e)));
+		TotalFunction type_G_E = new TotalFunction(G_.edges(), "type_G_E", T.edges());
+		G_.edges().elts().forEach(e -> type_G_E.addMapping(e, G.trg()._E().map(e)));
 		
-		TotalFunction type_G_V = new TotalFunction(G_.vertices(), "type_G_V", typeGraph.vertices());
-		G_.vertices().elts().forEach(v -> type_G_V.addMapping(v, G.type()._V().map(v)));
+		TotalFunction type_G_V = new TotalFunction(G_.vertices(), "type_G_V", T.vertices());
+		G_.vertices().elts().forEach(v -> type_G_V.addMapping(v, G.trg()._V().map(v)));
 		
-		GraphMorphism type_G = new GraphMorphism("type_G", G_, typeGraph, type_G_E, type_G_V);
-		TGraph _G_ = new TGraph("G_", type_G);
+		GraphMorphism type_G = new GraphMorphism("type_G", G_, T, type_G_E, type_G_V);
+		//GraphMorphism _G_ = new GraphMorphism("G_", type_G);
 		
-		return new Corner<>(this, new TGraphMorphism("_m_", untyped.first, upperLeft.first.trg(), _G_),
-								  new TGraphMorphism("_g_", untyped.second, _G_, G));
+		return new Corner<>(this, new Triangle<Graph, GraphMorphism>("_m_", untyped.first, upperLeft.first.trg(), type_G),
+								  new Triangle<Graph, GraphMorphism>("_g_", untyped.second, G.getF(), G.getG()));
 	}
 }

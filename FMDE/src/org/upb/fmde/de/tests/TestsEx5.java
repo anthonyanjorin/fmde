@@ -24,6 +24,7 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
+import org.upb.fmde.de.categories.slice.Triangle;
 
 public class TestsEx5 {
 
@@ -38,41 +39,41 @@ public class TestsEx5 {
 	public void doublePushOut() throws IOException {
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
-		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex5/L.xmi", "L");
-		TGraph L = L_TG_Ecore[0];
+		GraphMorphism[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex5/L.xmi", "L");
+		GraphMorphism L = L_TG_Ecore[0];
 		
-		Graph TG = L_TG_Ecore[1].type().src();
+		Graph TG = L_TG_Ecore[1].src();
 		TGraphs cat = TGraphs.TGraphsFor(TG);
 
-		TGraph R = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
+		GraphMorphism R = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "R", L_TG_Ecore[1], L_TG_Ecore[2]);
 
-		TGraph K = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "K", L_TG_Ecore[1], L_TG_Ecore[2]);
-		Object cardsEdge = K.type().src().edges().get("cards");
-		Graph graphK = K.type().src();
-		K.type()._E().mappings().remove(cardsEdge);
+		GraphMorphism K = TestUtil.loadBoardAsTGraph(rs, "models/ex5/R.xmi", "K", L_TG_Ecore[1], L_TG_Ecore[2]);
+		Object cardsEdge = K.src().edges().get("cards");
+		Graph graphK = K.src();
+		K._E().mappings().remove(cardsEdge);
 		graphK.src().mappings().remove(cardsEdge);
 		graphK.trg().mappings().remove(cardsEdge);
 		graphK.edges().elts().remove(cardsEdge);
 
 		TPatternMatcher pm = new TPatternMatcher(K, L);
-		TGraphMorphism l = pm.getMonicMatches().get(0);
+		Triangle<Graph, GraphMorphism> l = pm.getMonicMatches().get(0);
 		l.label("l");
 		
 		pm = new TPatternMatcher(K, R);
-		TGraphMorphism r = pm.getMonicMatches().get(0);
+		Triangle<Graph, GraphMorphism> r = pm.getMonicMatches().get(0);
 		r.label("r");
 		
 		
-		Span<TGraphMorphism> moveCard = new Span<>(cat, l, r);
+		Span<Triangle<Graph, GraphMorphism>> moveCard = new Span<>(cat, l, r);
 		
 		TGraphDiagram d = new TGraphDiagram(TG);
 		d.objects(L, K, R).arrows(l, r);
 		TestUtil.prettyPrintTEcore(d, "moveCard", diagrams);		
 		
-		TGraph G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G", L_TG_Ecore[1], L_TG_Ecore[2]);
+		GraphMorphism G = TestUtil.loadBoardAsTGraph(rs, "models/ex3/Board.xmi", "G", L_TG_Ecore[1], L_TG_Ecore[2]);
 		pm = new TPatternMatcher(L, G);
 		
-		for(TGraphMorphism m : pm.getMonicMatches()){			
+		for(Triangle<Graph, GraphMorphism> m : pm.getMonicMatches()){			
 			cat.doublePushout(moveCard, m).ifPresent(dd -> {
 				TGraphDiagram result = new TGraphDiagram(TG);
 				result.objects(L, K, R, G)
@@ -94,9 +95,9 @@ public class TestsEx5 {
 	public void danglingEdge() throws IOException{
 		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
-		TGraph[] G_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/Board.xmi", "G");
-		TGraph G = G_TG_Ecore[0];
-		Graph TG = G_TG_Ecore[1].type().src();		
+		GraphMorphism[] G_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/Board.xmi", "G");
+		GraphMorphism G = G_TG_Ecore[0];
+		Graph TG = G_TG_Ecore[1].src();		
 		
 		TGraphs cat = TGraphs.TGraphsFor(TG);
 		
@@ -113,23 +114,23 @@ public class TestsEx5 {
 									.filter(v -> eMoflonEMFUtil.getName((EObject)v).equals("Card"))
 									.findAny()
 									.get()));
-		TGraph L = new TGraph("L", type_L);
-		TGraph K = cat.initialObject().obj;
-		TGraph R = cat.initialObject().obj;
-		TGraphMorphism l = cat.initialObject().up.apply(L);
-		TGraphMorphism r = cat.initialObject().up.apply(R);
+		GraphMorphism L = new TGraph("L", type_L);
+		GraphMorphism K = cat.initialObject().obj;
+		GraphMorphism R = cat.initialObject().obj;
+		Triangle<Graph, GraphMorphism> l = cat.initialObject().up.apply(L);
+		Triangle<Graph, GraphMorphism> r = cat.initialObject().up.apply(R);
 		
-		Span<TGraphMorphism> deleteCard = new Span<>(cat, l, r);
+		Span<Triangle<Graph, GraphMorphism>> deleteCard = new Span<>(cat, l, r);
 		
 		TGraphDiagram d = new TGraphDiagram(TG);
 		d.objects(L, K, R).arrows(l, r);
 		TestUtil.prettyPrintTEcore(d, "deleteCard", diagrams);
 		
 		TPatternMatcher pm = new TPatternMatcher(L, G);
-		for(TGraphMorphism m : pm.getMonicMatches()){			
+		for(Triangle<Graph, GraphMorphism> m : pm.getMonicMatches()){			
 			assertFalse(cat.doublePushout(deleteCard, m).isPresent());
 			
-			Corner<TGraphMorphism> _m = cat.restrict(new Corner<>(cat, l, m));
+			Corner<Triangle<Graph, GraphMorphism>> _m = cat.restrict(new Corner<>(cat, l, m));
 			cat.doublePushout(deleteCard, _m.first).ifPresent(dd -> {
 				TGraphDiagram result = new TGraphDiagram(TG);
 				result.objects(L, K, R, G)

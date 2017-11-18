@@ -11,9 +11,9 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.ecore.ModelToGraphs.EcoreEdge;
 
 public class ModelToTGraphs {
-	private TGraph model;
-	private TGraph metamodel;
-	private TGraph metametamodel;
+	private GraphMorphism model;
+	private GraphMorphism metamodel;
+	private GraphMorphism metametamodel;
 	
 	public ModelToTGraphs(EObject root, String label) {
 		Graph m = new ModelToGraphs(root, label).getResult();
@@ -25,15 +25,15 @@ public class ModelToTGraphs {
 		metametamodel = determineTypeForMetamodel(mmm, mmm);
 	}
 	
-	public ModelToTGraphs(EObject root, String label, TGraph metamodel, TGraph metametamodel){
+	public ModelToTGraphs(EObject root, String label, GraphMorphism metamodel, GraphMorphism metametamodel){
 		this.metamodel = metamodel;
 		this.metametamodel = metametamodel;
 		
 		Graph m = new ModelToGraphs(root, label).getResult();
-		model = determineTypeForModel(m, metamodel.type().src());
+		model = determineTypeForModel(m, metamodel.src());
 	}
 
-	private TGraph determineTypeForMetamodel(Graph mm, Graph mmm) {
+	private GraphMorphism determineTypeForMetamodel(Graph mm, Graph mmm) {
 		TotalFunction f_E = new TotalFunction(mm.edges(), "type_E_" + mm.label(), mmm.edges());
 		TotalFunction f_V = new TotalFunction(mm.vertices(), "type_V_" + mm.label(), mmm.vertices());
 		
@@ -57,7 +57,7 @@ public class ModelToTGraphs {
 		return new TGraph(mm.label(), type);
 	}
 
-	private TGraph determineTypeForModel(Graph m, Graph mm) {
+	private GraphMorphism determineTypeForModel(Graph m, Graph mm) {
 		TotalFunction f_E = new TotalFunction(m.edges(), "type_E_" + m.label(), mm.edges());
 		TotalFunction f_V = new TotalFunction(m.vertices(), "type_V_" + m.label(), mm.vertices());
 
@@ -81,8 +81,8 @@ public class ModelToTGraphs {
 		return new TGraph(m.label(), type);
 	}
 
-	public TGraph[] getResult() {
-		return new TGraph[] {model, metamodel, metametamodel};
+	public GraphMorphism[] getResult() {
+		return new GraphMorphism[] {model, metamodel, metametamodel};
 	}
 
 	
