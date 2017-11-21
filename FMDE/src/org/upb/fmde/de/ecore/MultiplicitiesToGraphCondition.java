@@ -9,8 +9,6 @@ import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
 import org.upb.fmde.de.categories.slice.Triangle;
 import org.upb.fmde.de.graphconditions.And;

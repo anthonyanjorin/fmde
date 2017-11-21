@@ -1,4 +1,4 @@
-package org.upb.fmde.de.categories.concrete.typedtriplegraphs;
+/*package org.upb.fmde.de.categories.concrete.typedtriplegraphs;
 
 import org.upb.fmde.de.categories.Labelled;
 import org.upb.fmde.de.categories.concrete.triplegraphs.TripleMorphism;
@@ -15,4 +15,4 @@ public class TTripleGraph extends Labelled {
 	public TripleMorphism getTypeMorphism(){
 		return type;
 	}
-}
+}*/

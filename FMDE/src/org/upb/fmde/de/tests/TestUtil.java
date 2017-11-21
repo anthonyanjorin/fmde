@@ -13,7 +13,6 @@ import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.ecore.EcorePrinter;
 import org.upb.fmde.de.ecore.ModelToTGraphs;
@@ -66,7 +65,7 @@ public class TestUtil {
 		return f;
 	}
 
-	public static TGraph createTypedPatternGraph(Graph TG, Graph G) {
+	public static GraphMorphism createTypedPatternGraph(Graph TG, Graph G) {
 		TotalFunction type_E = new TotalFunction(G.edges(), "type_E", TG.edges())
 				.addMapping(G.edges().get("cards"), TG.edges().get("cards"));
 	
@@ -74,12 +73,10 @@ public class TestUtil {
 				.addMapping(G.vertices().get("L"), TG.vertices().get("List"))
 				.addMapping(G.vertices().get("C"), TG.vertices().get("Card"));
 	
-		GraphMorphism type = new GraphMorphism("type", G, TG, type_E, type_V);
-		TGraph GT = new TGraph("G", type);
-		return GT;
+		return new GraphMorphism("type", G, TG, type_E, type_V);
 	}
 
-	public static TGraph createTypedHostGraph(Graph TG, Graph G_) {
+	public static GraphMorphism createTypedHostGraph(Graph TG, Graph G_) {
 		TotalFunction type_E_ = new TotalFunction(G_.edges(), "type'_E", TG.edges())
 				.addMapping(G_.edges().get("e1:cards"), TG.edges().get("cards"))
 				.addMapping(G_.edges().get("e2:cards"), TG.edges().get("cards"))
@@ -93,10 +90,7 @@ public class TestUtil {
 				.addMapping(G_.vertices().get("x"), TG.vertices().get("Card"))
 				.addMapping(G_.vertices().get("y"), TG.vertices().get("Card"));
 
-		GraphMorphism type_ = new GraphMorphism("type'", G_, TG, type_E_, type_V_);
-
-		TGraph GT_ = new TGraph("G'", type_);
-		return GT_;
+		return new GraphMorphism("type'", G_, TG, type_E_, type_V_);
 	}
 
 	public static Graph createListCardTypeGraph(String name) {

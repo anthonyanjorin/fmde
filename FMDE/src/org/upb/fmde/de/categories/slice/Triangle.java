@@ -6,14 +6,14 @@ import org.upb.fmde.de.categories.LabelledArrow;
 public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<Arr> implements ComparableArrow<Triangle<Ob, Arr>>{
 	
 	private Arr f;
-	private Arr m;
-	private Arr g;
+	private Arr type;
+	private Arr type_;
 	
-	public Triangle(String label, Arr f, Arr m, Arr g) {
-		super(label, f, g);
+	public Triangle(String label, Arr f, Arr type, Arr type_) {
+		super(label, type, type_);
 		this.f = f;
-		this.m = m;
-		this.g = g;
+		this.type = type;
+		this.type_ = type_;
 	}
 	
 	/**
@@ -21,44 +21,44 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 	 * 
 	 * @return true, if yes
 	 */
-	public boolean checkValidity(Ob X){
-		if (!m.src().equals(f.src()) ||
-				!m.trg().equals(g.src()) ||
-				!f.trg().equals(g.trg())){
+	public boolean checkValidity(Ob T){
+		if (!f.src().equals(type.src()) ||
+				!f.trg().equals(type_.src()) ||
+				!type.trg().equals(type_.trg())){
 			throw new IllegalArgumentException("Arrows do not form a Triangle!");
 		}
-	if	(!f.trg().equals(X)){
-			throw new IllegalArgumentException(f.label() + " and " + g.label() + " should have the sliced object as their target!");
+	if	(!type.trg().equals(T)){
+			throw new IllegalArgumentException(type.label() + " and " + type_.label() + " should have the sliced object as their target!");
 		}
 			else return false;
 	}
 	
+	public Arr getType() {
+		return type;
+	}
+
+	public void setType(Arr type) {
+		this.type = type;
+	}
+
 	public Arr getF() {
 		return f;
 	}
 
-	public void setF(Arr f) {
+	public void setM(Arr f) {
 		this.f = f;
 	}
 
-	public Arr getM() {
-		return m;
+	public Arr getType_() {
+		return type_;
 	}
 
-	public void setM(Arr m) {
-		this.m = m;
-	}
-
-	public Arr getG() {
-		return g;
-	}
-
-	public void setG(Arr g) {
-		this.g = g;
+	public void setType_(Arr type_) {
+		this.type_ = type_;
 	}
 
 	@Override
 	public boolean isTheSameAs(Triangle<Ob, Arr> a) {
-		return m.equals(a.m) && f.equals(a.f) && g.equals(a.g);
+		return f.equals(a.f) && type.equals(a.type) && type_.equals(a.type_);
 	}
 }

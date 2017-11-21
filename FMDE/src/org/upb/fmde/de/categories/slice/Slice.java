@@ -17,7 +17,7 @@ public class Slice<Ob, Arr extends LabelledArrow<Ob>> implements Category<Arr, T
 		public Triangle<Ob, Arr> compose(Triangle<Ob, Arr> f, Triangle<Ob, Arr> g) {
 			((Triangle<Ob,Arr>)f).checkValidity(T);
 			((Triangle<Ob,Arr>)g).checkValidity(T);
-			return new Triangle<Ob, Arr>(f.label()+";"+g.label(),cat.compose(f.getM(), g.getM()),f.getF(),g.getG());
+			return new Triangle<Ob, Arr>(f.label()+";"+g.label(),cat.compose(f.getF(), g.getF()),f.getType(),g.getType_());
 		}
 	
 		@Override
@@ -29,13 +29,13 @@ public class Slice<Ob, Arr extends LabelledArrow<Ob>> implements Category<Arr, T
 		@Override
 		public Arr source(Triangle<Ob, Arr> f) {
 			((Triangle<Ob,Arr>)f).checkValidity(T);
-			return f.getF();
+			return f.getType();
 		}
 	
 		@Override
 		public Arr target(Triangle<Ob, Arr> f) {
 			((Triangle<Ob,Arr>)f).checkValidity(T);
-			return f.getG();
+			return f.getType_();
 		}
 		
 		@Override
@@ -48,6 +48,6 @@ public class Slice<Ob, Arr extends LabelledArrow<Ob>> implements Category<Arr, T
 		@Override
 		public String showArr(Triangle<Ob, Arr> f) {
 			((Triangle<Ob,Arr>)f).checkValidity(T);
-			return f.getF().label() + "-" + f.getM().label() + "-" + f.getG().label();
+			return f.getType().label() + "-" + f.getF().label() + "-" + f.getType_().label();
 		}
 }

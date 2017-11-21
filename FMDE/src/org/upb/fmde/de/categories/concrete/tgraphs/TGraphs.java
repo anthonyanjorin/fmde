@@ -97,10 +97,10 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		D.vertices().elts().forEach(v -> type_V.addMapping(v, G._V().map(v)));
 		
 		GraphMorphism type_D = new GraphMorphism("type_D", D, T, type_E, type_V);
-		TGraph D_ = new TGraph("D", type_D);
+		//TGraph D_ = new TGraph("D", type_D);
 		
-		Triangle<Graph, GraphMorphism> d = new Triangle<Graph, GraphMorphism>("d", pc_G.first, K, D_);
-		Triangle<Graph, GraphMorphism> l_ = new Triangle<Graph, GraphMorphism>("l'", pc_G.second, D_, G);
+		Triangle<Graph, GraphMorphism> d = new Triangle<Graph, GraphMorphism>("d", pc_G.first, K, type_D);
+		Triangle<Graph, GraphMorphism> l_ = new Triangle<Graph, GraphMorphism>("l'", pc_G.second, type_D, G);
 		
 		return new Corner<>(this, d, l_);
 	}
@@ -122,6 +122,6 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		//GraphMorphism _G_ = new GraphMorphism("G_", type_G);
 		
 		return new Corner<>(this, new Triangle<Graph, GraphMorphism>("_m_", untyped.first, upperLeft.first.trg(), type_G),
-								  new Triangle<Graph, GraphMorphism>("_g_", untyped.second, G.getF(), G.getG()));
+								  new Triangle<Graph, GraphMorphism>("_g_", untyped.second, G.getType(), G.getType_()));
 	}
 }

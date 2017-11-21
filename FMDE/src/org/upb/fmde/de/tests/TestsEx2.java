@@ -9,15 +9,11 @@ import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.triplegraphs.TripleGraph;
 import org.upb.fmde.de.categories.concrete.triplegraphs.TripleGraphDiagram;
 import org.upb.fmde.de.categories.concrete.triplegraphs.TripleMorphism;
-import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleGraph;
 import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleGraphDiagram;
-import org.upb.fmde.de.categories.concrete.typedtriplegraphs.TTripleMorphism;
 import org.upb.fmde.de.categories.slice.Triangle;
 
 public class TestsEx2 {
@@ -56,13 +52,13 @@ public class TestsEx2 {
 		Graph TG = TestUtil.createListCardTypeGraph("TG");
 	
 		Graph G = TestUtil.createPatternGraph("G");
-		TGraph GT = TestUtil.createTypedPatternGraph(TG, G);
+		GraphMorphism GT = TestUtil.createTypedPatternGraph(TG, G);
 	
 		Graph G_ = TestUtil.createHostGraph("G'");
-		TGraph GT_ = TestUtil.createTypedHostGraph(TG, G_);
+		GraphMorphism GT_ = TestUtil.createTypedHostGraph(TG, G_);
 	
 		GraphMorphism f = TestUtil.createGraphMorphism(G, G_);
-		TGraphMorphism f_typed = new TGraphMorphism("f", f, GT, GT_);
+		Triangle<Graph, GraphMorphism> f_typed = new Triangle<Graph, GraphMorphism>("f", f, GT, GT_);
 	
 		TGraphDiagram d_typed = new TGraphDiagram(TG);
 		d_typed.arrows(f_typed).objects(GT, GT_).saveAsDot(diagrams, "typed_match_in_TGraphs");
@@ -136,7 +132,7 @@ public class TestsEx2 {
 		Triangle<TripleGraph, TripleMorphism> tf = new Triangle<TripleGraph, TripleMorphism>("f", f, tGT, tGT_);
 	
 		// Create and save diagrams
-		TTripleGraphDiagram d = new TTripleGraphDiagram();
+		TTripleGraphDiagram d = new TTripleGraphDiagram(TGT);
 		d.objects(tGT, tGT_).arrows(tf).saveAsDot(diagrams, "typedTripleMorphism_in_TypedTripleGraphs");
 		d.getTripleGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_TripleGraphs");
 		d.getTripleGraphDiagram().getGraphDiagram().saveAsDot(diagrams, "typedTripleMorphism_in_Graphs");

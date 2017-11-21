@@ -1,4 +1,4 @@
-package org.upb.fmde.de.categories.concrete.tgraphs;
+/*package org.upb.fmde.de.categories.concrete.tgraphs;
 
 import static org.upb.fmde.de.categories.concrete.graphs.Graphs.Graphs;
 import org.upb.fmde.de.categories.concrete.graphs.*;
@@ -13,7 +13,7 @@ public class TGraphMorphism extends Triangle<Graph,GraphMorphism> {
 
 	private GraphMorphism f;
 	
-	public TGraphMorphism(String label, GraphMorphism f, TGraph source, TGraph target) {
+	public TGraphMorphism(String label, GraphMorphism f, GraphMorphism source, GraphMorphism target) {
 		super(label, source, f, target);
 		this.f = f;
 		if(!isValid()) throw new IllegalArgumentException("Typed GraphMorphism " + label + ": " + f.src().label() + " -> " + f.trg().label() + " is not valid.");
@@ -34,10 +34,10 @@ public class TGraphMorphism extends Triangle<Graph,GraphMorphism> {
 		f.label(label);
 	}
 	
-	/*@Override
+	@Override
 	public boolean isTheSameAs(TGraphMorphism a) {
 		return source.isTheSameAs(a.source) &&
 			   target.isTheSameAs(a.trg()) &&
 			   f.isTheSameAs(a.f);
-	}*/
-}
+	}
+}*/

@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.ecore.ModelToGraphs.EcoreEdge;
 
 public class ModelToTGraphs {
@@ -53,8 +52,7 @@ public class ModelToTGraphs {
 				.forEach(e -> f_E.addMapping(edge, e));
 		}
 		
-		GraphMorphism type = new GraphMorphism("type_" + mm.label(), mm, mmm, f_E, f_V);
-		return new TGraph(mm.label(), type);
+		return new GraphMorphism("type_" + mm.label(), mm, mmm, f_E, f_V);
 	}
 
 	private GraphMorphism determineTypeForModel(Graph m, Graph mm) {
@@ -77,8 +75,7 @@ public class ModelToTGraphs {
 					.forEach(e -> f_E.addMapping(edge, e));
 		}
 
-		GraphMorphism type = new GraphMorphism("type_" + m.label(), m, mm, f_E, f_V);
-		return new TGraph(m.label(), type);
+		return new GraphMorphism("type_" + m.label(), m, mm, f_E, f_V);
 	}
 
 	public GraphMorphism[] getResult() {

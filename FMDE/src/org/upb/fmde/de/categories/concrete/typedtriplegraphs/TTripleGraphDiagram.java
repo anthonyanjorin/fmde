@@ -8,8 +8,8 @@ import org.upb.fmde.de.categories.slice.Triangle;
 
 public class TTripleGraphDiagram extends Diagram<TripleMorphism, Triangle<TripleGraph, TripleMorphism>> {
 
-	public TTripleGraphDiagram() {
-		super(TypedTripleGraphs.TypedTripleGraphs);
+	public TTripleGraphDiagram(TripleGraph typeTripleGraph) {
+		super(TypedTripleGraphs.TypedTripleGraphsFor(typeTripleGraph));
 	}
 
 	public TripleGraphDiagram getTripleGraphDiagram() {

@@ -19,9 +19,7 @@ import org.upb.fmde.de.categories.concrete.finsets.FinSets;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
 import org.upb.fmde.de.categories.slice.Triangle;
@@ -114,26 +112,26 @@ public class TestsEx5 {
 									.filter(v -> eMoflonEMFUtil.getName((EObject)v).equals("Card"))
 									.findAny()
 									.get()));
-		GraphMorphism L = new TGraph("L", type_L);
+		//GraphMorphism L = new TGraph("L", type_L);
 		GraphMorphism K = cat.initialObject().obj;
 		GraphMorphism R = cat.initialObject().obj;
-		Triangle<Graph, GraphMorphism> l = cat.initialObject().up.apply(L);
+		Triangle<Graph, GraphMorphism> l = cat.initialObject().up.apply(type_L);
 		Triangle<Graph, GraphMorphism> r = cat.initialObject().up.apply(R);
 		
 		Span<Triangle<Graph, GraphMorphism>> deleteCard = new Span<>(cat, l, r);
 		
 		TGraphDiagram d = new TGraphDiagram(TG);
-		d.objects(L, K, R).arrows(l, r);
+		d.objects(type_L, K, R).arrows(l, r);
 		TestUtil.prettyPrintTEcore(d, "deleteCard", diagrams);
 		
-		TPatternMatcher pm = new TPatternMatcher(L, G);
+		TPatternMatcher pm = new TPatternMatcher(type_L, G);
 		for(Triangle<Graph, GraphMorphism> m : pm.getMonicMatches()){			
 			assertFalse(cat.doublePushout(deleteCard, m).isPresent());
 			
 			Corner<Triangle<Graph, GraphMorphism>> _m = cat.restrict(new Corner<>(cat, l, m));
 			cat.doublePushout(deleteCard, _m.first).ifPresent(dd -> {
 				TGraphDiagram result = new TGraphDiagram(TG);
-				result.objects(L, K, R, G)
+				result.objects(type_L, K, R, G)
 					  .arrows(l, r, m, _m.first, _m.second)
 					  .objects(_m.first.trg())
 					  .objects(dd.pushoutComplement.first.trg())

@@ -19,9 +19,7 @@ import org.upb.fmde.de.categories.concrete.finsets.FinSets;
 import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 import org.upb.fmde.de.categories.concrete.graphs.Graph;
 import org.upb.fmde.de.categories.concrete.graphs.GraphMorphism;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
-import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
 import org.upb.fmde.de.categories.slice.Triangle;
 
