@@ -107,7 +107,7 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 
 	@Override
 	public Corner<Triangle<Graph, GraphMorphism>> restrict(Corner<Triangle<Graph, GraphMorphism>> upperLeft) {
-		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<>(Graphs.Graphs, source(upperLeft.first), source(upperLeft.second)));
+		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<GraphMorphism>(Graphs.Graphs, upperLeft.first.getF(), upperLeft.second.getF()));
 		
 		Triangle<Graph, GraphMorphism> G = upperLeft.second;
 		Graph G_ = untyped.first.trg();
@@ -122,6 +122,6 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		//GraphMorphism _G_ = new GraphMorphism("G_", type_G);
 		
 		return new Corner<>(this, new Triangle<Graph, GraphMorphism>("_m_", untyped.first, upperLeft.first.trg(), type_G),
-								  new Triangle<Graph, GraphMorphism>("_g_", untyped.second, G.getType(), G.getType_()));
+								  new Triangle<Graph, GraphMorphism>("_g_", untyped.second, type_G, G.getType_()));
 	}
 }
