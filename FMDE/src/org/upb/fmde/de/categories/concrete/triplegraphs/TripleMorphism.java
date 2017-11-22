@@ -27,9 +27,9 @@ public class TripleMorphism extends LabelledArrow<TripleGraph> implements Compar
 
 	@Override
 	public boolean isTheSameAs(TripleMorphism a) {
-		return f_S.isTheSameAs(f_S) &&
-			   f_C.isTheSameAs(f_C) &&
-			   f_T.isTheSameAs(f_T);
+		return f_S.isTheSameAs(a.f_S) &&
+			   f_C.isTheSameAs(a.f_C) &&
+			   f_T.isTheSameAs(a.f_T);
 	}
 
 	public GraphMorphism getF_S() {
