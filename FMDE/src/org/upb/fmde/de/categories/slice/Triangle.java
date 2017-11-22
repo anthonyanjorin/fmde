@@ -57,8 +57,19 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 		this.type_ = type_;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isTheSameAs(Triangle<Ob, Arr> a) {
-		return f.equals(a.f) && type.equals(a.type) && type_.equals(a.type_);
+		if(f     instanceof ComparableArrow<?> && 
+		   type  instanceof ComparableArrow<?> &&
+		   type_ instanceof ComparableArrow<?>) {
+			ComparableArrow<Arr> fComp = (ComparableArrow<Arr>) f; 
+			ComparableArrow<Arr> typeComp = (ComparableArrow<Arr>) type; 
+			ComparableArrow<Arr> type_Comp = (ComparableArrow<Arr>) type_; 
+			
+			return fComp.isTheSameAs(a.f) && typeComp.isTheSameAs(a.type) && type_Comp.isTheSameAs(a.type_);
+		} else {
+			throw new IllegalStateException("You're trying to compare triangles consisting of uncomparable inner arrows!");
+		}
 	}
 }

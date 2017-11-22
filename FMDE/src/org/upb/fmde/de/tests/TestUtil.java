@@ -109,7 +109,7 @@ public class TestUtil {
 		return TG;
 	}
 
-	public static GraphMorphism loadBoardAsTGraph(ResourceSet rs, String fileName, String label) throws IOException {
+	private static GraphMorphism loadBoardAsTGraph(ResourceSet rs, String fileName, String label) throws IOException {
 		return TestUtil.loadBoardAsTGraphs(rs, fileName, label)[0];
 	}
 
@@ -140,7 +140,7 @@ public class TestUtil {
 		return root;
 	}
 
-	public static EObject loadSimpleTrello(ResourceSet rs) throws IOException {
+	static EObject loadSimpleTrello(ResourceSet rs) throws IOException {
 		Resource r = rs.createResource(URI.createFileURI("models/ex3/SimpleTrello.ecore"));
 		r.load(null);
 		r.setURI(URI.createURI("platform:/resource/FMDE/models/ex3/SimpleTrello.ecore"));
