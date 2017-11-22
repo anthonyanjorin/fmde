@@ -24,7 +24,7 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 								CategoryWithInitOb<GraphMorphism, Triangle<Graph, GraphMorphism>>, 
 								CategoryWithPushouts<GraphMorphism, Triangle<Graph, GraphMorphism>>,
 								CategoryWithPushoutComplements<GraphMorphism, Triangle<Graph, GraphMorphism>> {
-	//private final Graph typeGraph;
+
 	private final GraphMorphism EMPTY_TYPED_GRAPH;
 	private final CoLimit<GraphMorphism, Triangle<Graph, GraphMorphism>> INITIAL_OBJECT;
 	
@@ -32,9 +32,12 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		return new TGraphs(typeGraph);
 	}
 	
+	/**
+	 * Create typed graphs as slice category and initialize the initial object
+	 * @param typeGraph distinguished graph as typing/slicing object 
+	 */
 	public TGraphs(Graph typeGraph) {
 		super(Graphs.Graphs,typeGraph);
-		//this.typeGraph = typeGraph;
 		EMPTY_TYPED_GRAPH = Graphs.initialObject().up.apply(typeGraph);
 		INITIAL_OBJECT = new CoLimit<>(
 				EMPTY_TYPED_GRAPH, 
@@ -51,7 +54,6 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 	public CoLimit<Triangle<Graph, GraphMorphism>, Triangle<Graph, GraphMorphism>> coequaliser(Triangle<Graph, GraphMorphism> f, Triangle<Graph, GraphMorphism> g) {
 		CoLimit<GraphMorphism, GraphMorphism> coeq_graphs = Graphs.coequaliser(f.getF(), g.getF());
 		GraphMorphism type = coeq_graphs.up.apply(f.trg());
-		//TGraph obj = new TGraph("==", type);
 		Triangle<Graph, GraphMorphism> coeq_obj = new Triangle<Graph, GraphMorphism>("==", coeq_graphs.obj, f.trg(), type);
 		
 		return new CoLimit<Triangle<Graph, GraphMorphism>, Triangle<Graph, GraphMorphism>>(
@@ -64,7 +66,6 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 	public CoLimit<CoSpan<Triangle<Graph, GraphMorphism>>, Triangle<Graph, GraphMorphism>> coproduct(GraphMorphism a, GraphMorphism b) {
 		CoLimit<CoSpan<GraphMorphism>, GraphMorphism> coprod_graphs = Graphs.coproduct(a.src(), b.src());
 		GraphMorphism type = coprod_graphs.up.apply(new CoSpan<>(Graphs, b, a));
-		//GraphMorphism obj = new GraphMorphism(a + "+" + b, type);
 		
 		return new CoLimit<>(
 				new CoSpan<Triangle<Graph, GraphMorphism>>(this, new Triangle<Graph, GraphMorphism>("left", coprod_graphs.obj.left, b, type), 
@@ -86,7 +87,7 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		return Graphs.pushoutComplement(new Corner<GraphMorphism>(Graphs, l.getF(), m.getF()))
 				.map(pc_G -> determinedTypedPushoutComplement(pc_G, K, G));
 	}
-
+	
 	private Corner<Triangle<Graph, GraphMorphism>> determinedTypedPushoutComplement(Corner<GraphMorphism> pc_G, GraphMorphism K, GraphMorphism G) {
 		Graph D = pc_G.first.trg();
 		
@@ -97,7 +98,6 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		D.vertices().elts().forEach(v -> type_V.addMapping(v, G._V().map(v)));
 		
 		GraphMorphism type_D = new GraphMorphism("type_D", D, T, type_E, type_V);
-		//TGraph D_ = new TGraph("D", type_D);
 		
 		Triangle<Graph, GraphMorphism> d = new Triangle<Graph, GraphMorphism>("d", pc_G.first, K, type_D);
 		Triangle<Graph, GraphMorphism> l_ = new Triangle<Graph, GraphMorphism>("l'", pc_G.second, type_D, G);
@@ -119,7 +119,6 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		G_.vertices().elts().forEach(v -> type_G_V.addMapping(v, G.trg()._V().map(v)));
 		
 		GraphMorphism type_G = new GraphMorphism("type_G", G_, T, type_G_E, type_G_V);
-		//GraphMorphism _G_ = new GraphMorphism("G_", type_G);
 		
 		return new Corner<>(this, new Triangle<Graph, GraphMorphism>("_m_", untyped.first, upperLeft.first.trg(), type_G),
 								  new Triangle<Graph, GraphMorphism>("_g_", untyped.second, type_G, G.getType_()));

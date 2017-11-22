@@ -10,13 +10,20 @@ import org.upb.fmde.de.categories.slice.Triangle;
 
 public class TypedTripleGraphs extends    Slice<TripleGraph,TripleMorphism>
                                implements LabelledCategory<TripleMorphism, Triangle<TripleGraph, TripleMorphism>> {
-
-	//public static final TypedTripleGraphs TypedTripleGraphs = new TypedTripleGraphs(null);
     
+	/**
+	 * Create a typed triple graph category for the given type triple graph
+	 * @param typeTripleGraph typing object
+	 * @return typed triple graph category
+	 */
 	public static TypedTripleGraphs TypedTripleGraphsFor(TripleGraph typeTripleGraph) {
 		return new TypedTripleGraphs(typeTripleGraph);
 	}
 	
+	/**
+	 * Create typed triple graphs as a slice category
+	 * @param typeTripleGraph typing/slicing object
+	 */
 	public TypedTripleGraphs(TripleGraph typeTripleGraph) {
 		super(TripleGraphs.TripleGraphs,typeTripleGraph);
 	}

@@ -17,20 +17,18 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 	}
 	
 	/**
-	 * Checks, if the given Arrows form a valid triangle
-	 * 
-	 * @return true, if yes
+	 * Checks if the arrows f, type and type_ form a valid triangle and if type and type_ are arrows to the slice object T
+	 * @param T Slice object
 	 */
-	public boolean checkValidity(Ob T){
+	public void checkValidity(Ob T){
 		if (!f.src().equals(type.src()) ||
 				!f.trg().equals(type_.src()) ||
-				!type.trg().equals(type_.trg())){
+				!type.trg().equals(type_.trg())) {
 			throw new IllegalArgumentException("Arrows do not form a Triangle!");
 		}
-	if	(!type.trg().equals(T)){
+		if	(!type.trg().equals(T)){
 			throw new IllegalArgumentException(type.label() + " and " + type_.label() + " should have the sliced object as their target!");
 		}
-			else return false;
 	}
 	
 	public Arr getType() {
@@ -56,7 +54,12 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 	public void setType_(Arr type_) {
 		this.type_ = type_;
 	}
-
+	
+	/**
+	 * Compares itself with a given triangle
+	 * @param a Triangle object to be compared with
+	 * @return returns true if both triangles are equal
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isTheSameAs(Triangle<Ob, Arr> a) {
