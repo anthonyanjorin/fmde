@@ -44,12 +44,18 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 				G -> new Triangle<Graph, GraphMorphism>("initial_" + G.label(), Graphs.initialObject().up.apply(G.src()), EMPTY_TYPED_GRAPH, G)
 			);
 	}
-
+	
+	/**
+	 * Returns the initial object in TGraphs
+	 */
 	@Override
 	public CoLimit<GraphMorphism, Triangle<Graph, GraphMorphism>> initialObject() {
 		return INITIAL_OBJECT;
 	}
 
+	/**
+	 * FIXME
+	 */
 	@Override
 	public CoLimit<Triangle<Graph, GraphMorphism>, Triangle<Graph, GraphMorphism>> coequaliser(Triangle<Graph, GraphMorphism> f, Triangle<Graph, GraphMorphism> g) {
 		CoLimit<GraphMorphism, GraphMorphism> coeq_graphs = Graphs.coequaliser(f.getF(), g.getF());
@@ -62,6 +68,9 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 				);
 	}
 
+	/**
+	 * FIXME
+	 */
 	@Override
 	public CoLimit<CoSpan<Triangle<Graph, GraphMorphism>>, Triangle<Graph, GraphMorphism>> coproduct(GraphMorphism a, GraphMorphism b) {
 		CoLimit<CoSpan<GraphMorphism>, GraphMorphism> coprod_graphs = Graphs.coproduct(a.src(), b.src());
@@ -77,6 +86,9 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 				);
 	}
 
+	/**
+	 * FIXME
+	 */
 	@Override
 	public Optional<Corner<Triangle<Graph, GraphMorphism>>> pushoutComplement(Corner<Triangle<Graph, GraphMorphism>> upperLeft) {
 		Triangle<Graph, GraphMorphism> l = upperLeft.first;
@@ -88,6 +100,9 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 				.map(pc_G -> determinedTypedPushoutComplement(pc_G, K, G));
 	}
 	
+	/**
+	 * FIXME
+	 */
 	private Corner<Triangle<Graph, GraphMorphism>> determinedTypedPushoutComplement(Corner<GraphMorphism> pc_G, GraphMorphism K, GraphMorphism G) {
 		Graph D = pc_G.first.trg();
 		
@@ -105,6 +120,9 @@ public class TGraphs extends    Slice<Graph,GraphMorphism>
 		return new Corner<>(this, d, l_);
 	}
 
+	/**
+	 * FIXME
+	 */
 	@Override
 	public Corner<Triangle<Graph, GraphMorphism>> restrict(Corner<Triangle<Graph, GraphMorphism>> upperLeft) {
 		Corner<GraphMorphism> untyped = Graphs.restrict(new Corner<GraphMorphism>(Graphs.Graphs, upperLeft.first.getF(), upperLeft.second.getF()));
