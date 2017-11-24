@@ -25,7 +25,7 @@ public class TypedTripleGraphs extends    Slice<TripleGraph,TripleMorphism>
 	 * @param typeTripleGraph typing/slicing object
 	 */
 	public TypedTripleGraphs(TripleGraph typeTripleGraph) {
-		super(TripleGraphs.TripleGraphs,typeTripleGraph);
+		super(TripleGraphs, typeTripleGraph);
 	}
 
 }

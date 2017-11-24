@@ -10,7 +10,6 @@ public interface CategoryWithPushoutComplements<Ob, Arr> extends CategoryWithPus
 		return upperLeft;
 	}
 	
-	@SuppressWarnings("null")
 	default Optional<DirectDerivation<Arr>> doublePushout(Span<Arr> L_K_R, Arr match){
 		Corner<Arr> upperLeftCorner = new Corner<>(L_K_R.left, match);
 		

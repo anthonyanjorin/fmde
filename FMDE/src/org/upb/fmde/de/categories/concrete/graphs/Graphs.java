@@ -8,12 +8,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.upb.fmde.de.categories.LabelledCategory;
 import org.upb.fmde.de.categories.colimits.CategoryWithInitOb;
 import org.upb.fmde.de.categories.colimits.CoLimit;
 import org.upb.fmde.de.categories.colimits.pushouts.CategoryWithPushoutComplements;
-import org.upb.fmde.de.categories.colimits.pushouts.CategoryWithPushouts;
 import org.upb.fmde.de.categories.colimits.pushouts.CoSpan;
 import org.upb.fmde.de.categories.colimits.pushouts.Corner;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
@@ -21,7 +19,6 @@ import org.upb.fmde.de.categories.concrete.finsets.TotalFunction;
 
 public class Graphs implements LabelledCategory<Graph, GraphMorphism>, 
 							   CategoryWithInitOb<Graph, GraphMorphism>, 
-							   CategoryWithPushouts<Graph, GraphMorphism>,
 							   CategoryWithPushoutComplements<Graph, GraphMorphism> {
 
 	public static Graphs Graphs = new Graphs();
@@ -101,7 +98,6 @@ public class Graphs implements LabelledCategory<Graph, GraphMorphism>,
 				});
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public Optional<Corner<GraphMorphism>> pushoutComplement(Corner<GraphMorphism> upperLeft) {
 		if(!determineDanglingEdges(upperLeft).isEmpty())
