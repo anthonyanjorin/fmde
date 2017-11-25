@@ -21,12 +21,21 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 	 * @param T Slice object
 	 */
 	public void checkValidity(Ob T){
-		if (!f.src().equals(type.src()) ||
-				!f.trg().equals(type_.src()) ||
-				!type.trg().equals(type_.trg())) {
+		//         f
+		//   G --------> G'
+		//    \         /
+		//     \       /
+		// type \     /  type'
+		//       \   /
+		//        v v
+		//         T
+		
+		//TODO Formulate the conditions for the two exceptions to be thrown. The first should deal with the triangle 
+		//     structure as depicted above, the second one with the sliced object in particular.
+		if (true) {
 			throw new IllegalArgumentException("Arrows do not form a Triangle!");
 		}
-		if	(!type.trg().equals(T)){
+		if (true){
 			throw new IllegalArgumentException(type.label() + " and " + type_.label() + " should have the sliced object as their target!");
 		}
 	}
@@ -70,7 +79,9 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 			ComparableArrow<Arr> typeComp = (ComparableArrow<Arr>) type; 
 			ComparableArrow<Arr> type_Comp = (ComparableArrow<Arr>) type_; 
 			
-			return fComp.isTheSameAs(a.f) && typeComp.isTheSameAs(a.type) && type_Comp.isTheSameAs(a.type_);
+			//TODO When are two triangle objects equal? Reuse the comparable arrows created here and think about how
+			//     these arrows can be compared.
+			return false;
 		} else {
 			throw new IllegalStateException("You're trying to compare triangles consisting of uncomparable inner arrows!");
 		}

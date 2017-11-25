@@ -41,13 +41,17 @@ public class Slice<Ob, Arr extends LabelledArrow<Ob>> implements CategoryWithIni
 	public Triangle<Ob, Arr> compose(Triangle<Ob, Arr> f, Triangle<Ob, Arr> g) {
 		f.checkValidity(T);
 		g.checkValidity(T);
-		return new Triangle<Ob, Arr>(f.label()+";"+g.label(),cat.compose(f.getF(), g.getF()),f.getType(),g.getType_());
+		//TODO Return the composition of f and g according to the lecture. The composition within the underlying 
+		//     category can be reused. Take a look at the composition in the Category class and think about which 
+		//     parameters to pass here.
+		
+		return null;
 	}
 
 	@Override
 	public Triangle<Ob, Arr> id(Arr o) {
-		return new Triangle<Ob, Arr>("id_"+o.label(),cat.id(cat.source(o)),cat.id(cat.source(o)),cat.id(cat.source(o)));
-		
+		//TODO Create the id arrow by reusing the id arrow of the underlying category. 
+		return null;
 	}
 
 	@Override
