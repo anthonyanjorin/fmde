@@ -30,8 +30,8 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 		//        v v
 		//         T
 		
-		//TODO Formulate the conditions for the two exceptions to be thrown. The first should deal with the triangle 
-		//     structure as depicted above, the second one with the sliced object in particular.
+		//TODO (3) Formulate the conditions for the two exceptions to be thrown. The first should deal with the triangle 
+		//         structure as depicted above, the second one with the sliced object in particular.
 		if (true) {
 			throw new IllegalArgumentException("Arrows do not form a Triangle!");
 		}
@@ -79,8 +79,8 @@ public class Triangle<Ob, Arr extends LabelledArrow<Ob>> extends LabelledArrow<A
 			ComparableArrow<Arr> typeComp = (ComparableArrow<Arr>) type; 
 			ComparableArrow<Arr> type_Comp = (ComparableArrow<Arr>) type_; 
 			
-			//TODO When are two triangle objects equal? Reuse the comparable arrows created here and think about how
-			//     these arrows can be compared.
+			//TODO (4) When are two triangle objects equal? Reuse the comparable arrows created here and think about how
+			//         these arrows can be compared.
 			return false;
 		} else {
 			throw new IllegalStateException("You're trying to compare triangles consisting of uncomparable inner arrows!");
