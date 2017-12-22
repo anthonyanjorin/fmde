@@ -2,19 +2,19 @@
 skinparam shadowing false
 hide members
 hide circle
-class "G:TG.L"
-class "G:TG.C"
-"G:TG.L"-->"G:TG.C" : "cards"
-class "G':TG.i"
-class "G':TG.j"
-class "G':TG.k"
-class "G':TG.x"
-class "G':TG.y"
-"G':TG.j"-->"G':TG.i" : "prev"
-"G':TG.j"-->"G':TG.k" : "next"
-"G':TG.j"-->"G':TG.x" : "e1:cards"
-"G':TG.k"-->"G':TG.y" : "e2:cards"
+class "G:TG.L : List"
+class "G:TG.C : Card"
+"G:TG.L : List"-->"G:TG.C : Card" : "cards"
+class "G':TG.i : List"
+class "G':TG.j : List"
+class "G':TG.k : List"
+class "G':TG.x : Card"
+class "G':TG.y : Card"
+"G':TG.j : List"-->"G':TG.i : List" : "prev"
+"G':TG.j : List"-->"G':TG.k : List" : "next"
+"G':TG.j : List"-->"G':TG.x : Card" : "e1:cards"
+"G':TG.k : List"-->"G':TG.y : Card" : "e2:cards"
 
-"G:TG.L" --> "G':TG.j" : "m"
-"G:TG.C" --> "G':TG.x" : "m"
+"G:TG.L : List" --> "G':TG.j : List" : "m"
+"G:TG.C : Card" --> "G':TG.x : Card" : "m"
 @enduml
