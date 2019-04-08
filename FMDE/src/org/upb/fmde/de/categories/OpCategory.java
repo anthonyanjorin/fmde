@@ -8,6 +8,10 @@ public class OpCategory<Ob, Arr> implements Category<Ob, Arr> {
 		this.cat = cat;
 	}
 	
+	public Category<Ob, Arr> getUnderlyingCat() {
+		return cat;
+	}
+	
 	@Override
 	public Arr compose(Arr f, Arr g) {
 		return cat.compose(g, f);
