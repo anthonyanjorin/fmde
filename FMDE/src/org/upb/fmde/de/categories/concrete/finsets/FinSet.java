@@ -15,7 +15,6 @@ public class FinSet extends Labelled {
 		this.elements = new ArrayList<Object>(elements);
 	}
 	
-	@SuppressWarnings({ "null"})
 	public FinSet(String label, Object... elements) {
 		this(label, Arrays.asList(elements));
 	}
@@ -24,7 +23,6 @@ public class FinSet extends Labelled {
 		return elements;
 	}
 
-	@SuppressWarnings("null")
 	public Object get(String label) {
 		Optional<Object> o = elements.stream()
 					   .filter(x -> label.equals(x.toString()))

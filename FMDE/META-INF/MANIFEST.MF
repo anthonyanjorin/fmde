@@ -3,13 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: FMDE
 Bundle-SymbolicName: FMDE
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: FMDE.jar,
- org.eclipse.jdt.annotation_2.1.0.v20160418-1457.jar
-Export-Package: org.eclipse.jdt.annotation,
- org.upb.fmde.de.categories,
+Bundle-ClassPath: FMDE.jar
+Export-Package: org.upb.fmde.de.categories,
  org.upb.fmde.de.categories.concrete.finsets,
+ org.upb.fmde.de.categories.diagrams,
  org.upb.fmde.de.tests
 Require-Bundle: org.eclipse.emf.ecore.xmi;bundle-version="2.12.0",
- org.moflon.core.utilities;bundle-version="1.1.0",
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: FMDE
+Bundle-RequiredExecutionEnvironment: JavaSE-10

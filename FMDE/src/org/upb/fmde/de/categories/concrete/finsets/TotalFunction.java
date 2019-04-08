@@ -15,7 +15,6 @@ public class TotalFunction extends LabelledArrow<FinSet> implements ComparableAr
 		elementMappings = new HashMap<Object, Object>();
 	}
 
-	@SuppressWarnings("null") 
 	public Object map(Object x) {
 		return elementMappings.get(x);
 	}
