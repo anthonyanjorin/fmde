@@ -13,6 +13,10 @@ public class OpCategory<Ob, Arr> implements Category<Ob, Arr> {
 		return cat.compose(g, f);
 	}
 
+	public Category<Ob, Arr> getUnderlyingCat() {
+		return cat;
+	}
+	
 	@Override
 	public Arr id(Ob f) {
 		return cat.id(f);

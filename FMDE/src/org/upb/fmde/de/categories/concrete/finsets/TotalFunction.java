@@ -15,7 +15,6 @@ public class TotalFunction extends LabelledArrow<FinSet> implements ComparableAr
 		elementMappings = new HashMap<Object, Object>();
 	}
 
-	@SuppressWarnings("null") 
 	public Object map(Object x) {
 		return elementMappings.get(x);
 	}
@@ -26,15 +25,17 @@ public class TotalFunction extends LabelledArrow<FinSet> implements ComparableAr
 	}
 
 	public boolean isTheSameAs(TotalFunction f) {
-		return source.elts().stream()
-					 .allMatch(x -> map(x) != null && map(x).equals(f.map(x)));
+		// Check domain and co-domain
+		return (source.equals(f.source) && target.equals(f.target)) &&
+		// Mappings should be the same
+				elementMappings.equals(f.elementMappings);
 	}
-	
-	public Map<Object, Object> mappings(){
+
+	public Map<Object, Object> mappings() {
 		return elementMappings;
 	}
-	
-	public void setMappings(Map<Object, Object> mappings){
+
+	public void setMappings(Map<Object, Object> mappings) {
 		elementMappings.clear();
 		elementMappings.putAll(mappings);
 	}
