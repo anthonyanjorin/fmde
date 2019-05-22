@@ -5,7 +5,6 @@ import static org.upb.fmde.de.categories.concrete.tgraphs.TGraphs.TGraphsFor;
 import java.io.IOException;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -61,7 +60,7 @@ public class TestsEx4 {
 	@Test
 	public void colimitsGraphs() throws IOException{
 		ResourceSet rs = EMFUtil.createDefaultResourceSet();
-		EObject root = TestUtil.loadSimpleTrello(rs);
+		TestUtil.loadSimpleTrello(rs);
 		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/graphCondition/L.xmi", "L");
 		TGraph L = L_TG_Ecore[0];
 		Graph TG = L_TG_Ecore[1].type().src();

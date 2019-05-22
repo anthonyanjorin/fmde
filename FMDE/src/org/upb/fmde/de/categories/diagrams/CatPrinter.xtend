@@ -2,7 +2,7 @@ package org.upb.fmde.de.categories.diagrams
 
 class CatPrinter<Ob, Arr> implements DotPrinter {
 	
-	private Diagram<Ob, Arr> d;
+	Diagram<Ob, Arr> d;
 	
 	new(Diagram<Ob, Arr> d){
 		this.d = d

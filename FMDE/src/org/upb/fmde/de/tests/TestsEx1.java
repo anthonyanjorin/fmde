@@ -1,6 +1,5 @@
 package org.upb.fmde.de.tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.upb.fmde.de.categories.concrete.finsets.OpFinSets.OpFinSets;
 
