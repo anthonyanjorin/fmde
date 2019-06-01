@@ -2,7 +2,6 @@ package org.upb.fmde.de.ecore
 
 import org.eclipse.emf.ecore.ENamedElement
 import org.eclipse.emf.ecore.EObject
-import org.moflon.core.utilities.eMoflonEMFUtil
 import org.upb.fmde.de.categories.concrete.graphs.GraphDiagram
 import org.upb.fmde.de.categories.diagrams.DotPrinter
 
@@ -41,7 +40,7 @@ class EcorePrinter implements DotPrinter {
 		if(o instanceof ENamedElement)
 			return (o as ENamedElement).name
 		else if(o instanceof EObject)
-			return eMoflonEMFUtil.getIdentifier(o as EObject)
+			return EMFUtil.getIdentifier(o as EObject)
 		else
 			return o.toString();
 	}
