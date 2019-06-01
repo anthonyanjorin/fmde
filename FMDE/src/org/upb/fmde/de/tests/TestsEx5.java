@@ -1,18 +1,14 @@
 package org.upb.fmde.de.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.moflon.core.utilities.eMoflonEMFUtil;
 import org.upb.fmde.de.categories.colimits.pushouts.Corner;
-import org.upb.fmde.de.categories.colimits.pushouts.DirectDerivation;
 import org.upb.fmde.de.categories.colimits.pushouts.Span;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.FinSets;
@@ -24,6 +20,7 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
+import org.upb.fmde.de.ecore.EMFUtil;
 
 public class TestsEx5 {
 
@@ -36,7 +33,7 @@ public class TestsEx5 {
 
 	@Test
 	public void doublePushOut() throws IOException {
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
 		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex5/L.xmi", "L");
 		TGraph L = L_TG_Ecore[0];
@@ -92,7 +89,7 @@ public class TestsEx5 {
 
 	@Test
 	public void danglingEdge() throws IOException{
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
 		TGraph[] G_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/Board.xmi", "G");
 		TGraph G = G_TG_Ecore[0];
@@ -110,7 +107,7 @@ public class TestsEx5 {
 						.addMapping(L_.vertices().get("C"), 
 								TG.vertices().elts()
 									.stream()
-									.filter(v -> eMoflonEMFUtil.getName((EObject)v).equals("Card"))
+									.filter(v -> EMFUtil.getName((EObject)v).equals("Card"))
 									.findAny()
 									.get()));
 		TGraph L = new TGraph("L", type_L);
