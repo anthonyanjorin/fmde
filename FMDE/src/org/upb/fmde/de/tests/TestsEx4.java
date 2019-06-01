@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.moflon.core.utilities.eMoflonEMFUtil;
 import org.upb.fmde.de.categories.colimits.CoLimit;
 import org.upb.fmde.de.categories.colimits.pushouts.CoSpan;
 import org.upb.fmde.de.categories.colimits.pushouts.Span;
@@ -22,6 +21,7 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraph;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphDiagram;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
+import org.upb.fmde.de.ecore.EMFUtil;
 
 public class TestsEx4 {
 	private static final String diagrams = "diagrams/ex4/";
@@ -60,7 +60,7 @@ public class TestsEx4 {
 
 	@Test
 	public void colimitsGraphs() throws IOException{
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 		EObject root = TestUtil.loadSimpleTrello(rs);
 		TGraph[] L_TG_Ecore = TestUtil.loadBoardAsTGraphs(rs, "models/ex3/graphCondition/L.xmi", "L");
 		TGraph L = L_TG_Ecore[0];

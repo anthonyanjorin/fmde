@@ -1,6 +1,8 @@
 package org.upb.fmde.de.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -11,7 +13,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.moflon.core.utilities.eMoflonEMFUtil;
 import org.upb.fmde.de.categories.PatternMatcher;
 import org.upb.fmde.de.categories.concrete.finsets.FinSet;
 import org.upb.fmde.de.categories.concrete.finsets.FinSetDiagram;
@@ -27,6 +28,7 @@ import org.upb.fmde.de.categories.concrete.tgraphs.TGraphMorphism;
 import org.upb.fmde.de.categories.concrete.tgraphs.TGraphs;
 import org.upb.fmde.de.categories.concrete.tgraphs.TPatternMatcher;
 import org.upb.fmde.de.categories.concrete.tgraphs.Timer;
+import org.upb.fmde.de.ecore.EMFUtil;
 import org.upb.fmde.de.ecore.MetaMetaModelToGraphs;
 import org.upb.fmde.de.ecore.MetaModelToGraphs;
 import org.upb.fmde.de.ecore.ModelToGraphs;
@@ -88,7 +90,7 @@ public class TestsEx3 {
 
 	@Test
 	public void ecoreFormalisationAsGraphs() throws IOException {
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 	
 		{
 			MetaMetaModelToGraphs importer = new MetaMetaModelToGraphs(EcorePackage.eINSTANCE, "Ecore");
@@ -116,7 +118,7 @@ public class TestsEx3 {
 
 	@Test
 	public void ecoreFormalisationAsTypedGraphs() throws IOException {
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
 		EObject root = TestUtil.loadBoard(rs, "models/ex3/Board.xmi");
 		ModelToTGraphs importer = new ModelToTGraphs(root, "G");
@@ -128,7 +130,7 @@ public class TestsEx3 {
 
 	@Test
 	public void graphConditions() throws IOException {
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 		TestUtil.loadSimpleTrello(rs);
 		TGraph L = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/L.xmi", "L");
 		TGraph P = TestUtil.loadBoardAsTGraph(rs, "models/ex3/graphCondition/P.xmi", "P");
@@ -195,7 +197,7 @@ public class TestsEx3 {
 
 	@Test
 	public void multiplicities() throws IOException {
-		ResourceSet rs = eMoflonEMFUtil.createDefaultResourceSet();
+		ResourceSet rs = EMFUtil.createDefaultResourceSet();
 		EObject root = TestUtil.loadSimpleTrello(rs);
 		MetaModelToGraphs importer = new MetaModelToGraphs(root, "SimpleTrello");
 		Graph TG = importer.getResult();
