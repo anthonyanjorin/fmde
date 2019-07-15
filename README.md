@@ -3,8 +3,7 @@ Material and exercises for the lecture Fundamentals of Model-Driven Engineering 
 
 # Installation
 
-1. Install JAVA 10 (or later)
-2. Install Eclipse Neon (modelling package):  http://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon1a
-3. Install eMoflon 2.22.0: https://emoflon.github.io/eclipse-plugin/emoflon_2.22.0/update-site2/
-4. Install Graphviz dot:  http://www.graphviz.org/Download.php
-5. Install Xtend: http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/
+1. Download and install the latest version of the Eclipse IDE for Java and DSL Developers: https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-java-and-dsl-developers
+2. Install PlantUML (Select Help -> Install New Software). Use http://hallvard.github.io/plantuml/ as the download site.
+3.  Download and install graphviz dot for your platform: http://www.graphviz.org/download/  Make sure that it is on your path (and can be run via dot in a console).
+4.  Make sure you change the text encoding for your Eclipse workspace to UTF 8 (Window->Preference->General->Workspace).
